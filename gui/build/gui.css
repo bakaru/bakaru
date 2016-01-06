@@ -1,0 +1,9 @@
+* {
+  cursor: default; }
+
+gui {
+  background-color: red; }
+  gui header {
+    -webkit-app-region: drag; }
+
+/*# sourceMappingURL=gui.css.map*/

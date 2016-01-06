@@ -1,0 +1,11 @@
+* {
+  cursor: default;
+}
+
+gui {
+  background-color: red;
+
+  header {
+    -webkit-app-region: drag;
+  }
+}

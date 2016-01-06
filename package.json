@@ -1,0 +1,43 @@
+{
+  "name": "bakaru",
+  "version": "0.0.1",
+  "description": "Bakaru, an anime tool",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron main.js",
+    "watch": "webpack -d -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thers/bakaru.git"
+  },
+  "keywords": [
+    "Bakaru",
+    "animw"
+  ],
+  "author": "Alexander Kukhta <me@thers.io>",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "babel": "6.3.26",
+    "babel-loader": "6.2.1",
+    "babel-plugin-transform-class-properties": "6.3.13",
+    "babel-plugin-transform-object-rest-spread": "6.3.13",
+    "babel-plugin-transform-regenerator": "6.3.26",
+    "babel-preset-es2015": "6.3.13",
+    "babel-preset-react": "6.3.13",
+    "css-loader": "0.23.1",
+    "extract-text-webpack-plugin": "1.0.0",
+    "electron-prebuilt": "0.36.0",
+    "node-sass": "3.4.2",
+    "resolve-url-loader": "1.4.3",
+    "sass-loader": "3.1.2",
+    "style-loader": "0.13.0",
+    "url-loader": "0.5.7",
+    "webpack": "1.12.9",
+    "webpack-sources": "0.1.0"
+  },
+  "dependencies": {
+    "react": "0.14.5",
+    "react-dom": "0.14.5"
+  }
+}

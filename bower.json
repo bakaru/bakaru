@@ -1,0 +1,26 @@
+{
+  "name": "bakaru",
+  "description": "Bakaru, an anime tool",
+  "main": "main.js",
+  "authors": [
+    "Alexander Kukhta <me@thers.io>"
+  ],
+  "license": "CC0-1.0",
+  "keywords": [
+    "Bakaru",
+    "animw"
+  ],
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "font-awesome": "~4.5.0"
+  }
+}
