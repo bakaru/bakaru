@@ -1,0 +1,56 @@
+header {
+  height: $headerHeight;
+
+  -webkit-user-select: none;
+
+  color: $foregroundContrastColour;
+  background-color: $mainColour;
+  padding: $baseInnerPadding;
+
+
+  title {
+    -webkit-app-region: drag;
+    display: block;
+    width: calc(100% - #{$headerHeight/2});
+    text-transform: uppercase;
+    line-height: 1;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: .5px;
+    text-align: center;
+  }
+
+  controls {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: $headerHeight/2;
+    height: $headerHeight;
+    font-size: 20px;
+    z-index: 1;
+
+    * {
+      text-align: center;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, .8);
+      transition: all .2s ease;
+    }
+    *:hover {
+      color: #fff;
+      background-color: rgba(255,255,255,.3);
+    }
+
+    exit {
+      display: block;
+      width: 100%;
+      height: $headerHeight/2;
+    }
+
+    minimize {
+      display: block;
+      width: 100%;
+      height: $headerHeight/2;
+    }
+  }
+}

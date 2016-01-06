@@ -2,16 +2,20 @@ var webpack = require('webpack');
 var path = require('path');
 
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var Clean = require('clean-webpack-plugin');
 
 var config = [];
 
 config.push({
   entry: {
-    gui: './gui/main.js'
+    gui: './gui/app/main.js'
   },
   output: {
     path: './gui/build/',
     filename: '[name].js'
+  },
+  resolve: {
+    root: [path.join(__dirname, "bower_components")]
   },
   module: {
     loaders: [
@@ -19,8 +23,12 @@ config.push({
         test: /\.js$/,
         loaders: ["babel"]
       },
+      // {
+      //   test: /\.css$/,
+      //   loader: ExtractTextPlugin.extract("style", "css?sourceMap", "resolve-url")
+      // },
       {
-        test: /\.scss$/,
+        test: /\.(scss|css)$/,
         loader: ExtractTextPlugin.extract("style", "css!sass?sourceMap", "resolve-url")
       },
       {
@@ -30,7 +38,11 @@ config.push({
     ]
   },
   plugins: [
-    new ExtractTextPlugin("[name].css")
+    new webpack.ResolverPlugin(
+      new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])
+    ),
+    new ExtractTextPlugin("[name].css"),
+    new Clean(['./gui/build'])
   ]
 });
 

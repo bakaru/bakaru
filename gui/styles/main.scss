@@ -1,11 +1,20 @@
+@import "variables";
+@import "header";
+@import "layer";
+
 * {
   cursor: default;
+  box-sizing: border-box;
 }
 
 gui {
-  background-color: red;
+  display: block;
 
-  header {
-    -webkit-app-region: drag;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  font-family: "Open Sans";
 }

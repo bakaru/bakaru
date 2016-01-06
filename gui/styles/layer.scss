@@ -1,0 +1,9 @@
+layer {
+  background: $backgroundColour url(http://nya.sh/top/top54.png) bottom right no-repeat;
+  position: fixed;
+  top: $headerHeight;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: $baseInnerPadding;
+}
