@@ -11,8 +11,11 @@ import Header from './components/Header';
 import Layer from './components/Layer';
 
 import appReducers from './reducers';
+import { setStore } from './rpc';
 
 const store = createStore(appReducers);
+
+setStore(store);
 
 const Gui = () => (
   <gui>

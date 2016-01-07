@@ -43,7 +43,10 @@ config.push({
     ),
     new ExtractTextPlugin("[name].css"),
     new Clean(['./gui/build'])
-  ]
+  ],
+  externals: {
+    electron: 'commonjs electron'
+  }
 });
 
 module.exports = config;

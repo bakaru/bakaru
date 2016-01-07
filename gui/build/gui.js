@@ -65,21 +65,25 @@
 	
 	var _Header2 = _interopRequireDefault(_Header);
 	
-	var _Layer = __webpack_require__(/*! ./components/Layer */ 178);
+	var _Layer = __webpack_require__(/*! ./components/Layer */ 180);
 	
 	var _Layer2 = _interopRequireDefault(_Layer);
 	
-	var _reducers = __webpack_require__(/*! ./reducers */ 179);
+	var _reducers = __webpack_require__(/*! ./reducers */ 181);
 	
 	var _reducers2 = _interopRequireDefault(_reducers);
 	
+	var _rpc = __webpack_require__(/*! ./rpc */ 178);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(/*! font-awesome/css/font-awesome.css */ 180);
-	__webpack_require__(/*! ../styles/font.css */ 190);
-	__webpack_require__(/*! ../styles/main.scss */ 200);
+	__webpack_require__(/*! font-awesome/css/font-awesome.css */ 182);
+	__webpack_require__(/*! ../styles/font.css */ 192);
+	__webpack_require__(/*! ../styles/main.scss */ 202);
 	
 	var store = (0, _redux.createStore)(_reducers2.default);
+	
+	(0, _rpc.setStore)(store);
 	
 	var Gui = function Gui() {
 	  return _react2.default.createElement(
@@ -21473,6 +21477,8 @@
 
 	'use strict';
 	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
@@ -21483,36 +21489,67 @@
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 168);
 	
+	var _rpc = __webpack_require__(/*! ../rpc */ 178);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Header = function Header(_ref) {
-	  var app = _ref.app;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	  return _react2.default.createElement(
-	    'header',
-	    null,
-	    _react2.default.createElement(
-	      'title',
-	      null,
-	      'BAKARU バカル'
-	    ),
-	    _react2.default.createElement(
-	      'actions',
-	      null,
-	      'action'
-	    ),
-	    _react2.default.createElement(
-	      'controls',
-	      null,
-	      _react2.default.createElement('exit', { dangerouslySetInnerHTML: { __html: '&times;' } }),
-	      _react2.default.createElement(
-	        'minimize',
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Header = (function (_Component) {
+	  _inherits(Header, _Component);
+	
+	  function Header() {
+	    _classCallCheck(this, Header);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Header).apply(this, arguments));
+	  }
+	
+	  _createClass(Header, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'header',
 	        null,
-	        '-'
-	      )
-	    )
-	  );
-	};
+	        _react2.default.createElement(
+	          'title',
+	          null,
+	          'BAKARU バカル'
+	        ),
+	        _react2.default.createElement(
+	          'actions',
+	          null,
+	          'action'
+	        ),
+	        _react2.default.createElement(
+	          'controls',
+	          null,
+	          _react2.default.createElement('exit', { dangerouslySetInnerHTML: { __html: '&times;' }, onClick: this.handleExitClick.bind(this) }),
+	          _react2.default.createElement(
+	            'minimize',
+	            { onClick: this.handleMinimizeClick.bind(this) },
+	            '-'
+	          )
+	        )
+	      );
+	    }
+	  }, {
+	    key: 'handleExitClick',
+	    value: function handleExitClick() {
+	      window.close();
+	    }
+	  }, {
+	    key: 'handleMinimizeClick',
+	    value: function handleMinimizeClick() {
+	      (0, _rpc.minimizeMainWindow)();
+	    }
+	  }]);
+	
+	  return Header;
+	})(_react.Component);
 	
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	  return {
@@ -21522,6 +21559,44 @@
 
 /***/ },
 /* 178 */
+/*!************************!*\
+  !*** ./gui/app/rpc.js ***!
+  \************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.minimizeMainWindow = exports.setStore = undefined;
+	
+	var _electron = __webpack_require__(/*! electron */ 179);
+	
+	var store = undefined;
+	
+	var setStore = function setStore(originStore) {
+	  store = originStore;
+	};
+	
+	var minimizeMainWindow = function minimizeMainWindow() {
+	  _electron.ipcRenderer.send('rpc:minimizeMainWindow');
+	};
+	
+	exports.setStore = setStore;
+	exports.minimizeMainWindow = minimizeMainWindow;
+
+/***/ },
+/* 179 */
+/*!***************************!*\
+  !*** external "electron" ***!
+  \***************************/
+/***/ function(module, exports) {
+
+	module.exports = require("electron");
+
+/***/ },
+/* 180 */
 /*!*************************************!*\
   !*** ./gui/app/components/Layer.js ***!
   \*************************************/
@@ -21550,7 +21625,7 @@
 	exports.default = Layer;
 
 /***/ },
-/* 179 */
+/* 181 */
 /*!***********************************!*\
   !*** ./gui/app/reducers/index.js ***!
   \***********************************/
@@ -21576,7 +21651,7 @@
 	});
 
 /***/ },
-/* 180 */
+/* 182 */
 /*!************************************************************!*\
   !*** ./bower_components/font-awesome/css/font-awesome.css ***!
   \************************************************************/
@@ -21585,8 +21660,6 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 181 */,
-/* 182 */,
 /* 183 */,
 /* 184 */,
 /* 185 */,
@@ -21594,7 +21667,9 @@
 /* 187 */,
 /* 188 */,
 /* 189 */,
-/* 190 */
+/* 190 */,
+/* 191 */,
+/* 192 */
 /*!*****************************!*\
   !*** ./gui/styles/font.css ***!
   \*****************************/
@@ -21603,8 +21678,6 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 191 */,
-/* 192 */,
 /* 193 */,
 /* 194 */,
 /* 195 */,
@@ -21612,7 +21685,9 @@
 /* 197 */,
 /* 198 */,
 /* 199 */,
-/* 200 */
+/* 200 */,
+/* 201 */,
+/* 202 */
 /*!******************************!*\
   !*** ./gui/styles/main.scss ***!
   \******************************/

@@ -1,6 +1,8 @@
 'use strict';
 
 const electron = require('electron');
+
+require('./lib/ipcListener')(electron.ipcMain, getMainWindow);
 // Module to control application life.
 const app = electron.app;
 // Module to create native browser window.
@@ -32,6 +34,10 @@ function createWindow () {
     // when you should delete the corresponding element.
     mainWindow = null;
   });
+}
+
+function getMainWindow () {
+  return mainWindow;
 }
 
 // This method will be called when Electron has finished
