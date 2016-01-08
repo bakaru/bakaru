@@ -3,15 +3,14 @@ import setupIpcListener from 'lib/ipcListener';
 export default class App {
   constructor (electron, rootDir) {
     this.electron = electron;
-    this.rootDir = rootDir;
+    this.rootDir = process.cwd();
+    this.dialog = electron.dialog;
     this.app = electron.app;
     this.ipc = electron.ipcMain;
 
     this.mainWindow = null;
 
-    setupIpcListener(this.ipc, () => {
-      return this.mainWindow;
-    });
+    setupIpcListener(this);
     this._setupAppEvenetListeners();
   }
 
@@ -20,7 +19,8 @@ export default class App {
       width: 850,
       height: 720,
       title: 'Bakaru',
-      frame: false
+      frame: false,
+      icon: this.rootDir + '/icon.png'
     });
 
     // and load the index.html of the app.
@@ -28,6 +28,8 @@ export default class App {
 
     // Open the DevTools.
     this.mainWindow.webContents.openDevTools();
+
+    // this.mainWindow.setProgressBar(.5);
 
     // Emitted when the window is closed.
     this.mainWindow.on('closed', function() {
