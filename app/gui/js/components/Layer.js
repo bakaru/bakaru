@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { test as testie } from '../actions';
+import { test as testie } from 'actions';
 
 class Layer extends Component {
   render () {

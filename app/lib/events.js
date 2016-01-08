@@ -1,5 +1,6 @@
 export const main = {
-  minimizeMainWindow: 'main:minimizeMainWindow'
+  minimizeMainWindow: 'main:minimizeMainWindow',
+  openSelectFolderDialog: 'main:openSelectFolderDialog'
 };
 
 export const renderer = {

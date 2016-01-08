@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { minimizeMainWindow } from '../rpc';
+import { minimizeMainWindow, openSelectFolderDialog } from 'rpc';
 
 class Header extends Component {
   render () {
     return (
       <header>
         <title>BAKARU バカル</title>
-        <actions>action</actions>
+        <actions>
+          <button onClick={ () => openSelectFolderDialog() }>
+            Add folder
+          </button>
+        </actions>
         <controls>
           <exit dangerouslySetInnerHTML={{__html: '&times;'}} onClick={::this.handleExitClick} />
           <minimize onClick={::this.handleMinimizeClick}>
