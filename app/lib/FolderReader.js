@@ -1,4 +1,5 @@
 import getFolderItemsType from 'lib/FolderTypeDetector';
+import Promise from 'bluebird';
 import { readdir } from 'fs';
 import { sep } from 'path';
 
