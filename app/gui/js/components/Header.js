@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { minimizeMainWindow, openSelectFolderDialog } from 'rpc';
+import { minimizeMainWindow, openSelectFolderDialog } from 'ipc';
 
 class Header extends Component {
   render () {

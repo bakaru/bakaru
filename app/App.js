@@ -1,4 +1,4 @@
-import setupIpcListener from 'lib/ipcListener';
+import setupIpcMain from './ipcMain';
 
 export default class App {
   constructor (electron, rootDir) {
@@ -10,7 +10,7 @@ export default class App {
 
     this.mainWindow = null;
 
-    setupIpcListener(this);
+    setupIpcMain(this);
     this._setupAppEvenetListeners();
   }
 

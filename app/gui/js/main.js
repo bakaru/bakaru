@@ -11,7 +11,7 @@ import Header from 'components/Header';
 import Layer from 'components/Layer';
 
 import appReducers from './reducers';
-import { setStore } from './rpc';
+import { setStore } from 'ipc';
 
 const store = createStore(appReducers);
 

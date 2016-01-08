@@ -55,7 +55,7 @@ config.push({
     root: [path.join(__dirname, "bower_components")],
     alias: {
       lib: path.join(__dirname, "app/lib"),
-      rpc: path.join(__dirname, "app/gui/js/rpc.js"),
+      ipc: path.join(__dirname, "app/gui/js/ipcRenderer.js"),
       actions: path.join(__dirname, "app/gui/js/actions.js"),
       components: path.join(__dirname, "app/gui/js/components")
     }
