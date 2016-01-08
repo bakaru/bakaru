@@ -7,8 +7,8 @@ import ReactDom from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
-import Header from './components/Header';
-import Layer from './components/Layer';
+import Header from 'components/Header';
+import Layer from 'components/Layer';
 
 import appReducers from './reducers';
 import { setStore } from './rpc';

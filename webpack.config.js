@@ -28,7 +28,7 @@ config.push({
   },
   resolve: {
     alias: {
-      lib: path.join(__dirname, "lib")
+      lib: path.join(__dirname, "app/lib")
     }
   },
   target: "atom",
@@ -54,8 +54,8 @@ config.push({
   resolve: {
     root: [path.join(__dirname, "bower_components")],
     alias: {
-      lib: path.join(__dirname, "lib"),
-      components: path.join(__dirname, "gui/js/components")
+      lib: path.join(__dirname, "app/lib"),
+      components: path.join(__dirname, "app/gui/js/components")
     }
   },
   module: {
