@@ -1,21 +1,62 @@
 var webpack = require('webpack');
 var path = require('path');
+var fs = require('fs');
 
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var Clean = require('clean-webpack-plugin');
+
+var nodeModules = {
+  electron: 'commonjs electron'
+};
+fs.readdirSync('node_modules')
+  .filter(function(x) {
+    return ['.bin'].indexOf(x) === -1;
+  })
+  .forEach(function(mod) {
+    nodeModules[mod] = 'commonjs ' + mod;
+  });
 
 var config = [];
 
 config.push({
   entry: {
-    gui: './gui/app/main.js'
+    main: './app/main.js'
   },
   output: {
-    path: './gui/build/',
+    path: './app/build/',
     filename: '[name].js'
   },
   resolve: {
-    root: [path.join(__dirname, "bower_components")]
+    alias: {
+      lib: path.join(__dirname, "lib")
+    }
+  },
+  target: "atom",
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        loaders: ['babel']
+      }
+    ]
+  },
+  externals: nodeModules
+});
+
+config.push({
+  entry: {
+    gui: './app/gui/js/main.js'
+  },
+  output: {
+    path: './app/gui/build/',
+    filename: '[name].js'
+  },
+  resolve: {
+    root: [path.join(__dirname, "bower_components")],
+    alias: {
+      lib: path.join(__dirname, "lib"),
+      components: path.join(__dirname, "gui/js/components")
+    }
   },
   module: {
     loaders: [
@@ -23,10 +64,6 @@ config.push({
         test: /\.js$/,
         loaders: ["babel"]
       },
-      // {
-      //   test: /\.css$/,
-      //   loader: ExtractTextPlugin.extract("style", "css?sourceMap", "resolve-url")
-      // },
       {
         test: /\.(scss|css)$/,
         loader: ExtractTextPlugin.extract("style", "css!sass?sourceMap", "resolve-url")
@@ -42,7 +79,7 @@ config.push({
       new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])
     ),
     new ExtractTextPlugin("[name].css"),
-    new Clean(['./gui/build'])
+    new Clean(['./app/gui/build'])
   ],
   externals: {
     electron: 'commonjs electron'

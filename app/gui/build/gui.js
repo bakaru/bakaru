@@ -42,9 +42,9 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/*!*************************!*\
-  !*** ./gui/app/main.js ***!
-  \*************************/
+/*!****************************!*\
+  !*** ./app/gui/js/main.js ***!
+  \****************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -65,11 +65,11 @@
 	
 	var _Header2 = _interopRequireDefault(_Header);
 	
-	var _Layer = __webpack_require__(/*! ./components/Layer */ 180);
+	var _Layer = __webpack_require__(/*! ./components/Layer */ 181);
 	
 	var _Layer2 = _interopRequireDefault(_Layer);
 	
-	var _reducers = __webpack_require__(/*! ./reducers */ 181);
+	var _reducers = __webpack_require__(/*! ./reducers */ 183);
 	
 	var _reducers2 = _interopRequireDefault(_reducers);
 	
@@ -77,9 +77,9 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(/*! font-awesome/css/font-awesome.css */ 182);
-	__webpack_require__(/*! ../styles/font.css */ 192);
-	__webpack_require__(/*! ../styles/main.scss */ 202);
+	__webpack_require__(/*! font-awesome/css/font-awesome.css */ 184);
+	__webpack_require__(/*! ../styles/font.css */ 194);
+	__webpack_require__(/*! ../styles/main.scss */ 204);
 	
 	var store = (0, _redux.createStore)(_reducers2.default);
 	
@@ -21470,9 +21470,9 @@
 
 /***/ },
 /* 177 */
-/*!**************************************!*\
-  !*** ./gui/app/components/Header.js ***!
-  \**************************************/
+/*!*****************************************!*\
+  !*** ./app/gui/js/components/Header.js ***!
+  \*****************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21559,9 +21559,9 @@
 
 /***/ },
 /* 178 */
-/*!************************!*\
-  !*** ./gui/app/rpc.js ***!
-  \************************/
+/*!***************************!*\
+  !*** ./app/gui/js/rpc.js ***!
+  \***************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21569,22 +21569,26 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.minimizeMainWindow = exports.setStore = undefined;
+	exports.setStore = setStore;
+	exports.minimizeMainWindow = minimizeMainWindow;
 	
 	var _electron = __webpack_require__(/*! electron */ 179);
 	
+	var _events = __webpack_require__(/*! lib/events */ 180);
+	
 	var store = undefined;
 	
-	var setStore = function setStore(originStore) {
+	function setStore(originStore) {
 	  store = originStore;
 	};
 	
-	var minimizeMainWindow = function minimizeMainWindow() {
-	  _electron.ipcRenderer.send('rpc:minimizeMainWindow');
+	function minimizeMainWindow() {
+	  _electron.ipcRenderer.send(_events.main.minimizeMainWindow);
 	};
 	
-	exports.setStore = setStore;
-	exports.minimizeMainWindow = minimizeMainWindow;
+	// Listeners
+	
+	// ipcRenderer.on('');
 
 /***/ },
 /* 179 */
@@ -21597,12 +21601,34 @@
 
 /***/ },
 /* 180 */
-/*!*************************************!*\
-  !*** ./gui/app/components/Layer.js ***!
-  \*************************************/
+/*!***********************!*\
+  !*** ./lib/events.js ***!
+  \***********************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var main = exports.main = {
+	  minimizeMainWindow: 'main:minimizeMainWindow'
+	};
+	
+	var renderer = exports.renderer = {
+	  folderRead: 'renderer:folderRead'
+	};
+
+/***/ },
+/* 181 */
+/*!****************************************!*\
+  !*** ./app/gui/js/components/Layer.js ***!
+  \****************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -21612,46 +21638,179 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 168);
+	
+	var _actions = __webpack_require__(/*! ../actions */ 182);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Layer = function Layer() {
-	  return _react2.default.createElement(
-	    'layer',
-	    null,
-	    'Im a frame!'
-	  );
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Layer = (function (_Component) {
+	  _inherits(Layer, _Component);
+	
+	  function Layer() {
+	    _classCallCheck(this, Layer);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Layer).apply(this, arguments));
+	  }
+	
+	  _createClass(Layer, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var app = _props.app;
+	      var dispatch = _props.dispatch;
+	
+	      return _react2.default.createElement(
+	        'layer',
+	        null,
+	        'Im a frame!',
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: function onClick() {
+	              return dispatch((0, _actions.test)());
+	            } },
+	          'test'
+	        ),
+	        app.readingFolder ? 'ya' : 'nah'
+	      );
+	    }
+	  }]);
+	
+	  return Layer;
+	})(_react.Component);
+	
+	var mapPropsFromStore = function mapPropsFromStore(store) {
+	  return {
+	    app: store.switches
+	  };
 	};
 	
-	exports.default = Layer;
+	exports.default = (0, _reactRedux.connect)(mapPropsFromStore)(Layer);
 
 /***/ },
-/* 181 */
-/*!***********************************!*\
-  !*** ./gui/app/reducers/index.js ***!
-  \***********************************/
-/***/ function(module, exports, __webpack_require__) {
+/* 182 */
+/*!*******************************!*\
+  !*** ./app/gui/js/actions.js ***!
+  \*******************************/
+/***/ function(module, exports) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.test = test;
+	exports.addFolder = addFolder;
+	exports.removeFolder = removeFolder;
+	var ADD_FOLDER = exports.ADD_FOLDER = 'ADD_FOLDER';
+	var REMOVE_FOLDER = exports.REMOVE_FOLDER = 'REMOVE_FOLDER';
+	var TEST = exports.TEST = 'TEST';
+	
+	function test() {
+	  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	    args[_key] = arguments[_key];
+	  }
+	
+	  return {
+	    type: TEST,
+	    args: args
+	  };
+	}
+	
+	function addFolder(path) {
+	  return {
+	    type: ADD_FOLDER,
+	    path: path
+	  };
+	}
+	
+	function removeFolder(path) {
+	  return {
+	    type: REMOVE_FOLDER,
+	    path: path
+	  };
+	}
+
+/***/ },
+/* 183 */
+/*!**************************************!*\
+  !*** ./app/gui/js/reducers/index.js ***!
+  \**************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _actions = __webpack_require__(/*! ../actions */ 182);
 	
 	var _redux = __webpack_require__(/*! redux */ 159);
 	
-	var app = function app() {
+	var switches = function switches() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? { readingFolder: false } : arguments[0];
 	  var action = arguments[1];
 	
-	  return state;
+	  switch (action.type) {
+	    case _actions.TEST:
+	      return _extends({}, state, {
+	        readingFolder: true
+	      });
+	      break;
+	
+	    default:
+	      return state;
+	      break;
+	  }
 	};
 	
+	var initialFoldersMap = new Map();
+	
+	function folders() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialFoldersMap : arguments[0];
+	  var action = arguments[1];
+	
+	  var newState = new Map(state);
+	
+	  console.log('action', action);
+	
+	  switch (action.type) {
+	    case _actions.ADD_FOLDER:
+	      newState.set(action.path, {
+	        path: action.path,
+	        items: []
+	      });
+	      return newState;
+	      break;
+	
+	    case _actions.REMOVE_FOLDER:
+	      newState.delete(action.path);
+	      return newState;
+	      break;
+	
+	    default:
+	      return state;
+	      break;
+	  }
+	}
+	
 	exports.default = (0, _redux.combineReducers)({
-	  app: app
+	  switches: switches,
+	  folders: folders
 	});
 
 /***/ },
-/* 182 */
+/* 184 */
 /*!************************************************************!*\
   !*** ./bower_components/font-awesome/css/font-awesome.css ***!
   \************************************************************/
@@ -21660,8 +21819,6 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 183 */,
-/* 184 */,
 /* 185 */,
 /* 186 */,
 /* 187 */,
@@ -21669,17 +21826,17 @@
 /* 189 */,
 /* 190 */,
 /* 191 */,
-/* 192 */
-/*!*****************************!*\
-  !*** ./gui/styles/font.css ***!
-  \*****************************/
+/* 192 */,
+/* 193 */,
+/* 194 */
+/*!*********************************!*\
+  !*** ./app/gui/styles/font.css ***!
+  \*********************************/
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 193 */,
-/* 194 */,
 /* 195 */,
 /* 196 */,
 /* 197 */,
@@ -21687,10 +21844,12 @@
 /* 199 */,
 /* 200 */,
 /* 201 */,
-/* 202 */
-/*!******************************!*\
-  !*** ./gui/styles/main.scss ***!
-  \******************************/
+/* 202 */,
+/* 203 */,
+/* 204 */
+/*!**********************************!*\
+  !*** ./app/gui/styles/main.scss ***!
+  \**********************************/
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin

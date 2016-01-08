@@ -4,7 +4,7 @@
   "description": "Bakaru, an anime tool",
   "main": "main.js",
   "scripts": {
-    "start": "electron main.js",
+    "start": "electron app/build/main.js",
     "watch": "webpack -d -w"
   },
   "repository": {
@@ -40,6 +40,7 @@
     "webpack-sources": "0.1.0"
   },
   "dependencies": {
+    "bluebird": "^3.1.1",
     "react": "0.14.5",
     "react-dom": "0.14.5",
     "react-redux": "4.0.6",
