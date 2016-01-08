@@ -57,8 +57,6 @@
 	
 	var _App2 = _interopRequireDefault(_App);
 	
-	var _path = __webpack_require__(/*! path */ 4);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var app = new _App2.default(_electron2.default);
@@ -190,15 +188,7 @@
 	};
 
 /***/ },
-/* 4 */
-/*!***********************!*\
-  !*** external "path" ***!
-  \***********************/
-/***/ function(module, exports) {
-
-	module.exports = require("path");
-
-/***/ },
+/* 4 */,
 /* 5 */
 /*!***********************!*\
   !*** ./lib/events.js ***!
