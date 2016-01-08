@@ -46,9 +46,7 @@ export default function getFolderItemsType (path, items) {
   });
   const promise = Promise.all(itemsStatsPromises);
 
-  return promise.then(itemsStats => {
-    return guessType(itemsStats);
-  });
+  return promise.then(itemsStats => guessType(itemsStats));
 }
 
 function guessType (itemsStats) {

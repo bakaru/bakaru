@@ -1,7 +1,6 @@
 import getFolderItemsType from 'lib/FolderTypeDetector';
-import Promise from 'bluebird';
-import { sep } from 'path';
 import { readdir } from 'fs';
+import { sep } from 'path';
 
 const readdirAsync = Promise.promisify(readdir);
 
