@@ -10,6 +10,7 @@ import { sep, basename, extname } from 'path';
 const readdirAsync = Promise.promisify(readdir);
 
 /**
+ * @typedef {{folders: string[], videos: string[], subtitles: string[], audios: string[]}} ClassifiedItems
  * @typedef {{id: string, name: string, path: string: ext: string}} DubEntry
  * @typedef {{id: string, name: string, path: string: ext: string}} SubEntry
  * @typedef {{id: string, name: string, path: string: ext: string}} EpisodeEntry
@@ -28,7 +29,7 @@ export default class FolderReader {
   }
 
   /**
-   * @param {String} path
+   * @param {string} path
    * @returns {Promise.<T>}
    */
   findAnime(path) {
@@ -60,7 +61,7 @@ export default class FolderReader {
   /**
    * Detects if given folder is an anime
    *
-   * @param {{folders: String[], videos: String[], subtitles: String[], audios: String[]}} classifiedItems
+   * @param {ClassifiedItems} classifiedItems
    * @returns {boolean}
    */
   isAnimeFolder(classifiedItems) {
@@ -94,8 +95,8 @@ export default class FolderReader {
   /**
    * Normalizes anime name as possible
    *
-   * @param {String} path
-   * @returns {String}
+   * @param {string} path
+   * @returns {string}
    */
   normalizeAnimeName(path) {
     let name = basename(path);
@@ -119,11 +120,14 @@ export default class FolderReader {
   }
 
   /**
-   * @param {String} path
-   * @param {{}} classifiedItems
-   * @returns {{id: string, name: String, path: *, dubs: Array, subs: Array, episodes: Array, state: {dubsLoading: boolean, subsLoading: boolean, episodesLoading: boolean}}}
+   * @param {string} path
+   * @param {ClassifiedItems} classifiedItems
+   * @returns {AnimeFolder}
    */
   makeAnimeFolderData(path, classifiedItems) {
+    /**
+     * @type {AnimeFolder}
+     */
     const animeFolder = {
       id: this.getAnimeId(path),
       name: this.normalizeAnimeName(path),
