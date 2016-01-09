@@ -3,21 +3,40 @@ import {
   UPDATE_ANIME_FOLDER
 } from 'actions';
 
-const initialFoldersMap = new Map();
-
-export default function folders (state = initialFoldersMap, action) {
+/**
+ * @param {Map} state
+ * @param {AnimeFolder} animeFolder
+ * @returns {Map}
+ */
+function addAnimeFolder(state, animeFolder) {
   const newState = new Map(state);
+  newState.set(animeFolder.id, animeFolder);
 
+  return newState;
+}
+
+/**
+ * @param {Map} state
+ * @param {AnimeFolder} animeFolder
+ * @returns {Map}
+ */
+function updateAnimeFolder(state, animeFolder) {
+  const newState = new Map(state);
+  newState.set(animeFolder.id, animeFolder);
+  return newState;
+}
+
+/**
+ * @param {Map|undefined} [state=Map]
+ * @param {{type: String, animeFolder: AnimeFolder=}} action
+ * @returns {Map}
+ */
+export default function folders (state = new Map(), action) {
   switch (action.type) {
-    case ADD_ANIME_FOLDER:
-      newState.set(action.animeFolder.id, action.animeFolder);
-      return newState;
+    case ADD_ANIME_FOLDER: return addAnimeFolder(state, action.animeFolder);
       break;
 
-    case UPDATE_ANIME_FOLDER:
-      newState.set(action.animeFolder.id, action.animeFolder);
-      console.log(`AFTER UPDATE_ANIME_FOLDER STATE`, newState);
-      return newState;
+    case UPDATE_ANIME_FOLDER: return updateAnimeFolder(state, action.animeFolder);
       break;
 
     default:

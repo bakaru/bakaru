@@ -9,11 +9,18 @@ import { sep, basename, extname } from 'path';
 
 const readdirAsync = Promise.promisify(readdir);
 
+/**
+ * @typedef {{id: string, name: string, path: string: ext: string}} DubEntry
+ * @typedef {{id: string, name: string, path: string: ext: string}} SubEntry
+ * @typedef {{id: string, name: string, path: string: ext: string}} EpisodeEntry
+ * @typedef {{dubsLoaded: boolean, subsLoaded: boolean, episodesLoaded: boolean}} AnimeFolderState
+ * @typedef {{id: string, name: string, path: string, dubs: DubEntry[], subs: SubEntry[], episodes: EpisodeEntry[], state: AnimeFolderState}} AnimeFolder
+ */
 export default class FolderReader {
 
   /**
-   * @param {Function} addAnimeFolder
-   * @param {Function} updateAnimeFolder
+   * @callback addAnimeFolder
+   * @callback updateAnimeFolder
    */
   constructor(addAnimeFolder, updateAnimeFolder) {
     this.addAnimeFolder = addAnimeFolder;
