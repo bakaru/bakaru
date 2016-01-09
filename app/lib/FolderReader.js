@@ -149,11 +149,20 @@ export default class FolderReader {
     process.nextTick(() => {
       animeFolder.episodes = animeFolder.episodes.map(episode => {
         episode['ext'] = extname(episode.path);
-        episode.name = this.normalizeAnimeName(basename(episode.path, episode.ext));
+        episode.name = basename(episode.path, episode.ext);
         episode.ext = episode.ext.replace(/\./, '').toLowerCase();
 
         return episode;
       });
+
+      const [sameStart, sameEnd] = findEqualStartAndEndParts(animeFolder.episodes.map(episode => episode.name));
+
+      animeFolder.episodes.map(episode => {
+        episode.name = episode.name.replace(sameStart, '').replace(sameEnd, '').trim();
+
+        return episode;
+      });
+
       animeFolder.state.episodesLoading = false;
 
       this.updateAnimeFolder(animeFolder);
@@ -164,4 +173,67 @@ export default class FolderReader {
 
     return animeFolder;
   }
+}
+
+/**
+ * Returns equal start and end parts of all strings
+ *
+ * Given the strings ["w 1 e", "w 2 e", "w 3 2 4 e"] will return ["w ", " e"]
+ *
+ * @param {string[]} strings
+ * @returns {[string, string]}
+ */
+function findEqualStartAndEndParts (strings) {
+  const splittedStrings = strings.map(string => string.split(''));
+  const stringsLength = strings.length;
+
+  const firstStringLength = splittedStrings[0].length;
+
+  // Start
+  let start = [];
+
+  for (let i = 0; i < firstStringLength; i++) {
+    const letter = splittedStrings[0][i];
+
+    let differenceDetected = false;
+
+    for (let stringIndex = 1; stringIndex < stringsLength; stringIndex++) {
+      if (splittedStrings[stringIndex][i] !== letter) {
+        differenceDetected = true;
+        break;
+      }
+    }
+
+    if (!differenceDetected) {
+      start[start.length] = letter;
+    } else {
+      break;
+    }
+  }
+
+  // End
+  let end = [];
+
+  for (let j = 0; j < firstStringLength; j++) {
+    const letter = splittedStrings[0][firstStringLength - 1 - j];
+
+    let differenceDetected = false;
+
+    for (let stringIndex = 1; stringIndex < stringsLength; stringIndex++) {
+      const stringLength = splittedStrings[stringIndex].length;
+
+      if (splittedStrings[stringIndex][stringLength - 1 - j] !== letter) {
+        differenceDetected = true;
+        break;
+      }
+    }
+
+    if (!differenceDetected) {
+      end = [letter].concat(end); // Like end.unshift(letter), but 98% faster. prooflink: https://github.com/loverajoel/jstips
+    } else {
+      break;
+    }
+  }
+
+  return [start.join(''), end.join('')];
 }
