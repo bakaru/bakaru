@@ -5,8 +5,10 @@ let store;
 
 // Listeners
 
-ipcRenderer.on(renderer.folderRead, (event, path) => {
-  console.log(event, path);
+ipcRenderer.on(renderer.folderRead, (event, data) => {
+  const folders = new Map(data.folders);
+
+  console.log(event, folders);
 });
 
 // Senders

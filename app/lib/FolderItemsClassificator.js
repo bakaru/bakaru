@@ -29,7 +29,7 @@ extensionTypes.set('subtitles', [
   'sbv'
 ]);
 
-export default function getFolderItemsType (path, items) {
+export default function classifyFolderItems (path, items) {
   const itemsStatsPromises = [];
   items.map(itemName => {
     const itemPath = [path, itemName].join(sep);
@@ -46,36 +46,31 @@ export default function getFolderItemsType (path, items) {
   });
   const promise = Promise.all(itemsStatsPromises);
 
-  return promise.then(itemsStats => guessType(itemsStats));
+  return promise.then(itemsStats => classify(itemsStats));
 }
 
-function guessType (itemsStats) {
+function classify (itemsStats) {
   const itemsStatsMap = new Map(itemsStats);
-  const folders = [];
-  const itemTypeConductor = {
-    audios: 0,
-    videos: 0,
-    folders: 0,
-    subtitles: 0
+  const classes = {
+    audios: [],
+    videos: [],
+    folders: [],
+    subtitles: []
   };
 
   for (let [itemPath, itemStats] of itemsStats) {
     if (itemStats.isDirectory()) {
-      itemTypeConductor.folders++;
-      folders[folders.length] = itemPath;
+      classes.folders[classes.folders.length] = itemPath;
     } else {
       const itemExt = extname(itemPath).replace(/\./, '').toLowerCase();
 
       for (let [type, extensions] of extensionTypes) {
         if (extensions.indexOf(itemExt) > -1) {
-          itemTypeConductor[type]++;
+          classes[type][classes[type].length] = itemPath;
         }
       }
     }
   }
 
-  return {
-    types: itemTypeConductor,
-    folders
-  };
+  return classes;
 }
