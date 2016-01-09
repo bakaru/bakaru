@@ -42,7 +42,7 @@ export default class FolderReader {
           throw new Error(`${path}, no folders or videos found, are you sure you pick correct folder?`);
         }
 
-        if (classifiedItems.videos.length > 0 && this.isAnimeFolder(classifiedItems)) {
+        if (classifiedItems.videos.length > 0 && isAnimeFolder(classifiedItems)) {
           // So this is anime, good, fulfill it's data
           const animeFolder = this.makeAnimeFolderData(path, classifiedItems);
 
@@ -59,67 +59,6 @@ export default class FolderReader {
   }
 
   /**
-   * Detects if given folder is an anime
-   *
-   * @param {ClassifiedItems} classifiedItems
-   * @returns {boolean}
-   */
-  isAnimeFolder(classifiedItems) {
-    const videos = classifiedItems.videos.slice().sort(naturalSort);
-    const videosLength = videos.length;
-    const distances = [];
-    const pairs = [];
-    const percentile = .9;
-
-    // TODO: Get rid of AB & BA distances duplication
-    for (let i = 0; i < videosLength; i++) {
-      for (let j = 0; j < videosLength; j++) {
-        const compositeKey = `${i}${j}`;
-
-        if (i === j || pairs.indexOf(compositeKey) > -1) {
-          continue;
-        }
-
-        distances[distances.length] = levenshtein(videos[i], videos[j]);
-      }
-    }
-
-    distances.sort((a, b) => a > b);
-    const index = Math.round(distances.length * percentile) + 1;
-    const mean = distances.slice(0, index).reduce((acc, n) => acc + n, 0) / index;
-
-    // 90% times diff should be less than 3 symbols, that should be enough, huh?
-    return mean < 3;
-  }
-
-  /**
-   * Normalizes anime name as possible
-   *
-   * @param {string} path
-   * @returns {string}
-   */
-  normalizeAnimeName(path) {
-    let name = basename(path);
-
-    // Get rid of [720p] and similar shit
-    name = name.replace(/(\[.*?])/g, '');
-    // Get rid of (720p) and similar shit
-    name = name.replace(/(\(.*?\))/g, '');
-    // Replace _. with space
-    name = name.replace(/[_\.]/g, ' ');
-
-    return name.trim();
-  }
-
-  /**
-   * @param path
-   * @returns {string}
-   */
-  getAnimeId(path) {
-    return sha224(path);
-  }
-
-  /**
    * @param {string} path
    * @param {ClassifiedItems} classifiedItems
    * @returns {AnimeFolder}
@@ -129,13 +68,13 @@ export default class FolderReader {
      * @type {AnimeFolder}
      */
     const animeFolder = {
-      id: this.getAnimeId(path),
-      name: this.normalizeAnimeName(path),
+      id: sha224(path),
+      name: normalizeAnimeName(path),
       path,
       dubs: [],
       subs: [],
       episodes: classifiedItems.videos.map(episode => ({
-        id: this.getAnimeId(episode),
+        id: sha224(episode),
         name: episode,
         path: episode
       })),
@@ -173,6 +112,58 @@ export default class FolderReader {
 
     return animeFolder;
   }
+}
+
+/**
+ * Detects if given folder is an anime
+ *
+ * @param {ClassifiedItems} classifiedItems
+ * @returns {boolean}
+ */
+function isAnimeFolder(classifiedItems) {
+  const videos = classifiedItems.videos.slice().sort(naturalSort);
+  const videosLength = videos.length;
+  const distances = [];
+  const pairs = [];
+  const percentile = .9;
+
+  for (let i = 0; i < videosLength; i++) {
+    for (let j = 0; j < videosLength; j++) {
+      const compositeKey = `${i}${j}`;
+
+      if (i === j || pairs.indexOf(compositeKey) > -1) {
+        continue;
+      }
+
+      distances[distances.length] = levenshtein(videos[i], videos[j]);
+    }
+  }
+
+  distances.sort((a, b) => a > b);
+  const index = Math.round(distances.length * percentile) + 1;
+  const mean = distances.slice(0, index).reduce((acc, n) => acc + n, 0) / index;
+
+  // 90% times diff should be less than 3 symbols, that should be enough, huh?
+  return mean < 3;
+}
+
+/**
+ * Normalizes anime name as possible
+ *
+ * @param {string} path
+ * @returns {string}
+ */
+function normalizeAnimeName(path) {
+  let name = basename(path);
+
+  // Get rid of [720p] and similar shit
+  name = name.replace(/(\[.*?])/g, '');
+  // Get rid of (720p) and similar shit
+  name = name.replace(/(\(.*?\))/g, '');
+  // Replace _. with space
+  name = name.replace(/[_\.]/g, ' ');
+
+  return name.trim();
 }
 
 /**
