@@ -1,4 +1,8 @@
-import { TEST, ADD_FOLDER, REMOVE_FOLDER } from '../actions';
+import {
+  ADD_ANIME_FOLDER,
+  UPDATE_ANIME_FOLDER,
+  TEST
+} from 'actions';
 import { combineReducers } from 'redux';
 
 const switches = (state = { readingFolder: false }, action) => {
@@ -21,19 +25,15 @@ const initialFoldersMap = new Map();
 function folders (state = initialFoldersMap, action) {
   const newState = new Map(state);
 
-  console.log(`action`, action);
-
   switch (action.type) {
-    case ADD_FOLDER:
-      newState.set(action.path, {
-        path: action.path,
-        items: []
-      });
+    case ADD_ANIME_FOLDER:
+      newState.set(action.animeFolder.id, action.animeFolder);
       return newState;
       break;
 
-    case REMOVE_FOLDER:
-      newState.delete(action.path);
+    case UPDATE_ANIME_FOLDER:
+      newState.set(action.animeFolder.id, action.animeFolder);
+      console.log(`AFTER UPDATE_ANIME_FOLDER STATE`, newState);
       return newState;
       break;
 

@@ -1,3 +1,5 @@
+@import "variables";
+
 layer {
   background: $backgroundColour url(http://nya.sh/top/top54.png) bottom right no-repeat;
   position: fixed;
@@ -6,4 +8,5 @@ layer {
   right: 0;
   bottom: 0;
   padding: $baseInnerPadding;
+  overflow-y: scroll;
 }

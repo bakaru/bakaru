@@ -2,8 +2,11 @@ import Promise from 'bluebird';
 import FolderReader from 'lib/FolderReader';
 import { main, renderer } from 'lib/events';
 
+/**
+ * @param {App} app
+ */
 export default (app) => {
-  app.ipc.on(main.minimizeMainWindow, (event, arg) => {
+  app.ipc.on(main.minimizeMainWindow, () => {
     app.mainWindow.minimize();
   });
 
@@ -17,10 +20,15 @@ export default (app) => {
         ]
       },
       itemsPaths => {
-        const folderReader = new FolderReader(items => event.sender.send(renderer.folderRead, items));
+        const fr = new FolderReader(
+          animeFolder => event.sender.send(renderer.addAnimeFolder, animeFolder),
+          animeFolder => event.sender.send(renderer.updateAnimeFolder, animeFolder)
+        );
 
         itemsPaths.map(itemPath => {
-          folderReader.read(itemPath);
+          fr.findAnime(itemPath).catch(err => {
+            app.dialog.showErrorBox('No anime found :c', `${err}`);
+          });
         });
       }
     );

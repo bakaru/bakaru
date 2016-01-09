@@ -1,5 +1,5 @@
 {
-  "name": "bakaru",
+  "name": "Bakaru",
   "version": "0.0.1",
   "description": "Bakaru, an anime tool",
   "main": "main.js",
@@ -14,7 +14,7 @@
   },
   "keywords": [
     "Bakaru",
-    "animw"
+    "anime"
   ],
   "author": "Alexander Kukhta <me@thers.io>",
   "license": "CC0-1.0",
@@ -44,6 +44,8 @@
     "bluebird": "3.1.1",
     "fast-levenshtein": "1.1.0",
     "javascript-natural-sort": "0.7.1",
+    "js-sha256": "^0.3.0",
+    "mkdirp": "0.5.1",
     "react": "0.14.5",
     "react-dom": "0.14.5",
     "react-redux": "4.0.6",

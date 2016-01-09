@@ -1,3 +1,4 @@
+import * as actions from 'actions';
 import { ipcRenderer } from 'electron';
 import { main, renderer } from 'lib/events';
 
@@ -5,10 +6,12 @@ let store;
 
 // Listeners
 
-ipcRenderer.on(renderer.folderRead, (event, data) => {
-  const folders = new Map(data.folders);
+ipcRenderer.on(renderer.addAnimeFolder, (event, animeFolder) => {
+  store.dispatch(actions.addAnimeFolder(animeFolder));
+});
 
-  console.log(event, folders);
+ipcRenderer.on(renderer.updateAnimeFolder, (event, animeFolder) => {
+  store.dispatch(actions.updateAnimeFolder(animeFolder));
 });
 
 // Senders

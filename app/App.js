@@ -1,19 +1,43 @@
+import Promise from 'bluebird';
+import mkdirp from 'mkdirp';
+import { sep } from 'path';
 import setupIpcMain from './ipcMain';
 
+const mkdirpAsync = Promise.promisify(mkdirp);
+
 export default class App {
-  constructor (electron, rootDir) {
+  constructor (electron) {
+    this.name = 'Bakaru';
+
     this.electron = electron;
     this.rootDir = process.cwd();
     this.dialog = electron.dialog;
     this.app = electron.app;
     this.ipc = electron.ipcMain;
 
+    this.appDir = this.app.getPath('appData') + sep + this.name + 'Data';
+    this.thirdPartyDir = this.appDir + sep + 'Thirdparty';
+    this.tempDir = this.appDir + sep + 'Temp';
+
     this.mainWindow = null;
 
+    this.createDirsIfNotExist();
     setupIpcMain(this);
-    this._setupAppEvenetListeners();
+    this._setupAppEventListeners();
   }
 
+  /**
+   * Creates app directories
+   */
+  createDirsIfNotExist () {
+    mkdirpAsync(this.appDir);
+    mkdirpAsync(this.thirdPartyDir);
+    mkdirpAsync(this.tempDir);
+  }
+
+  /**
+   * Creates main window
+   */
   createMainWindow () {
     this.mainWindow = new this.electron.BrowserWindow({
       width: 850,
@@ -40,7 +64,12 @@ export default class App {
     });
   }
 
-  _setupAppEvenetListeners () {
+  /**
+   * Setup app events listeners
+   *
+   * @private
+   */
+  _setupAppEventListeners () {
     this.app.on('ready', ::this.createMainWindow);
 
     this.app.on('window-all-closed', () => {
@@ -55,7 +84,7 @@ export default class App {
       // On OS X it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
       if (this.mainWindow === null) {
-        createWindow();
+        this.createMainWindow();
       }
     });
   }

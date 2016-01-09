@@ -4,5 +4,6 @@ export const main = {
 };
 
 export const renderer = {
-  folderRead: 'renderer:folderRead'
+  addAnimeFolder: 'renderer:addAnimeFolder',
+  updateAnimeFolder: 'renderer:updateAnimeFolder'
 };

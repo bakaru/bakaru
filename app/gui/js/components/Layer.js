@@ -1,16 +1,34 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { test as testie } from 'actions';
 
 class Layer extends Component {
   render () {
-    const { app, dispatch } = this.props;
+    const { folders } = this.props;
+
+    const foldersList = [];
+
+    for (let [id, folder] of folders) {
+      const episodesList = folder.episodes.map(episode => {
+        return (
+          <li key={ episode.id }>
+            <i>{ episode.name }</i>
+          </li>
+        );
+      });
+
+      foldersList[foldersList.length] = (
+        <li key={ id }>
+          <strong>{ folder.name }</strong>
+          <i>{ JSON.stringify(folder.state) }</i>
+          <ul>{ episodesList }</ul>
+        </li>
+      );
+    }
 
     return (
       <layer>
         Im a frame!<br/>
-        <button onClick={ () => dispatch(testie()) }>test</button>
-        { app.readingFolder ? 'ya' : 'nah' }
+        <ul>{ foldersList }</ul>
       </layer>
     );
   }
@@ -18,7 +36,7 @@ class Layer extends Component {
 
 const mapPropsFromStore = store => {
   return {
-    app: store.switches
+    folders: store.folders
   }
 };
 
