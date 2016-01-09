@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Item from 'components/Item';
 
 class Layer extends Component {
   render () {
@@ -17,18 +18,13 @@ class Layer extends Component {
       });
 
       foldersList[foldersList.length] = (
-        <li key={ id }>
-          <strong>{ folder.name }</strong>
-          <i>{ JSON.stringify(folder.state) }</i>
-          <ul>{ episodesList }</ul>
-        </li>
+        <Item key={ id } id={ id } />
       );
     }
 
     return (
       <layer>
-        Im a frame!<br/>
-        <ul>{ foldersList }</ul>
+        { foldersList }
       </layer>
     );
   }

@@ -20,16 +20,18 @@ export default (app) => {
         ]
       },
       itemsPaths => {
-        const fr = new FolderReader(
-          animeFolder => event.sender.send(renderer.addAnimeFolder, animeFolder),
-          animeFolder => event.sender.send(renderer.updateAnimeFolder, animeFolder)
-        );
+        if (itemsPaths) {
+          const fr = new FolderReader(
+            animeFolder => event.sender.send(renderer.addAnimeFolder, animeFolder),
+            animeFolder => event.sender.send(renderer.updateAnimeFolder, animeFolder)
+          );
 
-        itemsPaths.map(itemPath => {
-          fr.findAnime(itemPath).catch(err => {
-            app.dialog.showErrorBox('No anime found :c', `${err}`);
+          itemsPaths.map(itemPath => {
+            fr.findAnime(itemPath).catch(err => {
+              app.dialog.showErrorBox('No anime found :c', `${err}`);
+            });
           });
-        });
+        }
       }
     );
   });
