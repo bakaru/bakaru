@@ -9,16 +9,21 @@ layer {
   right: 0;
   bottom: 0;
 
+  &>* {
+    width: 50%;
+  }
+
   list {
     display: block;
     overflow-y: scroll;
+    border-right: solid 1px $delimiterColour;
 
     item {
       position: relative;
       display: block;
       background-color: $backgroundColour;
       padding: $baseInnerPadding $baseInnerPadding*1.68;
-      border-bottom: solid 1px #dedede;
+      border-bottom: solid 1px $delimiterColour;
       -webkit-user-select: none;
 
       &::before {
@@ -63,5 +68,8 @@ layer {
 
   anime {
     display: block;
+    overflow-y: scroll;
+    padding: $baseInnerPadding;
+    border-right: solid 1px $delimiterColour;
   }
 }

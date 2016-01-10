@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Item from 'components/Item';
+import Anime from 'components/Anime';
 
 class Layer extends Component {
   render () {
@@ -19,9 +20,7 @@ class Layer extends Component {
         <list>
           { foldersList }
         </list>
-        <anime>
-          Open one on the left
-        </anime>
+        <Anime/>
       </layer>
     );
   }

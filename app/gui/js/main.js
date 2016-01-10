@@ -15,10 +15,10 @@ import { setStore } from 'ipc';
 
 const store = createStore(appReducers);
 
-store.subscribe(() => {
-  console.log(`====================`);
-  console.log(`New state`, store.getState());
-});
+//store.subscribe(() => {
+//  console.log(`====================`);
+//  console.log(`New state`, store.getState());
+//});
 
 setStore(store);
 

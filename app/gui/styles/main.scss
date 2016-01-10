@@ -7,6 +7,28 @@
   box-sizing: border-box;
 }
 
+::-webkit-scrollbar {
+  width: 2px;
+  background-color: transparent;
+}
+::-webkit-scrollbar-track {
+  border-left: solid 1px $delimiterColour;
+  background-color: $delimiterColour;
+}
+::-webkit-scrollbar-thumb {
+  width: 2px;
+  box-shadow: 1px 0 0 0 $delimiterColour inset;
+  background-color: #fff;
+}
+::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+  display: none;
+}
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
 gui {
   display: block;
 
