@@ -4,6 +4,8 @@ export const main = {
 };
 
 export const renderer = {
+  flagAddAnimeFolderStart: 'renderer:flagAddAnimeFolderStart',
+  flagAddAnimeFolderEnd: 'renderer:flagAddAnimeFolderEnd',
   addAnimeFolder: 'renderer:addAnimeFolder',
   updateAnimeFolder: 'renderer:updateAnimeFolder'
 };

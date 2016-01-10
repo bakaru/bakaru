@@ -39,9 +39,11 @@ export default class FolderReader {
           const animeFolder = this.makeAnimeFolderData(path, classifiedItems);
 
           this.addAnimeFolder(animeFolder);
+
+          return true;
         } else if (classifiedItems.folders.length > 0) {
           // Okay, we have some folders here, lets check'em all
-          Promise.all(classifiedItems.folders.map(subPath => this.findAnime(subPath)))
+          return Promise.all(classifiedItems.folders.map(subPath => this.findAnime(subPath)))
             .catch(errors => {
               // So we catch here all errors from reading all sub folders
               // Dunno if we should do something with it :c

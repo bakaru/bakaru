@@ -11,6 +11,8 @@ export default (app) => {
   });
 
   app.ipc.on(main.openSelectFolderDialog, event => {
+    event.sender.send(renderer.flagAddAnimeFolderStart);
+
     app.dialog.showOpenDialog(
       app.mainWindow,
       {
@@ -27,9 +29,13 @@ export default (app) => {
           );
 
           itemsPaths.map(itemPath => {
-            fr.findAnime(itemPath).catch(err => {
-              app.dialog.showErrorBox('No anime found :c', `${err}`);
-            });
+            fr.findAnime(itemPath)
+              .catch(err => {
+                app.dialog.showErrorBox('No anime found :c', `${err}`);
+              })
+              .finally(() => {
+                event.sender.send(renderer.flagAddAnimeFolderEnd);
+              });
           });
         }
       }
