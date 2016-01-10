@@ -19,10 +19,10 @@ extensionTypes.set('videos', [
   'mpeg',
   'mov',
   'webm',
-  'vp9',
   '3gp'
 ]);
 extensionTypes.set('subtitles', [
+  'mks',
   'ass',
   'srt',
   'sub',
