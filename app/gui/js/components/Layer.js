@@ -16,7 +16,12 @@ class Layer extends Component {
 
     return (
       <layer>
-        { foldersList }
+        <list>
+          { foldersList }
+        </list>
+        <anime>
+          Open one on the left
+        </anime>
       </layer>
     );
   }

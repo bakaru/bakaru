@@ -5,3 +5,11 @@ $headerHeight: 65px;
 $mainColour: hsl(335, 100%, 50%);
 $backgroundColour: #f0f0f0;
 $foregroundContrastColour: #fff;
+
+// Mixins
+
+@mixin ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

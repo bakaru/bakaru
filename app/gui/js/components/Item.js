@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { openAnimeFolder } from 'actions';
+
 class Item extends Component {
   render () {
-    const { id, getAnimeFolder, dispatch } = this.props;
+    const { id, getAnimeFolder, openedFolder, openFolder } = this.props;
 
     /**
      * @type {AnimeFolder}
      */
     const folder = getAnimeFolder(id);
-
+    const isOpened = openedFolder === id;
     const summary = [];
 
     if (folder.state.scanning) {
@@ -29,8 +31,8 @@ class Item extends Component {
     }
 
     return (
-      <item>
-        <title>
+      <item className={ isOpened ? 'opened' : '' } onClick={ () => openFolder(id) }>
+        <title title={ folder.name }>
           { folder.name }
         </title>
         <summary>
@@ -41,8 +43,13 @@ class Item extends Component {
   }
 }
 
-const mapPropsFromStore = store => ({
-  getAnimeFolder: id => store.folders.get(id)
+const mapStoreToProps = store => ({
+  getAnimeFolder: id => store.folders.get(id),
+  openedFolder: store.state.openedFolder
 });
 
-export default connect(mapPropsFromStore)(Item);
+const mapDispatchToProps = dispatch => ({
+  openFolder: id => dispatch(openAnimeFolder(id))
+});
+
+export default connect(mapStoreToProps, mapDispatchToProps)(Item);
