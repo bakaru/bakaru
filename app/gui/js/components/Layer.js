@@ -8,15 +8,7 @@ class Layer extends Component {
 
     const foldersList = [];
 
-    for (let [id, folder] of folders) {
-      const episodesList = folder.episodes.map(episode => {
-        return (
-          <li key={ episode.id }>
-            <i>{ episode.name }</i>
-          </li>
-        );
-      });
-
+    for (let id of folders.keys()) {
       foldersList[foldersList.length] = (
         <Item key={ id } id={ id } />
       );
