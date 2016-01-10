@@ -1,10 +1,6 @@
 import { FLAG_ADD_FOLDER_END, FLAG_ADD_FOLDER_START } from 'actions';
 
 /**
- * @typedef {{addFolder: boolean}} FlagsState
- */
-
-/**
  * @type {FlagsState}
  */
 const initialFlags = {

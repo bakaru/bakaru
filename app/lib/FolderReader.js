@@ -9,14 +9,6 @@ import { sep, basename, extname } from 'path';
 
 const readdirAsync = Promise.promisify(readdir);
 
-/**
- * @typedef {{folders: string[], videos: string[], subtitles: string[], audios: string[]}} ClassifiedItems
- * @typedef {{id: string, name: string, path: string: ext: string}} DubEntry
- * @typedef {{id: string, name: string, path: string: ext: string}} SubEntry
- * @typedef {{id: string, name: string, path: string: ext: string}} EpisodeEntry
- * @typedef {{dubsLoaded: boolean, subsLoaded: boolean, episodesLoaded: boolean}} AnimeFolderState
- * @typedef {{id: string, name: string, path: string, dubs: DubEntry[], subs: SubEntry[], episodes: EpisodeEntry[], state: AnimeFolderState}} AnimeFolder
- */
 export default class FolderReader {
 
   /**
@@ -75,19 +67,19 @@ export default class FolderReader {
       subs: [],
       episodes: classifiedItems.videos.map(episode => ({
         id: sha224(episode),
+        ext: null,
         name: episode,
         path: episode
       })),
       state: {
-        dubsLoading: true,
-        subsLoading: true,
+        scanning: true,
         episodesLoading: true
       }
     };
 
     process.nextTick(() => {
       animeFolder.episodes = animeFolder.episodes.map(episode => {
-        episode['ext'] = extname(episode.path);
+        episode.ext = extname(episode.path);
         episode.name = basename(episode.path, episode.ext);
         episode.ext = episode.ext.replace(/\./, '').toLowerCase();
 
@@ -106,11 +98,17 @@ export default class FolderReader {
 
       this.updateAnimeFolder(animeFolder);
     });
-    process.nextTick(() => {
-      // TODO: Load subs and dubs
-    });
+
+    this.recursivelyScanAnimeFolder(animeFolder);
 
     return animeFolder;
+  }
+
+  /**
+   * @param {AnimeFolder} animeFolder
+   */
+  recursivelyScanAnimeFolder (animeFolder) {
+
   }
 }
 
