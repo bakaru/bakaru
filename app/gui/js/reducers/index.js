@@ -1,22 +1,8 @@
 import folders from './folders';
+import flags from './flags';
 import { combineReducers } from 'redux';
 
-const switches = (state = { readingFolder: false }, action) => {
-  switch (action.type) {
-    case 'TEST':
-      return {
-        ...state,
-        readingFolder: true
-      };
-      break;
-
-    default:
-      return state;
-      break;
-  }
-};
-
 export default combineReducers({
-  switches,
+  flags,
   folders
 });

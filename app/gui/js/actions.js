@@ -1,6 +1,5 @@
 export const ADD_ANIME_FOLDER = 'ADD_ANIME_FOLDER';
 export const UPDATE_ANIME_FOLDER = 'UPDATE_ANIME_FOLDER';
-export const TEST = 'TEST';
 
 export function addAnimeFolder(animeFolder) {
   return {
@@ -16,9 +15,18 @@ export function updateAnimeFolder(animeFolder) {
   }
 }
 
-export function test(...args) {
+// Flags
+export const FLAG_ADD_FOLDER_START = 'FLAG_ADD_FOLDER_START';
+export const FLAG_ADD_FOLDER_END = 'FLAG_ADD_FOLDER_END';
+
+export function flagAddFolderStart() {
   return {
-    type: TEST,
-    args
+    type: FLAG_ADD_FOLDER_START
+  };
+}
+
+export function flagAddFolderEnd() {
+  return {
+    type: FLAG_ADD_FOLDER_END
   };
 }
