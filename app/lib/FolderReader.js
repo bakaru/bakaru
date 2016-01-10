@@ -67,11 +67,13 @@ export default class FolderReader {
       path,
       dubs: [],
       subs: [],
+      bonuses: [],
       episodes: classifiedItems.videos.map(episode => ({
         id: sha224(episode),
-        ext: null,
-        name: episode,
-        path: episode
+        ext: '',
+        name: '',
+        path: episode,
+        filename: ''
       })),
       state: {
         scanning: true,
@@ -82,7 +84,7 @@ export default class FolderReader {
     process.nextTick(() => {
       animeFolder.episodes = animeFolder.episodes.map(episode => {
         episode.ext = extname(episode.path);
-        episode.name = basename(episode.path, episode.ext);
+        episode.filename = basename(episode.path, episode.ext);
         episode.ext = episode.ext.replace(/\./, '').toLowerCase();
 
         return episode;
@@ -91,26 +93,114 @@ export default class FolderReader {
       const [sameStart, sameEnd] = findEqualStartAndEndParts(animeFolder.episodes.map(episode => episode.name));
 
       animeFolder.episodes.map(episode => {
-        episode.name = episode.name.replace(sameStart, '').replace(sameEnd, '').trim();
+        episode.name = episode.filename.replace(sameStart, '').replace(sameEnd, '').trim();
 
         return episode;
       });
-
-      animeFolder.state.episodesLoading = false;
-
-      this.updateAnimeFolder(animeFolder);
     });
 
-    this.recursivelyScanAnimeFolder(animeFolder);
+    this.recursivelyScanAnimeFolder(animeFolder, classifiedItems.folders)
+      .finally(() => {
+        animeFolder.state.scanning = false;
+        this.updateAnimeFolder(animeFolder);
+      });
 
     return animeFolder;
   }
 
   /**
    * @param {AnimeFolder} animeFolder
+   * @param {string[]} folders
+   * @returns {Promise}
    */
-  recursivelyScanAnimeFolder (animeFolder) {
+  recursivelyScanAnimeFolder (animeFolder, folders) {
+    return Promise.all(folders.map(folderPath => {
+      readdirAsync(folderPath)
+        .then(itemsNames => classifyFolderItems(folderPath, itemsNames))
+        .then(classifiedItems => {
+          switch (true) {
+            case classifiedItems.folders.length > 0:
+              return this.recursivelyScanAnimeFolder(animeFolder, classifiedItems.folders);
+              break;
 
+            case classifiedItems.audios.length > 0:
+              return this._parseAndAddDub(animeFolder, folderPath, classifiedItems.audios);
+              break;
+
+            case classifiedItems.subtitles.length > 0:
+              return this._parseAndAddSub(animeFolder, folderPath, classifiedItems.subtitles);
+              break;
+
+            case classifiedItems.videos.length > 0:
+              return this._parseAndAddBonuses(animeFolder, folderPath, classifiedItems.videos);
+              break;
+
+            default:
+              return null;
+              break;
+          }
+        })
+    }));
+  }
+
+  /**
+   * @param {AnimeFolder} animeFolder
+   * @param {string} folderPath
+   * @param {string[]} folderItems
+   * @private
+   */
+  _parseAndAddDub (animeFolder, folderPath, folderItems) {
+    const name = basename(folderPath);
+    const path = folderPath;
+    const id = sha224(name);
+
+    animeFolder.dubs.push({
+      id,
+      name,
+      path
+    });
+
+    this.updateAnimeFolder(animeFolder);
+  }
+
+  /**
+   * @param {AnimeFolder} animeFolder
+   * @param {string} folderPath
+   * @param {string[]} folderItems
+   * @private
+   */
+  _parseAndAddSub (animeFolder, folderPath, folderItems) {
+    const name = basename(folderPath);
+    const path = folderPath;
+    const id = sha224(name);
+
+    animeFolder.subs.push({
+      id,
+      name,
+      path
+    });
+
+    this.updateAnimeFolder(animeFolder);
+  }
+
+  /**
+   * @param {AnimeFolder} animeFolder
+   * @param {string} folderPath
+   * @param {string[]} folderItems
+   * @private
+   */
+  _parseAndAddBonuses (animeFolder, folderPath, folderItems) {
+    const name = basename(folderPath);
+    const path = folderPath;
+    const id = sha224(name);
+
+    animeFolder.bonuses.push({
+      id,
+      name,
+      path
+    });
+
+    this.updateAnimeFolder(animeFolder);
   }
 }
 
