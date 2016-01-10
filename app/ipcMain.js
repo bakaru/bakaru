@@ -37,6 +37,8 @@ export default (app) => {
                 event.sender.send(renderer.flagAddAnimeFolderEnd);
               });
           });
+        } else {
+          event.sender.send(renderer.flagAddAnimeFolderEnd);
         }
       }
     );

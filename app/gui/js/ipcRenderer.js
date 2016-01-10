@@ -4,6 +4,10 @@ import { main, renderer } from 'lib/events';
 
 let store;
 
+export function setStore (originStore) {
+  store = originStore;
+};
+
 // Listeners
 
 ipcRenderer.on(renderer.addAnimeFolder, (event, animeFolder) => {
@@ -14,11 +18,15 @@ ipcRenderer.on(renderer.updateAnimeFolder, (event, animeFolder) => {
   store.dispatch(actions.updateAnimeFolder(animeFolder));
 });
 
-// Senders
+ipcRenderer.on(renderer.flagAddAnimeFolderStart, () => {
+  store.dispatch(actions.flagAddFolderStart());
+});
 
-export function setStore (originStore) {
-  store = originStore;
-};
+ipcRenderer.on(renderer.flagAddAnimeFolderEnd, () => {
+  store.dispatch(actions.flagAddFolderEnd());
+});
+
+// Senders
 
 export function minimizeMainWindow () {
   ipcRenderer.send(main.minimizeMainWindow);

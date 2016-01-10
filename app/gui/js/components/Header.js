@@ -4,13 +4,29 @@ import { minimizeMainWindow, openSelectFolderDialog } from 'ipc';
 
 class Header extends Component {
   render () {
+    const { addFolder } = this.props;
+
+    let addFolderButton;
+
+    if (addFolder) {
+      addFolderButton = (
+        <button key="add-folder-button" onClick={ () => openSelectFolderDialog() } disabled={ addFolder }>
+          <i className="fa fa-circle-o-notch fa-spin"></i>
+        </button>
+      );
+    } else {
+      addFolderButton = (
+        <button key="add-folder-button" onClick={ () => openSelectFolderDialog() }>
+          Add folder
+        </button>
+      );
+    }
+
     return (
       <header>
         <title>BAKARU バカル</title>
         <actions>
-          <button onClick={ () => openSelectFolderDialog() }>
-            Add folder
-          </button>
+          { addFolderButton }
         </actions>
         <controls>
           <exit dangerouslySetInnerHTML={{__html: '&times;'}} onClick={::this.handleExitClick} />
@@ -33,6 +49,6 @@ class Header extends Component {
 
 export default connect(
   state => ({
-    app: state.app
+    ...state.flags
   })
 )(Header);

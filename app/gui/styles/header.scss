@@ -41,13 +41,15 @@ header {
       padding: $baseInnerPadding $baseInnerPadding*1.68;
       background-color: transparent;
       border: none;
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 14px;
       font-family: 'Open Sans';
       outline: none;
 
       &:hover {
         background-color: rgba(255,255,255, .4);
+      }
+      &:disabled {
+        opacity: .8;
       }
     }
   }
