@@ -50,7 +50,6 @@ export default function classifyFolderItems (path, items) {
 }
 
 function classify (itemsStats) {
-  const itemsStatsMap = new Map(itemsStats);
   const classes = {
     audios: [],
     videos: [],
