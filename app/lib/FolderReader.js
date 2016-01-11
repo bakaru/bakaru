@@ -223,6 +223,8 @@ function isAnimeFolder(classifiedItems) {
 
       if (i === j || pairs.indexOf(compositeKey) > -1) {
         continue;
+      } else {
+        pairs[pairs.length] = compositeKey;
       }
 
       distances[distances.length] = levenshtein(videos[i], videos[j]);
