@@ -69,6 +69,7 @@ export default function getInfo(filepath) {
             info.audio.push({
               id: track.ID,
               format: track.Format,
+              title: track.Title,
               language: track.Language
             });
         }
