@@ -7,5 +7,5 @@
  * @typedef {{id: string, name: string, path: string, filename: string, ext: string}} BonusEntry
  * @typedef {{id: string, name: string, path: string, filename: string, ext: string}} EpisodeEntry
  * @typedef {{scanning: boolean}} AnimeFolderState
- * @typedef {{id: string, name: string, path: string, dubs: DubEntry[], subs: SubEntry[] bonuses: BonusEntry[], episodes: EpisodeEntry[], state: AnimeFolderState}} AnimeFolder
+ * @typedef {{id: string, name: string, path: string, dubs: DubEntry[], subs: SubEntry[] bonuses: BonusEntry[], episodeInfo: {}, episodes: EpisodeEntry[], state: AnimeFolderState}} AnimeFolder
  */

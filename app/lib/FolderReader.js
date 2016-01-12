@@ -7,6 +7,8 @@ import Promise from 'bluebird';
 import { readdir } from 'fs';
 import { sep, basename, extname } from 'path';
 
+import getInfo, { setThirdPartyDir } from 'lib/thirdparty/MediaInfo';
+
 const readdirAsync = Promise.promisify(readdir);
 
 export default class FolderReader {
@@ -68,6 +70,7 @@ export default class FolderReader {
       dubs: [],
       subs: [],
       bonuses: [],
+      episodeInfo: {},
       episodes: classifiedItems.videos.map(episode => ({
         id: sha224(episode),
         ext: '',
@@ -96,6 +99,17 @@ export default class FolderReader {
         episode.name = episode.filename.replace(sameStart, '').replace(sameEnd, '').trim();
 
         return episode;
+      });
+
+      this.updateAnimeFolder(animeFolder);
+    });
+
+    process.nextTick(() => {
+      const firstEpisode = animeFolder.episodes[0];
+
+      getInfo(firstEpisode.path).then(info => {
+        animeFolder.episodeInfo = info;
+        this.updateAnimeFolder(animeFolder);
       });
     });
 

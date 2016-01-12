@@ -3,10 +3,12 @@ import mkdirp from 'mkdirp';
 import { sep } from 'path';
 import setupIpcMain from './ipcMain';
 
+import { setThirdPartyDir } from 'lib/thirdparty/MediaInfo';
+
 const mkdirpAsync = Promise.promisify(mkdirp);
 
 export default class App {
-  constructor (electron) {
+  constructor(electron) {
     this.name = 'Bakaru';
 
     this.electron = electron;
@@ -15,21 +17,26 @@ export default class App {
     this.app = electron.app;
     this.ipc = electron.ipcMain;
 
+    this.mainWindow = null;
+
+    this._setupVariables();
+    this._createDirsIfNotExist();
+    setupIpcMain(this);
+    this._setupAppEventListeners();
+  }
+
+  _setupVariables() {
     this.appDir = this.app.getPath('appData') + sep + this.name + 'Data';
     this.thirdPartyDir = this.appDir + sep + 'Thirdparty';
     this.tempDir = this.appDir + sep + 'Temp';
 
-    this.mainWindow = null;
-
-    this.createDirsIfNotExist();
-    setupIpcMain(this);
-    this._setupAppEventListeners();
+    setThirdPartyDir(this.thirdPartyDir);
   }
 
   /**
    * Creates app directories
    */
-  createDirsIfNotExist () {
+  _createDirsIfNotExist() {
     mkdirpAsync(this.appDir);
     mkdirpAsync(this.thirdPartyDir);
     mkdirpAsync(this.tempDir);
@@ -38,7 +45,7 @@ export default class App {
   /**
    * Creates main window
    */
-  createMainWindow () {
+  createMainWindow() {
     this.mainWindow = new this.electron.BrowserWindow({
       width: 850,
       height: 720,
@@ -56,7 +63,7 @@ export default class App {
     // this.mainWindow.setProgressBar(.5);
 
     // Emitted when the window is closed.
-    this.mainWindow.on('closed', function() {
+    this.mainWindow.on('closed', function () {
       // Dereference the window object, usually you would store windows
       // in an array if your app supports multi windows, this is the time
       // when you should delete the corresponding element.
@@ -69,7 +76,7 @@ export default class App {
    *
    * @private
    */
-  _setupAppEventListeners () {
+  _setupAppEventListeners() {
     this.app.on('ready', ::this.createMainWindow);
 
     this.app.on('window-all-closed', () => {
