@@ -79,8 +79,7 @@ export default class FolderReader {
         filename: ''
       })),
       state: {
-        scanning: true,
-        episodesLoading: true
+        scanning: true
       }
     };
 
