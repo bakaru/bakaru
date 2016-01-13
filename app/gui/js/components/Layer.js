@@ -5,7 +5,7 @@ import Anime from 'components/Anime';
 
 class Layer extends Component {
   render () {
-    const { folders } = this.props;
+    const { folders, openedFolder } = this.props;
 
     const foldersList = [];
 
@@ -15,12 +15,24 @@ class Layer extends Component {
       );
     }
 
+    let sideBar;
+
+    if (openedFolder !== null) {
+      sideBar = (<Anime key="sidebar"/>);
+    } else {
+      sideBar = (
+        <placeholder key="sidebar">
+          Open one one the left!
+        </placeholder>
+      );
+    }
+
     return (
       <layer>
         <list>
           { foldersList }
         </list>
-        <Anime/>
+        { sideBar }
       </layer>
     );
   }
@@ -28,7 +40,8 @@ class Layer extends Component {
 
 const mapPropsFromStore = store => {
   return {
-    folders: store.folders
+    folders: store.folders,
+    openedFolder: store.state.openedFolder
   }
 };
 

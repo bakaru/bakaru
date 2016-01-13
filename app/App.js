@@ -1,11 +1,8 @@
-import Promise from 'bluebird';
-import mkdirp from 'mkdirp';
-import { sep } from 'path';
+import path from 'lib/path';
+import cache from 'lib/cache';
 import setupIpcMain from './ipcMain';
 
 import { setThirdPartyDir } from 'lib/thirdparty/MediaInfo';
-
-const mkdirpAsync = Promise.promisify(mkdirp);
 
 export default class App {
   constructor(electron) {
@@ -20,27 +17,14 @@ export default class App {
     this.mainWindow = null;
 
     this._setupVariables();
-    this._createDirsIfNotExist();
     setupIpcMain(this);
     this._setupAppEventListeners();
   }
 
   _setupVariables() {
-    this.appDir = this.app.getPath('appData') + sep + this.name + 'Data';
-    this.thirdPartyDir = this.appDir + sep + 'Thirdparty';
-    this.tempDir = this.appDir + sep + 'Temp';
-
-    setThirdPartyDir(this.thirdPartyDir);
+    setThirdPartyDir(path.thirdParty);
   }
 
-  /**
-   * Creates app directories
-   */
-  _createDirsIfNotExist() {
-    mkdirpAsync(this.appDir);
-    mkdirpAsync(this.thirdPartyDir);
-    mkdirpAsync(this.tempDir);
-  }
 
   /**
    * Creates main window
@@ -56,6 +40,10 @@ export default class App {
 
     // and load the index.html of the app.
     this.mainWindow.loadURL('file:///app/gui/index.html');
+
+    this.mainWindow.webContents.on('dom-ready', () => {
+      cache.restore(this.mainWindow.webContents);
+    });
 
     // Open the DevTools.
     this.mainWindow.webContents.openDevTools();
@@ -80,11 +68,13 @@ export default class App {
     this.app.on('ready', ::this.createMainWindow);
 
     this.app.on('window-all-closed', () => {
-      // On OS X it is common for applications and their menu bar
-      // to stay active until the user quits explicitly with Cmd + Q
-      if (process.platform !== 'darwin') {
-        this.app.quit();
-      }
+      cache.flush().then(() => {
+        // On OS X it is common for applications and their menu bar
+        // to stay active until the user quits explicitly with Cmd + Q
+        if (process.platform !== 'darwin') {
+          this.app.quit();
+        }
+      });
     });
 
     this.app.on('activate', () => {

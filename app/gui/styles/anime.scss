@@ -1,0 +1,40 @@
+@import "variables";
+
+$summaryHeight: 80px;
+
+anime {
+  display: block;
+  position: relative;
+  border-right: solid 1px $delimiterColour;
+
+  summary {
+    display: block;
+    padding: $baseInnerPadding;
+    border-bottom: solid 1px $delimiterColour;
+
+    title {
+      display: block;
+    }
+  }
+
+  episodes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $mainColour;
+    }
+
+    episode {
+      display: block;
+      flex-grow: 1;
+      padding: $baseInnerPadding;
+      border-bottom: solid 1px $delimiterColour;
+      border-right: solid 1px $delimiterColour;
+      text-align: center;
+    }
+  }
+}

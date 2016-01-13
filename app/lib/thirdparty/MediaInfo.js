@@ -75,8 +75,6 @@ export default function getInfo(filepath) {
         }
       }
 
-      console.log(JSON.stringify(info, null, 2));
-
       return info;
     });
 }

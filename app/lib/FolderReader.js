@@ -1,12 +1,11 @@
-import { get as levenshtein } from 'fast-levenshtein';
-import { sha224 } from 'js-sha256';
-import naturalSort from 'javascript-natural-sort';
-
-import classifyFolderItems from 'lib/FolderItemsClassificator';
-import Promise from 'bluebird';
 import { readdir } from 'fs';
+import Promise from 'bluebird';
+import { sha224 } from 'js-sha256';
 import { sep, basename, extname } from 'path';
-
+import naturalSort from 'javascript-natural-sort';
+import cache from 'lib/cache';
+import { get as levenshtein } from 'fast-levenshtein';
+import classifyFolderItems from 'lib/FolderItemsClassificator';
 import getInfo, { setThirdPartyDir } from 'lib/thirdparty/MediaInfo';
 
 const readdirAsync = Promise.promisify(readdir);
@@ -18,8 +17,24 @@ export default class FolderReader {
    * @callback updateAnimeFolder
    */
   constructor(addAnimeFolder, updateAnimeFolder) {
-    this.addAnimeFolder = addAnimeFolder;
-    this.updateAnimeFolder = updateAnimeFolder;
+    this._addAnimeFolder = addAnimeFolder;
+    this._updateAnimeFolder = updateAnimeFolder;
+  }
+
+  /**
+   * @param {AnimeFolder} animeFolder
+   */
+  addAnimeFolder(animeFolder) {
+    this._addAnimeFolder(animeFolder);
+    cache.setAnimeFolder(animeFolder);
+  }
+
+  /**
+   * @param {AnimeFolder} animeFolder
+   */
+  updateAnimeFolder(animeFolder) {
+    this._updateAnimeFolder(animeFolder);
+    cache.setAnimeFolder(animeFolder);
   }
 
   /**
@@ -85,16 +100,20 @@ export default class FolderReader {
 
     process.nextTick(() => {
       animeFolder.episodes = animeFolder.episodes.map(episode => {
-        episode.ext = extname(episode.path);
-        episode.filename = basename(episode.path, episode.ext);
-        episode.ext = episode.ext.replace(/\./, '').toLowerCase();
+        const originalExt = extname(episode.path);
+
+        episode.ext = originalExt.replace('.', '').toLowerCase();
+        episode.name = basename(episode.path, `.${originalExt}`);
+        episode.filename = basename(episode.path);
 
         return episode;
       });
 
       const [sameStart, sameEnd] = findEqualStartAndEndParts(animeFolder.episodes.map(episode => episode.name));
 
-      animeFolder.episodes.map(episode => {
+      console.log(sameStart, sameEnd);
+
+      animeFolder.episodes = animeFolder.episodes.map(episode => {
         episode.name = episode.filename.replace(sameStart, '').replace(sameEnd, '').trim();
 
         return episode;
@@ -280,7 +299,7 @@ function normalizeAnimeName(path) {
  * @returns {[string, string]}
  */
 function findEqualStartAndEndParts (strings) {
-  const splittedStrings = strings.map(string => string.split(''));
+  const splittedStrings = strings;
   const stringsLength = strings.length;
 
   const firstStringLength = splittedStrings[0].length;
