@@ -113,15 +113,15 @@ export default class FolderReader {
         return episode;
       });
 
-      const [sameStart, sameEnd] = findEqualStartAndEndParts(animeFolder.episodes.map(episode => episode.name));
+      if (animeFolder.episodes.length > 1) {
+        const [sameStart, sameEnd] = findEqualStartAndEndParts(animeFolder.episodes.map(episode => episode.name));
 
-      console.log(sameStart, sameEnd);
+        animeFolder.episodes = animeFolder.episodes.map(episode => {
+          episode.name = episode.filename.replace(sameStart, '').replace(sameEnd, '').trim();
 
-      animeFolder.episodes = animeFolder.episodes.map(episode => {
-        episode.name = episode.filename.replace(sameStart, '').replace(sameEnd, '').trim();
-
-        return episode;
-      });
+          return episode;
+        });
+      }
 
       this.updateAnimeFolder(animeFolder);
     });
