@@ -303,21 +303,24 @@ function normalizeAnimeName(path) {
  * @returns {[string, string]}
  */
 function findEqualStartAndEndParts (strings) {
-  const splittedStrings = strings;
   const stringsLength = strings.length;
 
-  const firstStringLength = splittedStrings[0].length;
+  if (stringsLength === 1) {
+    return ['', ''];
+  }
+
+  const firstStringLength = strings[0].length;
 
   // Start
   let start = [];
 
   for (let i = 0; i < firstStringLength; i++) {
-    const letter = splittedStrings[0][i];
+    const letter = strings[0][i];
 
     let differenceDetected = false;
 
     for (let stringIndex = 1; stringIndex < stringsLength; stringIndex++) {
-      if (splittedStrings[stringIndex][i] !== letter) {
+      if (strings[stringIndex][i] !== letter) {
         differenceDetected = true;
         break;
       }
@@ -334,14 +337,14 @@ function findEqualStartAndEndParts (strings) {
   let end = [];
 
   for (let j = 0; j < firstStringLength; j++) {
-    const letter = splittedStrings[0][firstStringLength - 1 - j];
+    const letter = strings[0][firstStringLength - 1 - j];
 
     let differenceDetected = false;
 
     for (let stringIndex = 1; stringIndex < stringsLength; stringIndex++) {
-      const stringLength = splittedStrings[stringIndex].length;
+      const stringLength = strings[stringIndex].length;
 
-      if (splittedStrings[stringIndex][stringLength - 1 - j] !== letter) {
+      if (strings[stringIndex][stringLength - 1 - j] !== letter) {
         differenceDetected = true;
         break;
       }
