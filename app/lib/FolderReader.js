@@ -85,6 +85,10 @@ export default class FolderReader {
       dubs: [],
       subs: [],
       bonuses: [],
+      selections: {
+        dub: false,
+        sub: false
+      },
       episodeInfo: {},
       episodes: classifiedItems.videos.map(episode => ({
         id: sha224(episode),
