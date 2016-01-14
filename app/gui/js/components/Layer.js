@@ -7,9 +7,18 @@ class Layer extends Component {
   render () {
     const { folders, openedFolder } = this.props;
 
+    const foldersSorted = [...folders.keys()].sort((a, b) => {
+      const aFolder = folders.get(a);
+      const bFolder = folders.get(b);
+
+      return aFolder.name.toLowerCase().charCodeAt(0) - bFolder.name.toLowerCase().charCodeAt(0);
+    });
+
     const foldersList = [];
 
-    for (let id of folders.keys()) {
+    for (let index = 0; index < foldersSorted.length; index++) {
+      const id = foldersSorted[index];
+
       foldersList[foldersList.length] = (
         <Item key={ id } id={ id } />
       );
