@@ -6,6 +6,7 @@ anime {
   display: block;
   position: relative;
   border-right: solid 1px $delimiterColour;
+  overflow-y: scroll;
 
   summary {
     display: block;
@@ -14,6 +15,60 @@ anime {
 
     title {
       display: block;
+    }
+
+    path {
+      display: block;
+      width: 100%;
+      color: #999;
+      font-size: 12px;
+      @include ellipsis;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  selectors {
+    display: flex;
+    border-bottom: solid 1px $delimiterColour;
+
+    select {
+      flex: 1;
+      margin: 0;
+      padding: $baseInnerPadding $baseInnerPadding*1.68;
+      border: none;
+      border-right: solid 1px $delimiterColour;
+      background-color: transparent;
+      outline-color: $mainColour;
+      outline-width: 1px;
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
+
+  actions {
+    display: block;
+    border-bottom: solid 1px $delimiterColour;
+
+    button {
+      color: $mainColour;
+      padding: $baseInnerPadding $baseInnerPadding*1.68;
+      background-color: transparent;
+      border: none;
+      font-size: 14px;
+      font-family: 'Open Sans';
+      outline: none;
+
+      &:hover {
+        background-color: lighten($mainColour, 40%);
+      }
+      &:disabled {
+        opacity: .8;
+      }
     }
   }
 
