@@ -16,12 +16,10 @@ class Path {
     this.temp = appDataPath + sep + 'Temp';
     this.thirdParty = appDataPath + sep + 'Thirdparty';
 
-    console.log(this);
-
-    this.createPaths();
+    this._createPaths();
   }
 
-  createPaths() {
+  _createPaths() {
     mkdirpAsync(appDataPath);
     mkdirpAsync(this.thirdParty);
     mkdirpAsync(this.temp);
