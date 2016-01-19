@@ -32,6 +32,6 @@ export default function isAnimeFolder(classifiedItems) {
   const index = Math.round(distances.length * percentile) + 1;
   const mean = distances.slice(0, index).reduce((acc, n) => acc + n, 0) / index;
 
-  // 90% times diff should be less than 3 symbols, that should be enough, huh?
-  return mean < 3;
+  // 90% times diff should be less than 5 symbols, that should be enough, huh?
+  return mean < 5;
 }

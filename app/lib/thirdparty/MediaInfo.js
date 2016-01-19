@@ -36,7 +36,7 @@ export default function getInfo(filepath) {
     .then(mediaInfo => parseXml(mediaInfo))
     .then(mediaObject => {
       const info = {
-        duration: '',
+        duration: null,
         video: null,
         audio: [],
         subtitles: []
@@ -49,28 +49,45 @@ export default function getInfo(filepath) {
 
         switch (track.$.type) {
           case 'General':
-            info.duration = track.Duration;
+            if (track.Duration) {
+              info.duration = track.Duration[0];
+            }
             break;
 
           case 'Video':
             if (info.video === null) {
+              const width = track.Width.length
+                ? parseInt(track.Width[0].replace('pixels', '').replace(' ', ''))
+                : false;
+              const height = track.Height.length
+                ? parseInt(track.Height[0].replace('pixels', '').replace(' ', ''))
+                : false;
+              const fps = track.Frame_rate.length
+                ? parseFloat(track.Frame_rate[0].replace('fps', '').replace(' ', ''))
+                : false;
+              const bitDepth = track.Bit_depth[0] || '8 bits';
+
               info.video = {
-                id: track.ID,
-                format: track.Format,
-                width: track.Width,
-                height: track.Height,
-                fps: track.Frame_rate,
-                bitDepth: track.Bit_depth || '8 bits'
+                id: track.ID[0],
+                format: track.Format[0],
+                width,
+                height,
+                fps,
+                bitDepth: parseInt(bitDepth.replace('bits', '').replace(' ', ''))
               };
             }
             break;
 
           case 'Audio':
             info.audio.push({
-              id: track.ID,
-              format: track.Format,
-              title: track.Title,
+              id: track.ID[0],
+              format: track.Format[0],
+              title: track.Title
+                ? track.Title[0]
+                : false,
               language: track.Language
+                ? track.Language[0]
+                : false
             });
         }
       }
