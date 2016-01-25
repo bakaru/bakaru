@@ -91,16 +91,19 @@ export default class FolderReader {
         dub: false,
         sub: false
       },
-      episodeInfo: {},
+      quality: "unknown",
       episodes: classifiedItems.videos.map(episode => ({
         id: sha224(episode),
         ext: '',
         name: '',
         path: episode,
-        filename: ''
+        filename: '',
+        mediainfo: null
       })),
       state: {
-        scanning: true
+        scanning: true,
+        subScanning: true,
+        mediainfoScanning: true
       }
     };
 
@@ -110,10 +113,27 @@ export default class FolderReader {
     });
 
     process.nextTick(() => {
-      const firstEpisode = animeFolder.episodes[0];
+      const episodesPathsMap = new Map();
 
-      thirdparty.getMediaInfo(firstEpisode.path).then(info => {
-        animeFolder.episodeInfo = info;
+      for (let episodeIndex in animeFolder.episodes) {
+        episodesPathsMap.set(animeFolder.episodes[episodeIndex].path, episodeIndex);
+      }
+
+      thirdparty.getMediaInfo([...episodesPathsMap.keys()]).then(info => {
+        let maxHeight = 0;
+
+        for (let [episodePath, mediainfo] of info) {
+          const episodeIndex = episodesPathsMap.get(episodePath);
+
+          if (mediainfo.video && mediainfo.video.height > maxHeight) {
+            maxHeight = mediainfo.video.height;
+          }
+
+          animeFolder.episodes[episodeIndex].mediainfo = mediainfo;
+        }
+
+        animeFolder.quality = `${maxHeight}p`;
+        animeFolder.state.mediainfoScanning = false;
         this.updateAnimeFolder(animeFolder);
       });
     });
@@ -121,6 +141,7 @@ export default class FolderReader {
     RecursiveAnimeFolderScanner.scan(animeFolder, classifiedItems.folders)
       .finally(() => {
         animeFolder.state.scanning = false;
+        animeFolder.state.subScanning = false;
         this.updateAnimeFolder(animeFolder);
       });
 
@@ -146,8 +167,6 @@ export default class FolderReader {
 
       let from = sameStart.length;
       let to   = sameEnd.length;
-
-      console.log(`Same start last char: ${sameStart}`);
 
       if (isNaN(+sameStart[from - 1]) === false) { // check if last char is a digit
         from--;

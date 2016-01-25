@@ -8,9 +8,9 @@ class Anime extends Component {
      */
     const { folder } = this.props;
 
-    console.log(folder);
-
     const episodes = folder.episodes.map(episode => {
+      console.log(episode.mediainfo);
+
       return (
         <episode key={ episode.id }>
           { episode.name }

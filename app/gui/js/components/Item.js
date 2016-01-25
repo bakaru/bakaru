@@ -14,7 +14,7 @@ class Item extends Component {
     const isOpened = openedFolder === id;
     const summary = [];
 
-    if (folder.state.scanning) {
+    if (folder.state.scanning || folder.state.subScanning || folder.state.mediainfoScanning) {
       summary[summary.length] = `Scanning in progress`;
     }
     if (folder.episodes.length > 0) {
@@ -29,6 +29,8 @@ class Item extends Component {
     if (folder.bonuses.length > 0) {
       summary[summary.length] = `Bonuses: ${folder.bonuses.length}`;
     }
+
+    summary[summary.length] = `Quality: ${folder.quality}`;
 
     return (
       <item className={ isOpened ? 'opened' : '' } onClick={ () => openFolder(id) }>
