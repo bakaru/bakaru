@@ -46,7 +46,9 @@ export default class App {
     });
 
     // Open the DevTools.
-    this.mainWindow.webContents.openDevTools();
+    this.mainWindow.webContents.openDevTools({
+      detach: true
+    });
 
     // this.mainWindow.setProgressBar(.5);
 

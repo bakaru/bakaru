@@ -8,7 +8,7 @@ class Anime extends Component {
      */
     const { folder } = this.props;
 
-    console.log(folder.episodes);
+    console.log(folder);
 
     const episodes = folder.episodes.map(episode => {
       return (

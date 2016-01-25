@@ -105,26 +105,7 @@ export default class FolderReader {
     };
 
     process.nextTick(() => {
-      animeFolder.episodes = animeFolder.episodes.map(episode => {
-        const originalExt = extname(episode.path);
-
-        episode.ext = originalExt.replace('.', '').toLowerCase();
-        episode.name = basename(episode.path, `.${originalExt}`);
-        episode.filename = basename(episode.path);
-
-        return episode;
-      });
-
-      if (animeFolder.episodes.length > 1) {
-        const [sameStart, sameEnd] = findSameParts(animeFolder.episodes.map(episode => episode.name));
-
-        animeFolder.episodes = animeFolder.episodes.map(episode => {
-          episode.name = episode.filename.replace(sameStart, '').replace(sameEnd, '').trim();
-
-          return episode;
-        });
-      }
-
+      this.refineEpisodesNames(animeFolder);
       this.updateAnimeFolder(animeFolder);
     });
 
@@ -144,6 +125,40 @@ export default class FolderReader {
       });
 
     return animeFolder;
+  }
+
+  /**
+   * @param {AnimeFolder} animeFolder
+   */
+  refineEpisodesNames(animeFolder) {
+    animeFolder.episodes = animeFolder.episodes.map(episode => {
+      const originalExt = extname(episode.path);
+
+      episode.ext = originalExt.replace('.', '').toLowerCase();
+      episode.name = basename(episode.path, `.${originalExt}`);
+      episode.filename = basename(episode.path);
+
+      return episode;
+    });
+
+    if (animeFolder.episodes.length > 1) {
+      let [sameStart, sameEnd] = findSameParts(animeFolder.episodes.map(episode => episode.name));
+
+      let from = sameStart.length;
+      let to   = sameEnd.length;
+
+      console.log(`Same start last char: ${sameStart}`);
+
+      if (isNaN(+sameStart[from - 1]) === false) { // check if last char is a digit
+        from--;
+      }
+
+      animeFolder.episodes = animeFolder.episodes.map(episode => {
+        episode.name = episode.filename.slice(from, episode.filename.length - to).trim();
+
+        return episode;
+      });
+    }
   }
 }
 
