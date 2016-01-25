@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { minimizeMainWindow, openSelectFolderDialog } from 'ipc';
 
-class Header extends Component {
+export default class Header extends Component {
   render () {
-    const { addFolder } = this.props;
+    const { addFolder } = this.props.flags;
+
+    const { minimizeMainWindow, openSelectFolderDialog } = this.props;
 
     let addFolderButton;
 
@@ -29,26 +30,12 @@ class Header extends Component {
           { addFolderButton }
         </actions>
         <controls>
-          <exit dangerouslySetInnerHTML={{__html: '&times;'}} onClick={::this.handleExitClick} />
-          <minimize onClick={::this.handleMinimizeClick}>
+          <exit dangerouslySetInnerHTML={{__html: '&times;'}} onClick={ () => window.close() } />
+          <minimize onClick={ () => minimizeMainWindow() }>
             -
           </minimize>
         </controls>
       </header>
     );
   }
-
-  handleExitClick () {
-    window.close();
-  }
-
-  handleMinimizeClick () {
-    minimizeMainWindow();
-  }
 }
-
-export default connect(
-  state => ({
-    ...state.flags
-  })
-)(Header);
