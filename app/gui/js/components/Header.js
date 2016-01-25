@@ -1,41 +1,37 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 
-export default class Header extends Component {
-  render () {
-    const { addFolder } = this.props.flags;
+export default function Header(props) {
+  const { addFolder } = props.flags;
+  const { minimizeMainWindow, openSelectFolderDialog } = props;
 
-    const { minimizeMainWindow, openSelectFolderDialog } = this.props;
+  let addFolderButton;
 
-    let addFolderButton;
-
-    if (addFolder) {
-      addFolderButton = (
-        <button key="add-folder-button" onClick={ () => openSelectFolderDialog() } disabled={ addFolder }>
-          <i className="fa fa-circle-o-notch fa-spin"></i>
-        </button>
-      );
-    } else {
-      addFolderButton = (
-        <button key="add-folder-button" onClick={ () => openSelectFolderDialog() }>
-          Add folder
-        </button>
-      );
-    }
-
-    return (
-      <header>
-        <title>BAKARU バカル</title>
-        <actions>
-          { addFolderButton }
-        </actions>
-        <controls>
-          <exit dangerouslySetInnerHTML={{__html: '&times;'}} onClick={ () => window.close() } />
-          <minimize onClick={ () => minimizeMainWindow() }>
-            -
-          </minimize>
-        </controls>
-      </header>
+  if (addFolder) {
+    addFolderButton = (
+      <button key="add-folder-button" onClick={ () => openSelectFolderDialog() } disabled={ addFolder }>
+        <i className="fa fa-circle-o-notch fa-spin"></i>
+      </button>
+    );
+  } else {
+    addFolderButton = (
+      <button key="add-folder-button" onClick={ () => openSelectFolderDialog() }>
+        Add folder
+      </button>
     );
   }
+
+  return (
+    <header>
+      <title>BAKARU バカル</title>
+      <actions>
+        { addFolderButton }
+      </actions>
+      <controls>
+        <exit dangerouslySetInnerHTML={{__html: '&times;'}} onClick={ () => window.close() }/>
+        <minimize onClick={ () => minimizeMainWindow() }>
+          -
+        </minimize>
+      </controls>
+    </header>
+  );
 }
