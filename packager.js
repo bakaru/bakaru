@@ -55,14 +55,6 @@ promise = promise.then(() => {
   });
 });
 
-//promise = promise.then(() => {
-//  log('Installing npm deps...');
-//  cmd.execSync('npm i --production', {
-//    cwd: path.join(__dirname, 'build/staging')
-//  });
-//  log('Done');
-//});
-
 promise = promise.then(() => {
   log('Packaging electron app...')
 
@@ -73,8 +65,8 @@ promise = promise.then(() => {
       arch: 'x64',
       dir: './build/staging',
       platform: 'win32',
-      version: '0.36.2',
-      asar: false,
+      version: '0.36.5',
+      asar: true,
       overwrite: true
     }, (err, appPath) => {
       if (err) {
