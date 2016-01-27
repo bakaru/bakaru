@@ -77,12 +77,16 @@ config.push({
         loaders: ["babel"]
       },
       {
-        test: /\.(scss|css)$/,
+        test: /\.(css)$/,
+        loader: ExtractTextPlugin.extract("style", "css", "resolve-url")
+      },
+      {
+        test: /\.(scss)$/,
         loader: ExtractTextPlugin.extract("style", "css!sass?sourceMap", "resolve-url")
       },
       {
-        test: /\.(otf|eot|svg|ttf|woff|png)/,
-        loader: 'url-loader?limit=8192'
+        test: /\.(otf|eot|svg|ttf|woff|png|woff2)/,
+        loader: 'url-loader?limit=8096'
       }
     ]
   },

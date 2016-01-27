@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron app/build/main.js",
     "watch": "webpack -d -w",
-    "build": "webpack -p"
+    "build": "node packager"
   },
   "repository": {
     "type": "git",

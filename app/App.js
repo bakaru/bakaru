@@ -4,8 +4,6 @@ import setupIpcMain from './ipcMain';
 
 import { setThirdPartyDir } from 'lib/thirdparty/MediaInfo';
 
-var thisDir = this['__dirname'];
-
 export default class App {
   constructor(electron) {
     this.name = 'Bakaru';
@@ -15,7 +13,16 @@ export default class App {
     this.dialog = electron.dialog;
     this.app = electron.app;
     this.ipc = electron.ipcMain;
+    this.runningDevMode = false;
 
+    // Hacky workaround d'oh :(
+    let appPath = this.app.getAppPath();
+    if (appPath.indexOf('default_app') > -1) {
+      appPath = '';
+      this.runningDevMode = true;
+    }
+
+    this.mainWindowUrl = `file://${appPath}/app/gui/index.html`;
     this.mainWindow = null;
 
     this._setupVariables();
@@ -41,17 +48,18 @@ export default class App {
     });
 
     // and load the index.html of the app.
-    console.log('file://' + thisDir + '/index.html');
-    this.mainWindow.loadURL('file:///index.html');
+    console.log(this.mainWindowUrl);
+    this.mainWindow.loadURL(this.mainWindowUrl);
 
     this.mainWindow.webContents.on('dom-ready', () => {
       cache.restore(this.mainWindow.webContents);
     });
 
-    // Open the DevTools.
-    this.mainWindow.webContents.openDevTools({
-      detach: true
-    });
+    if (this.runningDevMode) {
+      this.mainWindow.webContents.openDevTools({
+        detach: true
+      });
+    }
 
     // this.mainWindow.setProgressBar(.5);
 

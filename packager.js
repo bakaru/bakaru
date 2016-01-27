@@ -15,7 +15,7 @@ const log = msg => console.log(chalk.green(msg));
 var APP_BUILD = './build/staging/';
 var GUI_BUILD = './build/staging/app/gui/build/';
 
-const winBuild = `set APP_BUILD=${APP_BUILD} && set GUI_BUILD=${APP_BUILD}build/ && webpack -p`;
+const winBuild = `set APP_BUILD=${APP_BUILD} && set GUI_BUILD=${GUI_BUILD} && webpack -p`;
 
 var promise = Promise.resolve(noop);
 
@@ -46,7 +46,7 @@ promise = promise.then(() => {
   });
   cpPromise = cpPromise.then(() => {
     return new Promise(resolve => {
-      cp('./app/gui/index.html', './build/staging/', () => resolve());
+      cp('./app/gui/index.html', './build/staging/app/gui/', () => resolve());
     });
   });
 
