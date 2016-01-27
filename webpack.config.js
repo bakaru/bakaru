@@ -8,23 +8,33 @@ var Clean = require('clean-webpack-plugin');
 var nodeModules = {
   electron: 'commonjs electron'
 };
-fs.readdirSync('node_modules')
-  .filter(function(x) {
-    return ['.bin'].indexOf(x) === -1;
-  })
-  .forEach(function(mod) {
-    nodeModules[mod] = 'commonjs ' + mod;
-  });
+//fs.readdirSync('node_modules')
+//  .filter(function(x) {
+//    return ['.bin'].indexOf(x) === -1;
+//  })
+//  .forEach(function(mod) {
+//    nodeModules[mod] = 'commonjs ' + mod;
+//  });
 
 var config = [];
+
+var APP_BUILD = './app/build/';
+var GUI_BUILD = './app/gui/build/';
+
+if (process.env.APP_BUILD && process.env.APP_BUILD.trim().length > 0) {
+  APP_BUILD = process.env.APP_BUILD.trim();
+}
+if (process.env.GUI_BUILD && process.env.GUI_BUILD.trim().length > 0) {
+  GUI_BUILD = process.env.GUI_BUILD.trim();
+}
 
 config.push({
   entry: {
     main: './app/main.js'
   },
   output: {
-    path: './app/build/',
-    filename: '[name].js'
+    path: APP_BUILD,
+    filename: 'main.js'
   },
   resolve: {
     alias: {
@@ -48,8 +58,8 @@ config.push({
     gui: './app/gui/js/main.js'
   },
   output: {
-    path: './app/gui/build/',
-    filename: '[name].js'
+    path: GUI_BUILD,
+    filename: 'gui.js'
   },
   resolve: {
     root: [path.join(__dirname, "bower_components")],

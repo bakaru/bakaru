@@ -4,6 +4,8 @@ import setupIpcMain from './ipcMain';
 
 import { setThirdPartyDir } from 'lib/thirdparty/MediaInfo';
 
+var thisDir = this['__dirname'];
+
 export default class App {
   constructor(electron) {
     this.name = 'Bakaru';
@@ -39,7 +41,8 @@ export default class App {
     });
 
     // and load the index.html of the app.
-    this.mainWindow.loadURL('file:///app/gui/index.html');
+    console.log('file://' + thisDir + '/index.html');
+    this.mainWindow.loadURL('file:///index.html');
 
     this.mainWindow.webContents.on('dom-ready', () => {
       cache.restore(this.mainWindow.webContents);
