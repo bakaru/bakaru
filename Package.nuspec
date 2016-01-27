@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Bakaru</id>
+    <version>0.0.1</version>
+    <authors>Alexander Kukhta</authors>
+    <owners>Alexander Kukhta</owners>
+    <licenseUrl>http://www.wtfpl.net/</licenseUrl>
+    <projectUrl>https://github.com/bakaru/bakaru</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/bakaru/bakaru/master/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Otaku's best friend</description>
+    <releaseNotes>Blahblah</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>anime bakaru</tags>
+  </metadata>
+</package>
