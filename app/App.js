@@ -16,13 +16,13 @@ export default class App {
     this.runningDevMode = false;
 
     // Hacky workaround d'oh :(
-    let appPath = this.app.getAppPath();
-    if (appPath.indexOf('default_app') > -1) {
-      appPath = '';
+    this.appPath = this.app.getAppPath();
+    if (this.appPath.indexOf('default_app') > -1) {
+      this.appPath = '';
       this.runningDevMode = true;
     }
 
-    this.mainWindowUrl = `file://${appPath}/app/gui/index.html`;
+    this.mainWindowUrl = `file://${this.appPath}/app/gui/index.html`;
     this.mainWindow = null;
 
     this._setupVariables();

@@ -30,66 +30,107 @@ anime {
     }
   }
 
-  selectors {
-    display: flex;
-    border-bottom: solid 1px $delimiterColour;
-
-    select {
-      flex: 1;
-      margin: 0;
-      padding: $baseInnerPadding $baseInnerPadding*1.68;
-      border: none;
-      border-right: solid 1px $delimiterColour;
-      background-color: transparent;
-      outline-color: $mainColour;
-      outline-width: 1px;
-
-      &:last-child {
-        border-right: none;
-      }
-    }
-  }
-
-  actions {
+  backery {
     display: block;
+    //margin: $baseInnerPadding;
     border-bottom: solid 1px $delimiterColour;
 
-    button {
-      color: $mainColour;
-      padding: $baseInnerPadding $baseInnerPadding*1.68;
-      background-color: transparent;
-      border: none;
-      font-size: 14px;
-      font-family: 'Open Sans';
-      outline: none;
-
-      &:hover {
-        background-color: lighten($mainColour, 40%);
-      }
-      &:disabled {
-        opacity: .8;
-      }
-    }
-  }
-
-  episodes {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: flex-start;
-    width: 100%;
-
-    &::-webkit-scrollbar-thumb {
-      background-color: $mainColour;
-    }
-
-    episode {
+    title {
       display: block;
-      flex-grow: 1;
-      padding: $baseInnerPadding;
-      border-bottom: solid 1px $delimiterColour;
-      border-right: solid 1px $delimiterColour;
       text-align: center;
+      font-weight: 100;
+      font-size: 14px;
+      text-transform: uppercase;
+      border-bottom: solid 1px $delimiterColour;
+    }
+
+    subtitle {
+      display: block;
+      color: darken($delimiterColour, 50%);
+      font-size: 12px;
+      border-bottom: solid 1px lighten($delimiterColour, .1%);
+      padding: $baseInnerPadding/2 3px 0 3px;
+    }
+
+    selectors {
+      display: flex;
+      border-bottom: solid 1px $delimiterColour;
+
+      list {
+        flex: 1;
+        margin: 0;
+        border: none;
+        border-right: solid 1px $delimiterColour;
+        background-color: transparent;
+        overflow-y: visible;
+
+        subtitle {
+          padding: 0 3px;
+        }
+
+        option {
+          display: block;
+          padding: $baseInnerPadding $baseInnerPadding*1.68;
+        }
+
+        &:last-child {
+          border-right: none;
+        }
+      }
+    }
+
+    episodes {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: flex-start;
+      width: 100%;
+
+      &::-webkit-scrollbar-thumb {
+        background-color: $mainColour;
+      }
+
+      episode {
+        display: block;
+        flex-grow: 1;
+        padding: $baseInnerPadding;
+        border-bottom: solid 1px $delimiterColour;
+        border-right: solid 1px $delimiterColour;
+        text-align: center;
+      }
+    }
+
+    settings {
+      display: block;
+      border-bottom: solid 1px $delimiterColour;
+      padding: $baseInnerPadding;
+    }
+
+    actions {
+      display: flex;
+
+      button {
+        flex-grow: 1;
+        color: $mainColour;
+        padding: $baseInnerPadding $baseInnerPadding*1.68;
+        background-color: transparent;
+        border: none;
+        font-size: 14px;
+        font-family: 'Open Sans';
+        outline: none;
+        border-right: solid 1px $delimiterColour;
+
+        &:last-child {
+          border-right: none;
+        }
+
+        &:hover {
+          background-color: lighten($mainColour, 40%);
+        }
+        &:disabled {
+          opacity: .8;
+        }
+      }
     }
   }
 }

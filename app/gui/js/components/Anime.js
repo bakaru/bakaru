@@ -1,69 +1,74 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
-class Anime extends Component {
-  render () {
-    /**
-     * @type {AnimeFolder} folder
-     */
-    const { folder } = this.props;
+/**
+ * @param {AnimeFolder} folder
+ * @returns {XML}
+ * @constructor
+ */
+export default function Anime ({ folder }) {
+  const episodes = renderEps(folder.episodes);
+  const dubs = renderDubs(folder.dubs);
+  const subs = renderSubs(folder.subs);
 
-    const episodes = folder.episodes.map(episode => {
-      console.log(episode.mediainfo);
-
-      return (
-        <episode key={ episode.id }>
-          { episode.name }
-        </episode>
-      );
-    });
-
-    const dubs = folder.dubs.map(dub => {
-      return (
-        <option value="{ dub.id }" key={ dub.id }>{ dub.name }</option>
-      );
-    });
-
-    const subs = folder.subs.map(sub => {
-      return (
-        <option value="{ sub.id }" key={ sub.id }>{ sub.name }</option>
-      );
-    });
-
-    return (
-      <anime>
-        <summary>
-          <title>{ folder.name }</title>
-          <path>{ folder.path }</path>
-        </summary>
+  return (
+    <anime>
+      <summary>
+        <title>{ folder.name }</title>
+        <path>{ folder.path }</path>
+      </summary>
+      <backery>
         <selectors>
-          <select>
+          <list>
+            <subtitle>Dubs</subtitle>
             { dubs.length > 0 ? dubs : (<option>No dubs</option>) }
-          </select>
-          <select>
+          </list>
+          <list>
+            <subtitle>Subs</subtitle>
             { subs.length > 0 ? subs : (<option>No subs</option>) }
-          </select>
+          </list>
         </selectors>
+        <subtitle>Episodes</subtitle>
+        <episodes>
+          { episodes }
+        </episodes>
+        <subtitle>Settings</subtitle>
+        <settings>
+          Settings here
+        </settings>
         <actions>
           <button>Bake</button>
           <button>Run MPC-HC</button>
         </actions>
-        <episodes>
-          { episodes }
-        </episodes>
-      </anime>
-    );
-  }
+      </backery>
+    </anime>
+  );
 }
 
-const mapStoreToProps = store => ({
-  folder: (openedFolder => {
-    if (openedFolder === null) {
-      return false;
-    }
+function option(id, name, selected = false) {
+  return (
+    <option value={ id } key={ id } className={ selected ? 'selected' : '' }>
+      <i className="fa fa-check-square-o"></i>
+      { name }
+    </option>
+  );
+}
 
-    return store.folders.get(openedFolder);
-  })(store.state.openedFolder)
-});
+function renderSubs(subs) {
+  return subs.map(sub => option(sub.id, sub.name));
+}
 
-export default connect(mapStoreToProps)(Anime);
+function renderDubs(dubs) {
+  return dubs.map(dub => option(dub.id, dub.name));
+}
+
+function renderEps(eps) {
+  return eps.map(episode => {
+    console.log(episode.mediainfo);
+
+    return (
+      <episode key={ episode.id }>
+        { episode.name }
+      </episode>
+    );
+  });
+}

@@ -1,8 +1,7 @@
 import React from 'react';
 
-export default function Header(props) {
-  const { addFolder } = props.flags;
-  const { minimizeMainWindow, openSelectFolderDialog } = props;
+export default function Header({ minimizeMainWindow, openSelectFolderDialog, flags }) {
+  const { addFolder } = flags;
 
   let addFolderButton;
 
@@ -25,6 +24,9 @@ export default function Header(props) {
       <title>BAKARU バカル</title>
       <actions>
         { addFolderButton }
+        <button onClick={ () => window.location.reload() }>
+          Reload
+        </button>
       </actions>
       <controls>
         <exit dangerouslySetInnerHTML={{__html: '&times;'}} onClick={ () => window.close() }/>
