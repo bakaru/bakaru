@@ -4,7 +4,7 @@
   "description": "Bakaru, an anime tool",
   "main": "main.js",
   "scripts": {
-    "start": "electron app/build/main.js",
+    "start": "electron app/main.js",
     "watch": "webpack -d -w",
     "build": "node packager"
   },
@@ -44,6 +44,9 @@
     "webpack-sources": "0.1.0"
   },
   "dependencies": {
+    "babel-polyfill": "6.3.14",
+    "babel-preset-es2015-node": "5.0.2",
+    "babel-register": "6.4.3",
     "bluebird": "3.1.1",
     "fast-levenshtein": "1.1.0",
     "javascript-natural-sort": "0.7.1",

@@ -1,8 +1,11 @@
-import { readdir } from 'fs';
-import Promise from 'bluebird';
-import { sha224 } from 'js-sha256';
-import { sep, basename, extname } from 'path';
-import classifyFolderItems from './ItemsClassificator';
+'use strict';
+
+const Promise = require('bluebird');
+const readdir = require('fs').readdir;
+const sha224 = require('js-sha256').sha224;
+const _path = require('path');
+const basename = _path.basename;
+const classifyFolderItems = require('./ItemsClassificator');
 
 const readdirAsync = Promise.promisify(readdir);
 
@@ -13,7 +16,7 @@ class RecursiveAnimeFolderScanner {
    * @param {string[]} folders
    * @returns {Promise}
    */
-  scan (animeFolder, folders) {
+  scan(animeFolder, folders) {
     return Promise.all(folders.map(folderPath => {
       readdirAsync(folderPath)
         .then(itemsNames => classifyFolderItems(folderPath, itemsNames))
@@ -49,7 +52,7 @@ class RecursiveAnimeFolderScanner {
    * @param {string[]} folderItems
    * @private
    */
-  _parseAndAddDub (animeFolder, folderPath, folderItems) {
+  _parseAndAddDub(animeFolder, folderPath, folderItems) {
     const name = basename(folderPath);
     const path = folderPath;
     const id = sha224(name);
@@ -67,7 +70,7 @@ class RecursiveAnimeFolderScanner {
    * @param {string[]} folderItems
    * @private
    */
-  _parseAndAddSub (animeFolder, folderPath, folderItems) {
+  _parseAndAddSub(animeFolder, folderPath, folderItems) {
     const name = basename(folderPath);
     const path = folderPath;
     const id = sha224(name);
@@ -85,7 +88,7 @@ class RecursiveAnimeFolderScanner {
    * @param {string[]} folderItems
    * @private
    */
-  _parseAndAddBonuses (animeFolder, folderPath, folderItems) {
+  _parseAndAddBonuses(animeFolder, folderPath, folderItems) {
     const name = basename(folderPath);
     const path = folderPath;
     const id = sha224(name);
@@ -98,4 +101,4 @@ class RecursiveAnimeFolderScanner {
   }
 }
 
-export default new RecursiveAnimeFolderScanner();
+module.exports = new RecursiveAnimeFolderScanner();

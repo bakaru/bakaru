@@ -1,5 +1,9 @@
-import path from 'lib/path';
-import getMediaInfo, { setThirdPartyDir } from './MediaInfo';
+'use strict';
+
+const path = require('../path');
+const mediaInfo = require('./MediaInfo');
+const getMediaInfo = mediaInfo.getInfo;
+const setThirdPartyDir = mediaInfo.setThirdPartyDir;
 
 class Thirdparty {
   constructor() {
@@ -21,4 +25,4 @@ class Thirdparty {
   }
 }
 
-export default new Thirdparty();
+module.exports = new Thirdparty();

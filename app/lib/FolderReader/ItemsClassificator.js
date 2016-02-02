@@ -1,6 +1,9 @@
-import Promise from 'bluebird';
-import { extname, sep } from 'path';
-import fs from 'fs';
+'use strict';
+
+const _path = require('path');
+const extname = _path.extname;
+const sep = _path.sep;
+const fs = require('fs');
 
 const extensionTypes = new Map();
 
@@ -29,7 +32,12 @@ extensionTypes.set('subtitles', [
   'sbv'
 ]);
 
-export default function classifyFolderItems (path, items) {
+/**
+ * @param {string} path
+ * @param {[]} items
+ * @returns {Promise.<T>}
+ */
+module.exports = function classifyFolderItems (path, items) {
   const itemsStatsPromises = [];
   items.map(itemName => {
     const itemPath = [path, itemName].join(sep);
@@ -47,8 +55,12 @@ export default function classifyFolderItems (path, items) {
   const promise = Promise.all(itemsStatsPromises);
 
   return promise.then(itemsStats => classify(itemsStats));
-}
+};
 
+/**
+ * @param itemsStats
+ * @returns {{audios: Array, videos: Array, folders: Array, subtitles: Array}}
+ */
 function classify (itemsStats) {
   const classes = {
     audios: [],
@@ -57,13 +69,19 @@ function classify (itemsStats) {
     subtitles: []
   };
 
-  for (let [itemPath, itemStats] of itemsStats) {
+  for (let entry of itemsStats) {
+    const itemPath = entry[0];
+    const itemStats = entry[1];
+
     if (itemStats.isDirectory()) {
       classes.folders[classes.folders.length] = itemPath;
     } else {
       const itemExt = extname(itemPath).replace(/\./, '').toLowerCase();
 
-      for (let [type, extensions] of extensionTypes) {
+      for (let entry2 of extensionTypes) {
+        const type = entry2[0];
+        const extensions = entry2[1];
+
         if (extensions.indexOf(itemExt) > -1) {
           classes[type][classes[type].length] = itemPath;
         }

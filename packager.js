@@ -50,6 +50,12 @@ promise = promise.then(() => {
     });
   });
 
+  cpPromise = cpPromise.then(() => {
+    return new Promise(resolve => {
+      cp('./thirdparty', './build/staging/thirdparty/', () => resolve());
+    });
+  });
+
   return cpPromise.then(() => {
     log('Done.');
   });
@@ -66,8 +72,9 @@ promise = promise.then(() => {
       dir: './build/staging',
       platform: 'win32',
       version: '0.36.5',
-      asar: true,
-      overwrite: true
+      asar: false,
+      overwrite: true,
+      icon: './icon.ico'
     }, (err, appPath) => {
       if (err) {
         console.error(err);

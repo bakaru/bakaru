@@ -1,11 +1,15 @@
-export const main = {
-  minimizeMainWindow: 'main:minimizeMainWindow',
-  openSelectFolderDialog: 'main:openSelectFolderDialog'
-};
+'use strict';
 
-export const renderer = {
-  flagAddAnimeFolderStart: 'renderer:flagAddAnimeFolderStart',
-  flagAddAnimeFolderEnd: 'renderer:flagAddAnimeFolderEnd',
-  addAnimeFolder: 'renderer:addAnimeFolder',
-  updateAnimeFolder: 'renderer:updateAnimeFolder'
+module.exports = {
+  main: {
+    minimizeMainWindow: 'main:minimizeMainWindow',
+    openSelectFolderDialog: 'main:openSelectFolderDialog'
+  },
+
+  renderer: {
+    flagAddAnimeFolderStart: 'renderer:flagAddAnimeFolderStart',
+    flagAddAnimeFolderEnd: 'renderer:flagAddAnimeFolderEnd',
+    addAnimeFolder: 'renderer:addAnimeFolder',
+    updateAnimeFolder: 'renderer:updateAnimeFolder'
+  }
 };

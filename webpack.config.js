@@ -18,40 +18,11 @@ var nodeModules = {
 
 var config = [];
 
-var APP_BUILD = './app/build/';
 var GUI_BUILD = './app/gui/build/';
 
-if (process.env.APP_BUILD && process.env.APP_BUILD.trim().length > 0) {
-  APP_BUILD = process.env.APP_BUILD.trim();
-}
 if (process.env.GUI_BUILD && process.env.GUI_BUILD.trim().length > 0) {
   GUI_BUILD = process.env.GUI_BUILD.trim();
 }
-
-config.push({
-  entry: {
-    main: './app/main.js'
-  },
-  output: {
-    path: APP_BUILD,
-    filename: 'main.js'
-  },
-  resolve: {
-    alias: {
-      lib: path.join(__dirname, "app/lib")
-    }
-  },
-  target: "atom",
-  module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        loaders: ['babel']
-      }
-    ]
-  },
-  externals: nodeModules
-});
 
 config.push({
   entry: {

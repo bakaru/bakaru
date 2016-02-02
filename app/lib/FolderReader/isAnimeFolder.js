@@ -1,5 +1,7 @@
-import naturalSort from 'javascript-natural-sort';
-import { get as levenshtein } from 'fast-levenshtein';
+'use strict';
+
+const naturalSort = require('javascript-natural-sort');
+const levenshtein = require('fast-levenshtein').get;
 
 /**
  * Detects if given folder is an anime
@@ -7,7 +9,7 @@ import { get as levenshtein } from 'fast-levenshtein';
  * @param {ClassifiedItems} classifiedItems
  * @returns {boolean}
  */
-export default function isAnimeFolder(classifiedItems) {
+module.exports = function isAnimeFolder(classifiedItems) {
   const videos = classifiedItems.videos.slice().sort(naturalSort);
   const videosLength = videos.length;
   const distances = [];
@@ -34,4 +36,4 @@ export default function isAnimeFolder(classifiedItems) {
 
   // 90% times diff should be less than 5 symbols, that should be enough, huh?
   return mean < 5;
-}
+};

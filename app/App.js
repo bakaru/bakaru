@@ -1,10 +1,12 @@
-import path from 'lib/path';
-import cache from 'lib/cache';
-import setupIpcMain from './ipcMain';
+'use strict';
 
-import { setThirdPartyDir } from 'lib/thirdparty/MediaInfo';
+const path = require('./lib/path');
+const cache = require('./lib/cache');
+const setupIpcMain = require('./ipcMain');
 
-export default class App {
+const thirdparty = require('./lib/thirdparty');
+
+class App {
   constructor(electron) {
     this.name = 'Bakaru';
 
@@ -15,23 +17,11 @@ export default class App {
     this.ipc = electron.ipcMain;
     this.runningDevMode = false;
 
-    // Hacky workaround d'oh :(
-    this.appPath = this.app.getAppPath();
-    if (this.appPath.indexOf('default_app') > -1) {
-      this.appPath = '';
-      this.runningDevMode = true;
-    }
-
-    this.mainWindowUrl = `file://${this.appPath}/app/gui/index.html`;
+    this.mainWindowUrl = `file://${__dirname}/gui/index.html`;
     this.mainWindow = null;
 
-    this._setupVariables();
     setupIpcMain(this);
     this._setupAppEventListeners();
-  }
-
-  _setupVariables() {
-    setThirdPartyDir(path.thirdParty);
   }
 
 
@@ -78,7 +68,7 @@ export default class App {
    * @private
    */
   _setupAppEventListeners() {
-    this.app.on('ready', ::this.createMainWindow);
+    this.app.on('ready', this.createMainWindow.bind(this));
 
     this.app.on('window-all-closed', () => {
       cache.flush().then(() => {
@@ -99,3 +89,5 @@ export default class App {
     });
   }
 }
+
+module.exports = App;

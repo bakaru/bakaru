@@ -1,7 +1,11 @@
-import Promise from 'bluebird';
-import { sep, resolve } from 'path';
-import { app } from 'electron';
-import mkdirp from 'mkdirp';
+'use strict';
+
+const Promise = require('bluebird');
+const _path = require('path');
+const sep = _path.sep;
+const resolve = _path.resolve;
+const app = require('electron').app;
+const mkdirp = require('mkdirp');
 
 const mkdirpAsync = Promise.promisify(mkdirp);
 
@@ -36,4 +40,4 @@ class Path {
 
 const path = new Path();
 
-export default path;
+module.exports = path;

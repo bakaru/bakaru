@@ -1,8 +1,13 @@
-import Promise from 'bluebird';
-import { writeFile, readFile, readdir } from 'fs';
-import { sep } from 'path';
-import path from 'lib/path';
-import { renderer } from 'lib/events';
+'use strict';
+
+const Promise = require('bluebird');
+const _fs = require('fs');
+const writeFile = _fs.writeFile;
+const readFile = _fs.readFile;
+const readdir = _fs.readdir;
+const sep = require('path').sep;
+const path = require('./path');
+const renderer = require('./events').renderer;
 
 const writeFileAsync = Promise.promisify(writeFile);
 const readFileAsync = Promise.promisify(readFile);
@@ -58,4 +63,4 @@ class Cache {
 
 const cache = new Cache();
 
-export default cache;
+module.exports = cache;

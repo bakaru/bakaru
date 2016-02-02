@@ -1,11 +1,13 @@
-import Promise from 'bluebird';
-import FolderReader from 'lib/FolderReader';
-import { main, renderer } from 'lib/events';
+'use strict';
+
+const FolderReader = require('./lib/FolderReader');
+const main = require('./lib/events').main;
+const renderer = require('./lib/events').renderer;
 
 /**
  * @param {App} app
  */
-export default (app) => {
+module.exports = (app) => {
   app.ipc.on(main.minimizeMainWindow, () => {
     app.mainWindow.minimize();
   });
@@ -43,4 +45,4 @@ export default (app) => {
       }
     );
   });
-}
+};

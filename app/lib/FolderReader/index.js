@@ -1,18 +1,21 @@
-import cache from 'lib/cache';
-import Promise from 'bluebird';
-import { sha224 } from 'js-sha256';
-import thirdparty from 'lib/thirdparty';
-import { readdir } from 'fs';
-import { sep, basename, extname } from 'path';
+'use strict';
 
-import isAnimeFolder from './isAnimeFolder';
-import findSameParts from './findSameParts';
-import classifyFolderItems from './ItemsClassificator';
-import RecursiveAnimeFolderScanner from './RecursiveAnimeFolderScanner';
+const cache = require('../cache');
+const sha224 = require('js-sha256').sha224;
+const thirdparty = require('../thirdparty');
+const readdir = require('fs').readdir;
+const _path = require('path');
+const basename = _path.basename;
+const extname = _path.extname;
 
-const readdirAsync = Promise.promisify(readdir);
+const isAnimeFolder = require('./isAnimeFolder');
+const findSameParts = require('./findSameParts');
+const classifyFolderItems = require('./ItemsClassificator');
+const RecursiveAnimeFolderScanner = require('./RecursiveAnimeFolderScanner');
 
-export default class FolderReader {
+const readdirAsync = require('bluebird').promisify(readdir);
+
+class FolderReader {
 
   /**
    * @callback addAnimeFolder
@@ -122,7 +125,9 @@ export default class FolderReader {
       thirdparty.getMediaInfo([...episodesPathsMap.keys()]).then(info => {
         let maxHeight = 0;
 
-        for (let [episodePath, mediainfo] of info) {
+        for (let entry of info) {
+          const episodePath = entry[0];
+          const mediainfo = entry[1];
           const episodeIndex = episodesPathsMap.get(episodePath);
 
           if (mediainfo.video && mediainfo.video.height > maxHeight) {
@@ -163,7 +168,9 @@ export default class FolderReader {
     });
 
     if (animeFolder.episodes.length > 1) {
-      let [sameStart, sameEnd] = findSameParts(animeFolder.episodes.map(episode => episode.name));
+      const sameParts = findSameParts(animeFolder.episodes.map(episode => episode.name));
+      let sameStart = sameParts[0];
+      let sameEnd = sameParts[1];
 
       let from = sameStart.length;
       let to   = sameEnd.length;
@@ -180,6 +187,8 @@ export default class FolderReader {
     }
   }
 }
+
+module.exports = FolderReader;
 
 /**
  * Normalizes anime name as possible
