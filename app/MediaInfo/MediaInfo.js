@@ -16,12 +16,40 @@ class MediaInfo {
     ];
   }
 
+  getInfo(filepaths) {
+    if (filepaths.length > 10) {
+      const chunks = [[filepaths[0]]];
+      let currentChunk = 0;
+
+      for (let i = 1; i < filepaths.length; i++) {
+        if (i%10 === 0) {
+          currentChunk++;
+          chunks[currentChunk] = [];
+        }
+
+        chunks[currentChunk].push(filepaths[i]);
+      }
+
+      return Promise.all(chunks.map(chunk => {
+        return this.getInfoChunked(chunk);
+      })).then(infoChunks => {
+        const map = [];
+
+        infoChunks.map(infoChunk => map.push.apply(map, [...infoChunk]));
+
+        return new Map(map);
+      });
+    } else {
+      return this.getInfoChunked(filepaths);
+    }
+  }
+
   /**
    * @api
    * @param {string[]} filepaths
    * @returns {Promise<TResult>|Promise.<T>}
    */
-  getInfo(filepaths) {
+  getInfoChunked(filepaths) {
     const promise = new Promise((resolve, reject) => {
       execFile(
         this.executable,

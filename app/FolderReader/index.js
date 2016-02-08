@@ -1,28 +1,23 @@
 'use strict';
 
-const FolderReaderBase = require('./FolderReaderBase');
+const FolderReader = require('./FolderReader');
 
 /**
  * @param {App} app
- * @returns {FolderReaderBase}
+ * @returns {FolderReader}
  */
 function createFolderReader (app) {
   /**
-   * @type {FolderReaderBase}
+   * @type {FolderReader}
    */
-  const folderReader = new FolderReaderBase(app);
+  const folderReader = new FolderReader(app);
 
   app.ipc.on(app.events.main.openSelectFolderDialog, event => {
     event.sender.send(app.events.renderer.flagAddAnimeFolderStart);
 
     app.dialog.showOpenDialog(
       app.mainWindow,
-      {
-        properties: [
-          'openDirectory',
-          'multiSelections'
-        ]
-      },
+      { properties: [ 'openDirectory', 'multiSelections' ] },
       itemsPaths => {
         if (itemsPaths) {
           folderReader.setHandlers(

@@ -14,7 +14,7 @@ const RecursiveAnimeFolderScanner = require('./RecursiveAnimeFolderScanner');
 
 const readdirAsync = require('bluebird').promisify(readdir);
 
-class FolderReaderBase {
+class FolderReader {
 
   /**
    * @param {App} app
@@ -118,11 +118,21 @@ class FolderReaderBase {
       }
     };
 
+    // Refine episodes names
     process.nextTick(() => {
       this.refineEpisodesNames(animeFolder);
       this.updateAnimeFolder(animeFolder);
     });
 
+    RecursiveAnimeFolderScanner.scan(animeFolder, classifiedItems.folders)
+      .then(() => {
+        animeFolder.state.scanning = false;
+        animeFolder.state.subScanning = false;
+
+        this.updateAnimeFolder(animeFolder);
+      });
+
+    // Scan eps by MediaInfo
     process.nextTick(() => {
       const episodesPathsMap = new Map();
 
@@ -152,16 +162,11 @@ class FolderReaderBase {
           animeFolder.state.mediainfoScanning = false;
 
           this.updateAnimeFolder(animeFolder);
+        })
+        .catch(err => {
+          console.error(err);
         });
     });
-
-    RecursiveAnimeFolderScanner.scan(animeFolder, classifiedItems.folders)
-      .then(() => {
-        animeFolder.state.scanning = false;
-        animeFolder.state.subScanning = false;
-
-        this.updateAnimeFolder(animeFolder);
-      });
 
     return animeFolder;
   }
@@ -201,7 +206,7 @@ class FolderReaderBase {
   }
 }
 
-module.exports = FolderReaderBase;
+module.exports = FolderReader;
 
 /**
  * Normalizes anime name as possible
