@@ -2,7 +2,7 @@
   "name": "Bakaru",
   "version": "0.0.1",
   "description": "Bakaru, an anime tool",
-  "main": "main.js",
+  "main": "app/main.js",
   "scripts": {
     "start": "electron app/main.js",
     "watch": "webpack -d -w",

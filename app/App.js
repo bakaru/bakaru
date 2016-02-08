@@ -1,32 +1,63 @@
 'use strict';
 
-const path = require('./lib/path');
-const cache = require('./lib/cache');
-const setupIpcMain = require('./ipcMain');
+const events = require('./events');
 
-const thirdparty = require('./lib/thirdparty');
+const createPathDispatcher = require('./PathDispatcher');
+const createMediaInfo = require('./MediaInfo');
+const createFolderReader = require('./FolderReader');
 
 class App {
   constructor(electron) {
     this.name = 'Bakaru';
 
     this.electron = electron;
-    this.rootDir = process.cwd();
     this.dialog = electron.dialog;
     this.app = electron.app;
     this.ipc = electron.ipcMain;
-    this.runningDevMode = false;
 
-    this.mainWindowUrl = `file://${__dirname}/gui/index.html`;
+    this.events = events;
+    this.rootDir = __dirname;
+
+    this.runningDevMode = !!process.env.debug;
+
+    this.mainWindowUrl = `file://${this.rootDir}/../gui/index.html`;
     this.mainWindow = null;
 
-    setupIpcMain(this);
-    this._setupAppEventListeners();
+    const shouldQuit = this.makeSingleInstance();
+
+    if (shouldQuit) {
+      this.app.quit();
+    } else {
+      this.loadModules();
+      this._setupAppEventListeners();
+    }
   }
 
+  loadModules() {
+    this.pathDispatcher = createPathDispatcher(this);
+    this.mediaInfo = createMediaInfo(this);
+    this.folderReader = createFolderReader(this);
+  }
+
+  /**
+   * @private
+   * @returns {*}
+   */
+  makeSingleInstance() {
+    return this.app.makeSingleInstance(() => {
+      if (this.mainWindow !== null) {
+        if (this.mainWindow.isMinimized()) {
+          this.mainWindow.restore();
+        }
+
+        this.mainWindow.focus();
+      }
+    });
+  }
 
   /**
    * Creates main window
+   * @private
    */
   createMainWindow() {
     this.mainWindow = new this.electron.BrowserWindow({
@@ -37,12 +68,10 @@ class App {
       icon: this.rootDir + '/icon.png'
     });
 
-    // and load the index.html of the app.
-    console.log(this.mainWindowUrl);
     this.mainWindow.loadURL(this.mainWindowUrl);
 
     this.mainWindow.webContents.on('dom-ready', () => {
-      cache.restore(this.mainWindow.webContents);
+      this.folderReader.cache.restore(this.mainWindow.webContents);
     });
 
     if (this.runningDevMode) {
@@ -51,13 +80,7 @@ class App {
       });
     }
 
-    // this.mainWindow.setProgressBar(.5);
-
-    // Emitted when the window is closed.
     this.mainWindow.on('closed', function () {
-      // Dereference the window object, usually you would store windows
-      // in an array if your app supports multi windows, this is the time
-      // when you should delete the corresponding element.
       this.mainWindow = null;
     });
   }
@@ -68,12 +91,14 @@ class App {
    * @private
    */
   _setupAppEventListeners() {
+    this.ipc.on(this.events.main.minimizeMainWindow, () => {
+      this.mainWindow.minimize();
+    });
+
     this.app.on('ready', this.createMainWindow.bind(this));
 
     this.app.on('window-all-closed', () => {
-      cache.flush().then(() => {
-        // On OS X it is common for applications and their menu bar
-        // to stay active until the user quits explicitly with Cmd + Q
+      this.folderReader.cache.flush().then(() => {
         if (process.platform !== 'darwin') {
           this.app.quit();
         }
@@ -81,8 +106,6 @@ class App {
     });
 
     this.app.on('activate', () => {
-      // On OS X it's common to re-create a window in the app when the
-      // dock icon is clicked and there are no other windows open.
       if (this.mainWindow === null) {
         this.createMainWindow();
       }

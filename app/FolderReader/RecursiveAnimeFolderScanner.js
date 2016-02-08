@@ -17,6 +17,9 @@ class RecursiveAnimeFolderScanner {
    * @returns {Promise}
    */
   scan(animeFolder, folders) {
+
+    console.log(`[RAFS] start scanning`);
+
     return Promise.all(folders.map(folderPath => {
       readdirAsync(folderPath)
         .then(itemsNames => classifyFolderItems(folderPath, itemsNames))

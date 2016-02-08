@@ -6,20 +6,25 @@ const writeFile = _fs.writeFile;
 const readFile = _fs.readFile;
 const readdir = _fs.readdir;
 const sep = require('path').sep;
-const path = require('./path');
-const renderer = require('./events').renderer;
 
 const writeFileAsync = Promise.promisify(writeFile);
 const readFileAsync = Promise.promisify(readFile);
 const readdirAsync = Promise.promisify(readdir);
 
 class Cache {
-  constructor() {
+
+  /**
+   * @param {PathDispatcher} pathDispatcher
+   * @param {{main:{}, renderer:{}}} events
+   */
+  constructor(pathDispatcher, events) {
+    this.pathDispatcher = pathDispatcher;
+    this.events = events;
     this.animeFolders = new Map();
   }
 
   getAnimeFolderPath(animeFolderId) {
-    return path.cache.animeFolders + sep + animeFolderId + '.json';
+    return this.pathDispatcher.cache.animeFolders + sep + animeFolderId + '.json';
   }
 
   /**
@@ -30,18 +35,18 @@ class Cache {
   }
 
   restore(sendTo) {
-    readdirAsync(path.cache.animeFolders).then(items => {
+    readdirAsync(this.pathDispatcher.cache.animeFolders).then(items => {
       if (items === null || items.length === 0) {
         return null;
       }
 
       items.map(item => {
-        const filePath = path.cache.animeFolders + sep + item;
+        const filePath = this.pathDispatcher.cache.animeFolders + sep + item;
 
         readFileAsync(filePath).then(animeFolderJson => {
           const animeFolder = JSON.parse(animeFolderJson);
           this.setAnimeFolder(animeFolder);
-          sendTo.send(renderer.addAnimeFolder, animeFolder);
+          sendTo.send(this.events.renderer.addAnimeFolder, animeFolder);
         });
       });
     });
@@ -61,6 +66,4 @@ class Cache {
   }
 }
 
-const cache = new Cache();
-
-module.exports = cache;
+module.exports = Cache;

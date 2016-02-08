@@ -1,33 +1,31 @@
 'use strict';
 
 const parseString = require('xml2js').parseString;
-const Promise = require('bluebird');
 const execFile = require('child_process').execFile;
-const sep = require('path').sep;
 
-let executable;
+class MediaInfo {
 
-const defaultArgs = [
-  '--Output=XML'
-];
-
-module.exports = {
   /**
-   * @param {string} path
+   * @param {string} executable
    */
-  setThirdPartyDir(path) {
-    executable = `${path}${sep}MediaInfo${sep}MediaInfo.exe`;
-  },
+  constructor(executable) {
+    this.executable = executable;
+
+    this.defaultArgs = [
+      '--Output=XML'
+    ];
+  }
 
   /**
+   * @api
    * @param {string[]} filepaths
    * @returns {Promise<TResult>|Promise.<T>}
    */
   getInfo(filepaths) {
     const promise = new Promise((resolve, reject) => {
       execFile(
-        executable,
-        filepaths.concat(defaultArgs),
+        this.executable,
+        filepaths.concat(this.defaultArgs),
         (err, output) => {
           if (err) {
             reject(err);
@@ -39,7 +37,7 @@ module.exports = {
     });
 
     return promise
-      .then(mediaInfo => parseXml(mediaInfo))
+      .then(mediaInfo => this.parseXml(mediaInfo))
       .then(mediaObject => {
         const infoBase = {
           duration: null,
@@ -115,19 +113,23 @@ module.exports = {
         return files;
       });
   }
-};
 
-/**
- * @param string
- */
-function parseXml(string) {
-  return new Promise((resolve, reject) => {
-    parseString(string, (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    })
-  });
+  /**
+   * @private
+   * @param string
+   * @returns {Promise}
+   */
+  parseXml(string) {
+    return new Promise((resolve, reject) => {
+      parseString(string, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      })
+    });
+  }
 }
+
+module.exports = MediaInfo;

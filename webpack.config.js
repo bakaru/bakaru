@@ -5,20 +5,9 @@ var fs = require('fs');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var Clean = require('clean-webpack-plugin');
 
-var nodeModules = {
-  electron: 'commonjs electron'
-};
-//fs.readdirSync('node_modules')
-//  .filter(function(x) {
-//    return ['.bin'].indexOf(x) === -1;
-//  })
-//  .forEach(function(mod) {
-//    nodeModules[mod] = 'commonjs ' + mod;
-//  });
-
 var config = [];
 
-var GUI_BUILD = './app/gui/build/';
+var GUI_BUILD = './gui/build/';
 
 if (process.env.GUI_BUILD && process.env.GUI_BUILD.trim().length > 0) {
   GUI_BUILD = process.env.GUI_BUILD.trim();
@@ -26,7 +15,7 @@ if (process.env.GUI_BUILD && process.env.GUI_BUILD.trim().length > 0) {
 
 config.push({
   entry: {
-    gui: './app/gui/js/main.js'
+    gui: './gui/js/main.js'
   },
   output: {
     path: GUI_BUILD,
@@ -36,9 +25,10 @@ config.push({
     root: [path.join(__dirname, "bower_components")],
     alias: {
       lib: path.join(__dirname, "app/lib"),
-      ipc: path.join(__dirname, "app/gui/js/ipcRenderer.js"),
-      actions: path.join(__dirname, "app/gui/js/actions.js"),
-      components: path.join(__dirname, "app/gui/js/components")
+      ipc: path.join(__dirname, "gui/js/ipcRenderer.js"),
+      events: path.join(__dirname, "app/events.js"),
+      actions: path.join(__dirname, "gui/js/actions.js"),
+      components: path.join(__dirname, "gui/js/components")
     }
   },
   module: {
@@ -66,7 +56,7 @@ config.push({
       new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])
     ),
     new ExtractTextPlugin("[name].css"),
-    new Clean(['./app/gui/build'])
+    new Clean([GUI_BUILD])
   ],
   externals: {
     electron: 'commonjs electron'

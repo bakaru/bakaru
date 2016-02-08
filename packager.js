@@ -67,6 +67,8 @@ promise = promise.then(() => {
   return (new Promise((resolve, reject) => {
     packager({
       name: 'Bakaru',
+      'build-version': process.env.npm_package_version,
+      'app-version': process.env.npm_package_version,
       out: './build/packed',
       arch: 'x64',
       dir: './build/staging',
@@ -85,5 +87,3 @@ promise = promise.then(() => {
     });
   })).then(() => log('Done.'));
 });
-
-

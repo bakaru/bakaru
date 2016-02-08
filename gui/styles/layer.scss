@@ -1,0 +1,72 @@
+@import "variables";
+
+layer {
+  display: flex;
+  position: fixed;
+  top: $headerHeight;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $backgroundColour;
+
+  &>* {
+    width: 50%;
+  }
+
+  list {
+    display: block;
+    overflow-y: scroll;
+    border-right: solid 1px $delimiterColour;
+
+    item {
+      position: relative;
+      display: block;
+      background-color: $backgroundColour;
+      padding: $baseInnerPadding $baseInnerPadding*1.68;
+      border-bottom: solid 1px $delimiterColour;
+      -webkit-user-select: none;
+
+      &::before {
+        display: block;
+        content: '';
+        position: absolute;
+        top: $baseInnerPadding + 5.5;
+        left: -10px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: $mainColour;
+      }
+
+      &.opened::before {
+        left: -5px;
+        transition: left .2s ease;
+      }
+
+      &:active {
+        background-color: darken($backgroundColour, 10%);
+        transition: background-color .2s ease-in;
+      }
+
+      title {
+        display: block;
+        width: 100%;
+        font-size: 18px;
+        line-height: 1.2;
+
+        @include ellipsis;
+      }
+
+      summary {
+        display: block;
+        color: #666;
+        font-size: 12px;
+        font-weight: 300;
+      }
+    }
+  }
+
+  placeholder {
+    background: $backgroundColour url(http://nya.sh/top/top54.png) bottom right no-repeat;
+  }
+}

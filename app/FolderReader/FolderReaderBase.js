@@ -1,13 +1,12 @@
 'use strict';
 
-const cache = require('../cache');
 const sha224 = require('js-sha256').sha224;
-const thirdparty = require('../thirdparty');
 const readdir = require('fs').readdir;
 const _path = require('path');
 const basename = _path.basename;
 const extname = _path.extname;
 
+const Cache = require('./Cache');
 const isAnimeFolder = require('./isAnimeFolder');
 const findSameParts = require('./findSameParts');
 const classifyFolderItems = require('./ItemsClassificator');
@@ -15,13 +14,22 @@ const RecursiveAnimeFolderScanner = require('./RecursiveAnimeFolderScanner');
 
 const readdirAsync = require('bluebird').promisify(readdir);
 
-class FolderReader {
+class FolderReaderBase {
+
+  /**
+   * @param {App} app
+   */
+  constructor(app) {
+    this.mediaInfo = app.mediaInfo;
+    this.cache = new Cache(app.pathDispatcher, app.events);
+  }
 
   /**
    * @callback addAnimeFolder
    * @callback updateAnimeFolder
+   * @returns void
    */
-  constructor(addAnimeFolder, updateAnimeFolder) {
+  setHandlers(addAnimeFolder, updateAnimeFolder) {
     this._addAnimeFolder = addAnimeFolder;
     this._updateAnimeFolder = updateAnimeFolder;
   }
@@ -31,7 +39,7 @@ class FolderReader {
    */
   addAnimeFolder(animeFolder) {
     this._addAnimeFolder(animeFolder);
-    cache.setAnimeFolder(animeFolder);
+    this.cache.setAnimeFolder(animeFolder);
   }
 
   /**
@@ -39,7 +47,7 @@ class FolderReader {
    */
   updateAnimeFolder(animeFolder) {
     this._updateAnimeFolder(animeFolder);
-    cache.setAnimeFolder(animeFolder);
+    this.cache.setAnimeFolder(animeFolder);
   }
 
   /**
@@ -122,31 +130,36 @@ class FolderReader {
         episodesPathsMap.set(animeFolder.episodes[episodeIndex].path, episodeIndex);
       }
 
-      thirdparty.getMediaInfo([...episodesPathsMap.keys()]).then(info => {
-        let maxHeight = 0;
+      const mediaInfoPromise = this.mediaInfo.getInfo([...episodesPathsMap.keys()]);
 
-        for (let entry of info) {
-          const episodePath = entry[0];
-          const mediainfo = entry[1];
-          const episodeIndex = episodesPathsMap.get(episodePath);
+      mediaInfoPromise
+        .then(info => {
+          let maxHeight = 0;
 
-          if (mediainfo.video && mediainfo.video.height > maxHeight) {
-            maxHeight = mediainfo.video.height;
+          for (let entry of info) {
+            const episodePath = entry[0];
+            const mediainfo = entry[1];
+            const episodeIndex = episodesPathsMap.get(episodePath);
+
+            if (mediainfo.video && mediainfo.video.height > maxHeight) {
+              maxHeight = mediainfo.video.height;
+            }
+
+            animeFolder.episodes[episodeIndex].mediainfo = mediainfo;
           }
 
-          animeFolder.episodes[episodeIndex].mediainfo = mediainfo;
-        }
+          animeFolder.quality = `${maxHeight}p`;
+          animeFolder.state.mediainfoScanning = false;
 
-        animeFolder.quality = `${maxHeight}p`;
-        animeFolder.state.mediainfoScanning = false;
-        this.updateAnimeFolder(animeFolder);
-      });
+          this.updateAnimeFolder(animeFolder);
+        });
     });
 
     RecursiveAnimeFolderScanner.scan(animeFolder, classifiedItems.folders)
-      .finally(() => {
+      .then(() => {
         animeFolder.state.scanning = false;
         animeFolder.state.subScanning = false;
+
         this.updateAnimeFolder(animeFolder);
       });
 
@@ -188,7 +201,7 @@ class FolderReader {
   }
 }
 
-module.exports = FolderReader;
+module.exports = FolderReaderBase;
 
 /**
  * Normalizes anime name as possible
