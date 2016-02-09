@@ -65,10 +65,14 @@ class App {
       height: 720,
       title: 'Bakaru',
       frame: false,
-      icon: this.rootDir + '/icon.png'
+      icon: this.rootDir + '/icon.png',
+      webPreferences: {
+        experimentalFeatures: true,
+        blinkFeatures: 'CSSBackdropFilter'
+      }
     });
 
-    this.mainWindow.loadURL(this.mainWindowUrl);
+    this.mainWindow.loadURL(this.mainWindowUrl + '?wcjsPath=' + encodeURIComponent(this.pathDispatcher.wcjs));
 
     this.mainWindow.webContents.on('dom-ready', () => {
       this.folderReader.cache.restore(this.mainWindow.webContents);

@@ -20,6 +20,8 @@ class PathDispatcher {
     this.temp = path.join(this.appDataPath, 'temp');
     this.thirdParty = path.join(app.rootDir, '..', 'thirdparty');
 
+    this.wcjs = path.join(app.rootDir, '..', 'thirdparty', 'wcjs');
+
     this._createPaths();
   }
 
