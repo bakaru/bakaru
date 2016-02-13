@@ -12,10 +12,9 @@ const packager = require('electron-packager');
 const noop = ()=>{};
 const log = msg => console.log(chalk.green(msg));
 
-var APP_BUILD = './build/staging/';
-var GUI_BUILD = './build/staging/app/gui/build/';
+var GUI_BUILD = './build/staging/gui/build/';
 
-const winBuild = `set APP_BUILD=${APP_BUILD} && set GUI_BUILD=${GUI_BUILD} && webpack -p`;
+const winBuild = `set GUI_BUILD=${GUI_BUILD} && webpack -p`;
 
 var promise = Promise.resolve(noop);
 
@@ -46,7 +45,12 @@ promise = promise.then(() => {
   });
   cpPromise = cpPromise.then(() => {
     return new Promise(resolve => {
-      cp('./app/gui/index.html', './build/staging/app/gui/', () => resolve());
+      cp('./app', './build/staging/app/', () => resolve());
+    });
+  });
+  cpPromise = cpPromise.then(() => {
+    return new Promise(resolve => {
+      cp('./gui/index.html', './build/staging/gui/', () => resolve());
     });
   });
 
@@ -62,7 +66,13 @@ promise = promise.then(() => {
 });
 
 promise = promise.then(() => {
-  log('Packaging electron app...')
+  log('Installing deps...');
+  cmd.execSync(`cd ./build/staging && npm i --production`);
+  log('Done.');
+});
+
+promise = promise.then(() => {
+  log('Packaging app...');
 
   return (new Promise((resolve, reject) => {
     packager({
