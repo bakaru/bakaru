@@ -11,7 +11,7 @@ import { setStore } from 'ipc';
 
 import Gui from './containers/Gui';
 
-window.wcjs = window.require(getQueryVariable('wcjsPath'));
+const wcjs = window.require(getQueryVariable('wcjsPath'));
 
 const store = createStore(appReducers);
 
@@ -19,7 +19,7 @@ setStore(store);
 
 ReactDom.render(
   <Provider store={store}>
-    <Gui />
+    <Gui wcjs={ wcjs } />
   </Provider>,
   document.getElementById('gui-mount')
 );

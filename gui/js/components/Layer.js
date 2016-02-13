@@ -9,7 +9,15 @@ import Anime from 'components/Anime';
  * @returns {XML}
  * @constructor
  */
-export default function Layer({ folder, folders, openedFolder }) {
+export default function Layer(props) {
+  const {
+    folder,
+    folders,
+    openedFolder,
+    actions,
+    player
+  } = props;
+
   const foldersSorted = [...folders.keys()].sort((a, b) => {
     const aFolder = folders.get(a);
     const bFolder = folders.get(b);
@@ -27,24 +35,12 @@ export default function Layer({ folder, folders, openedFolder }) {
     );
   }
 
-  let sideBar;
-
-  if (openedFolder !== null) {
-    sideBar = (<Anime key="sidebar" folder={ folder }/>);
-  } else {
-    sideBar = (
-      <placeholder key="sidebar">
-        Open one one the left!
-      </placeholder>
-    );
-  }
-
   return (
-    <layer>
+    <layer className={ player.status === 'playing' ? 'hidden' : '' }>
       <list>
         { foldersList }
       </list>
-      { sideBar }
+      <Anime key="sidebar" folder={ folder } actions={ actions }/>
     </layer>
   );
 }

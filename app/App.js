@@ -61,7 +61,7 @@ class App {
    */
   createMainWindow() {
     this.mainWindow = new this.electron.BrowserWindow({
-      width: 850,
+      width: 1280,
       height: 720,
       title: 'Bakaru',
       frame: false,

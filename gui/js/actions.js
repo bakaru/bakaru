@@ -38,3 +38,27 @@ export function flagAddFolderEnd() {
     type: FLAG_ADD_FOLDER_END
   };
 }
+
+// Player
+export const PLAYER_SET_PLAYLIST = 'PLAYER_SET_PLAYLIST';
+export const PLAYER_PLAY = 'PLAYER_PLAY';
+export const PLAYER_PAUSE = 'PLAYER_PAUSE';
+
+export function playerSetPlaylist(playlist) {
+  return {
+    type: PLAYER_SET_PLAYLIST,
+    playlist
+  };
+}
+
+export function playerPlay() {
+  return {
+    type: PLAYER_PLAY
+  };
+}
+
+export function playerPause() {
+  return {
+    type: PLAYER_PAUSE
+  };
+}

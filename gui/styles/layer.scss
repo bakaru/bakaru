@@ -7,7 +7,16 @@ layer {
   left: 0;
   right: 0;
   bottom: 0;
+  backdrop-filter: blur(3px) brightness(.5);
   background-color: $backgroundColour;
+  opacity: 1;
+  transition: all .2s ease;
+
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
+    backdrop-filter: blur(0) brightness(1);
+  }
 
   &>* {
     width: 50%;
@@ -21,7 +30,6 @@ layer {
     item {
       position: relative;
       display: block;
-      background-color: $backgroundColour;
       padding: $baseInnerPadding $baseInnerPadding*1.68;
       border-bottom: solid 1px $delimiterColour;
       -webkit-user-select: none;
@@ -64,9 +72,5 @@ layer {
         font-weight: 300;
       }
     }
-  }
-
-  placeholder {
-    background: $backgroundColour url(http://nya.sh/top/top54.png) bottom right no-repeat;
   }
 }

@@ -60,7 +60,8 @@ class RecursiveAnimeFolderScanner {
     animeFolder.dubs.push({
       id,
       name,
-      path
+      path,
+      files: folderItems
     });
   }
 
@@ -78,7 +79,8 @@ class RecursiveAnimeFolderScanner {
     animeFolder.subs.push({
       id,
       name,
-      path
+      path,
+      files
     });
   }
 

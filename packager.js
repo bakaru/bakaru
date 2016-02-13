@@ -70,7 +70,7 @@ promise = promise.then(() => {
       'build-version': process.env.npm_package_version,
       'app-version': process.env.npm_package_version,
       out: './build/packed',
-      arch: 'x64',
+      arch: 'ia32',
       dir: './build/staging',
       platform: 'win32',
       version: '0.36.5',
