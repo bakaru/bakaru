@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Header({ minimizeMainWindow, openSelectFolderDialog, flags, playerStatus, actions }) {
+export default function Header({ minimizeMainWindow, openSelectFolderDialog, flags, playerStatus, playerState, actions }) {
   const { addFolder } = flags;
 
   let addFolderButton;
@@ -20,16 +20,15 @@ export default function Header({ minimizeMainWindow, openSelectFolderDialog, fla
   }
 
   return (
-    <header className={ playerStatus === 'playing' ? 'hidden' : '' }>
+    <header className={ playerState === 'focused' ? 'hidden' : '' }>
       <title onClick={ () => console.log('it works!') }>BAKARU バカル</title>
       <actions>
         { addFolderButton }
         <button onClick={ () => window.location.reload() }>
           Reload
         </button>
-        <button disabled={ playerStatus !== 'paused' } onClick={ () => actions.playerPlay() }>
-          <i className="fa fa-play"></i>
-          Continue playing
+        <button disabled={ playerStatus !== 'paused' } onClick={ () => { actions.playerPlay();actions.playerFocus(); } }>
+          <i className="fa fa-play"></i> Continue playing
         </button>
       </actions>
       <controls>

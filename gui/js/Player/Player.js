@@ -4,6 +4,7 @@ require('./style.css');
 import React, { Component } from 'react';
 import { setupCanvas } from 'webgl-video-renderer';
 import deepEqual from 'deep-equal';
+import Mousetrap from 'mousetrap';
 
 export default class Player extends Component {
   constructor(props) {
@@ -21,8 +22,16 @@ export default class Player extends Component {
     this.externalAudio = false;
     this.playlist = false;
     this.currentPlaylistItem = 0;
+    this.status = 'idle';
+    this.internalState = 'blurred';
 
     this.canvasResizeRequest = true;
+
+    this.state = {
+      playing: false,
+      length: 0,
+      pos: 0
+    };
 
     this.componentWillReceiveProps(props);
   }
@@ -44,11 +53,7 @@ export default class Player extends Component {
 
     if (props.status !== this.status) {
       if (props.status === 'playing') {
-        if (this.state === 'paused') {
-          this.togglePause();
-        } else {
-          this.play();
-        }
+        this.play();
       }
       if (props.status === 'paused') {
         this.pause();
@@ -56,21 +61,60 @@ export default class Player extends Component {
 
       this.status = props.status;
     }
+
+    this.internalState = props.state;
   }
 
   componentDidMount() {
     this.setupPlayers();
+    this.registerHotkeys();
   }
 
   render() {
+    const currentPlaybackPercent = this.state['length']
+      ? (100 / this.state.length) * this.state.pos
+      : 0;
+
+    const currentTime = this.secondsToHms(this.state.pos/1000);
+    const length = this.secondsToHms(this.state.length/1000);
+
     return (
-      <div className="bakaru-player" onClick={ ::this.togglePause }>
-        <canvas ref="canvas" className="canvas"></canvas>
+      <div className="bakaru-player">
+        <div className="canvas-wrapper" onClick={ ::this.togglePause }>
+          <canvas ref="canvas" className="canvas"></canvas>
+        </div>
         <div className="controls">
-          Here will be controls!
+          <div className="progressBar" onClick={ ::this.handleSeek }>
+            <div className="track" style={{ width: `${currentPlaybackPercent}%` }}></div>
+          </div>
+          <div className="buttons">
+            <button className="play-pause" onClick={ ::this.togglePause }>
+              <i className={ `fa fa-${this.state.playing ? 'pause' : 'play'}` }></i>
+            </button>
+            <button className="prev" onClick={ ::this.prev }>
+              <i className="fa fa-step-backward"></i>
+            </button>
+            <button className="next" onClick={ ::this.next }>
+              <i className="fa fa-step-forward"></i>
+            </button>
+          </div>
+          <div className="times">
+            <div className="timeNow">
+              { currentTime }
+            </div>
+            <div className="timeEnd">
+              { length }
+            </div>
+          </div>
         </div>
       </div>
     );
+  }
+
+  handleSeek(event) {
+    const clickOnPercent = 100 / event.target.offsetWidth * (event.clientX - 5);
+
+    this.setTime(this.state.length / 100 * clickOnPercent);
   }
 
   /**
@@ -81,7 +125,7 @@ export default class Player extends Component {
   setPlaylist(playlist) {
     console.log(`Player: setPlaylist`);
 
-    this.playlist = playlist;
+    this.playlist = Array.from(playlist);
     this.currentPlaylistItem = 0;
     this.setMedia(this.playlist[0]);
   }
@@ -94,7 +138,7 @@ export default class Player extends Component {
    * @param subtitlesPath
    */
   setMedia({ videoPath, audioPath, subtitlesPath }) {
-    console.log(`Player: setMedia`);
+    console.log(`Player: setMedia`, this.playlist);
 
     this.videoPlayer.playlist.clear();
     this.audioPlayer.playlist.clear();
@@ -166,6 +210,8 @@ export default class Player extends Component {
     } else {
       this.videoPlayer.play();
     }
+
+    this.setState({ playing: true });
   }
 
   /**
@@ -176,6 +222,8 @@ export default class Player extends Component {
 
     this.videoPlayer.pause();
     this.audioPlayer.pause();
+
+    this.setState({ playing: false });
   }
 
   /**
@@ -186,6 +234,8 @@ export default class Player extends Component {
 
     this.videoPlayer.togglePause();
     if (this.externalAudio) this.audioPlayer.togglePause();
+
+    this.setState({ playing: !this.state.playing });
   }
 
   /**
@@ -219,6 +269,23 @@ export default class Player extends Component {
   setTime(time) {
     this.videoPlayer.time = time;
     if (this.externalAudio) this.audioPlayer.time = time;
+    this.setState({ pos: time });
+  }
+
+  registerHotkeys() {
+    Mousetrap.bind('space', this.onlyWhenFocused(::this.togglePause));
+    Mousetrap.bind('esc', this.onlyWhenFocused(() => {
+      this.actions.playerPause();
+      this.actions.playerBlur();
+    }));
+  }
+
+  onlyWhenFocused(func) {
+    return () => {
+      if (this.internalState === 'focused') {
+        func();
+      }
+    };
   }
 
   /**
@@ -234,10 +301,24 @@ export default class Player extends Component {
 
     window.addEventListener('resize', () => this.canvasResizeRequest = true);
 
+    this._setupOnTimeChangedEvent();
+    this._setupOnLengthChangedEvent();
     this._setupOnFrameReadyEvent();
     this._setupOnEndReachedEvent();
 
     this.renderContext.fillBlack();
+  }
+
+  _setupOnTimeChangedEvent() {
+    this.videoPlayer.onTimeChanged = time => {
+      this.setState({pos: time});
+    };
+  }
+
+  _setupOnLengthChangedEvent() {
+    this.videoPlayer.onLengthChanged = length => {
+      this.setState({length});
+    };
   }
 
   /**
@@ -263,10 +344,10 @@ export default class Player extends Component {
 
         if (windowRatio > frameRatio) {
           canvasHeight = window.outerHeight;
-          canvasWidth = canvasHeight * frameRatio |0;
+          canvasWidth = Math.ceil(canvasHeight * frameRatio);
         } else {
           canvasWidth = window.outerWidth;
-          canvasHeight = canvasWidth / frameRatio |0;
+          canvasHeight = Math.ceil(canvasWidth / frameRatio);
         }
 
         this.refs.canvas.width = canvasWidth;
@@ -283,5 +364,12 @@ export default class Player extends Component {
 
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
+  }
+
+  secondsToHms(d) {
+    var h = Math.floor(d / 3600);
+    var m = Math.floor(d % 3600 / 60);
+    var s = Math.floor(d % 3600 % 60);
+    return ((h > 0 ? h + ":" + (m < 10 ? "0" : "") : "") + m + ":" + (s < 10 ? "0" : "") + s);
   }
 }

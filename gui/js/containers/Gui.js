@@ -5,7 +5,7 @@ import { minimizeMainWindow, openSelectFolderDialog } from 'ipc';
 
 import * as actions from 'actions';
 
-import Player from '../Player';
+import Player from '../Player/Player';
 
 import Header from 'components/Header';
 import Layer from 'components/Layer';
@@ -19,6 +19,7 @@ const Gui = (props) => (
       flags={ props.flags }
       actions={ props.actions }
       playerStatus={ props.player.status }
+      playerState={ props.player.state }
     />
     <Layer { ...props } />
   </gui>

@@ -114,6 +114,7 @@ export default class Anime extends Component {
     });
 
     this.actions.playerSetPlaylist(playlist);
+    this.actions.playerFocus();
     this.actions.playerPlay();
   }
 

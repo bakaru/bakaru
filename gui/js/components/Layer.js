@@ -36,7 +36,7 @@ export default function Layer(props) {
   }
 
   return (
-    <layer className={ player.status === 'playing' ? 'hidden' : '' }>
+    <layer className={ player.state === 'focused' ? 'hidden' : '' }>
       <list>
         { foldersList }
       </list>
