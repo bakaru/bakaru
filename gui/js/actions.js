@@ -43,6 +43,8 @@ export function flagAddFolderEnd() {
 export const PLAYER_SET_PLAYLIST = 'PLAYER_SET_PLAYLIST';
 export const PLAYER_PLAY = 'PLAYER_PLAY';
 export const PLAYER_PAUSE = 'PLAYER_PAUSE';
+export const PLAYER_FOCUS = 'PLAYER_FOCUS';
+export const PLAYER_BLUR = 'PLAYER_BLUR';
 
 export function playerSetPlaylist(playlist) {
   return {
@@ -60,5 +62,17 @@ export function playerPlay() {
 export function playerPause() {
   return {
     type: PLAYER_PAUSE
+  };
+}
+
+export function playerFocus() {
+  return {
+    type: PLAYER_FOCUS
+  };
+}
+
+export function playerBlur() {
+  return {
+    type: PLAYER_BLUR
   };
 }

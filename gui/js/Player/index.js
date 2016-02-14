@@ -20,6 +20,7 @@ export default class Player extends Component {
 
     this.externalAudio = false;
     this.playlist = false;
+    this.currentPlaylistItem = 0;
 
     this.canvasResizeRequest = true;
 
@@ -44,7 +45,7 @@ export default class Player extends Component {
     if (props.status !== this.status) {
       if (props.status === 'playing') {
         if (this.state === 'paused') {
-          this.unpause();
+          this.togglePause();
         } else {
           this.play();
         }
@@ -72,14 +73,21 @@ export default class Player extends Component {
     );
   }
 
+  /**
+   * Set playlist
+   *
+   * @param playlist
+   */
   setPlaylist(playlist) {
     console.log(`Player: setPlaylist`);
 
     this.playlist = playlist;
+    this.currentPlaylistItem = 0;
     this.setMedia(this.playlist[0]);
   }
 
   /**
+   * Set current playing media
    *
    * @param videoPath
    * @param audioPath
@@ -106,6 +114,47 @@ export default class Player extends Component {
     this.setVolume(100);
   }
 
+  /**
+   * Switch to next playlist item if available
+   */
+  next() {
+    if (this.playlist === false) {
+      return;
+    }
+
+    if (this.currentPlaylistItem === this.playlist.length - 1) {
+      return;
+    }
+
+    this.currentPlaylistItem++;
+
+    this.setMedia(this.playlist[this.currentPlaylistItem]);
+
+    this.play();
+  }
+
+  /**
+   * Switch to previous playlist item if available
+   */
+  prev() {
+    if (this.playlist === false) {
+      return;
+    }
+
+    if (this.currentPlaylistItem === 0) {
+      return;
+    }
+
+    this.currentPlaylistItem--;
+
+    this.setMedia(this.playlist[this.currentPlaylistItem]);
+
+    this.play();
+  }
+
+  /**
+   * Play
+   */
   play() {
     console.log(`Player: play`);
 
@@ -119,6 +168,9 @@ export default class Player extends Component {
     }
   }
 
+  /**
+   * Pauses playback
+   */
   pause() {
     console.log(`Player: pause`);
 
@@ -126,23 +178,19 @@ export default class Player extends Component {
     this.audioPlayer.pause();
   }
 
-  unpause() {
-    console.log(`Player: unpause`);
+  /**
+   * Toggles pause
+   */
+  togglePause() {
+    console.log(`Player: togglePause`);
 
     this.videoPlayer.togglePause();
     if (this.externalAudio) this.audioPlayer.togglePause();
   }
 
-  togglePause() {
-    console.log(`Player: togglePause`);
-
-    if (this.status === 'playing') {
-      this.actions.playerPause();
-    } else {
-      this.actions.playerPlay();
-    }
-  }
-
+  /**
+   * Stop playback
+   */
   stop() {
     console.log(`Player: stop`);
 
@@ -150,6 +198,11 @@ export default class Player extends Component {
     if (this.externalAudio) this.audioPlayer.stop();
   }
 
+  /**
+   * Set volume
+   *
+   * @param volume
+   */
   setVolume(volume) {
     if (this.externalAudio) {
       this.audioPlayer.volume = volume;
@@ -158,13 +211,18 @@ export default class Player extends Component {
     }
   }
 
+  /**
+   * Set current time for video
+   *
+   * @param time
+   */
   setTime(time) {
     this.videoPlayer.time = time;
     if (this.externalAudio) this.audioPlayer.time = time;
   }
 
   /**
-   *
+   * Setups video and audio players
    */
   setupPlayers() {
     window.videoPlayer = this.videoPlayer = this.wcjs.createPlayer();
@@ -174,9 +232,26 @@ export default class Player extends Component {
       preserveDrawingBuffer: true
     });
 
-    const gl = this.renderContext.gl;
-
     window.addEventListener('resize', () => this.canvasResizeRequest = true);
+
+    this._setupOnFrameReadyEvent();
+    this._setupOnEndReachedEvent();
+
+    this.renderContext.fillBlack();
+  }
+
+  /**
+   * @private
+   */
+  _setupOnEndReachedEvent() {
+    this.videoPlayer.onEndReached = ::this.next;
+  }
+
+  /**
+   * @private
+   */
+  _setupOnFrameReadyEvent() {
+    const gl = this.renderContext.gl;
 
     this.videoPlayer.onFrameReady = frame => {
       if (this.canvasResizeRequest) {
@@ -208,7 +283,5 @@ export default class Player extends Component {
 
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
-
-    this.renderContext.fillBlack();
   }
 }
