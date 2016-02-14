@@ -82,12 +82,9 @@ export default class Player extends Component {
     const currentTime = this.secondsToHms(this.state.pos/1000);
     const length = this.secondsToHms(this.state.length/1000);
 
-    let hiddenCursor = `url('data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='), auto`;
-    hiddenCursor = 'wait';
-
     return (
-      <div className={ `bakaru-player ${this.state.uiHidden ? 'ui-hidden' : ''}` } onMouseMove={ ::this.showUi }>
-        <div className="canvas-wrapper" onClick={ ::this.togglePause }>
+      <div className={ `bakaru-player ${this.state.uiHidden ? 'ui-hidden' : ''}` } onMouseMove={ ::this.showUi } ref="player">
+        <div className="canvas-wrapper" onClick={ ::this.togglePause } onDoubleClick={ ::this.handleDoubleClick }>
           <canvas ref="canvas" className="canvas"></canvas>
         </div>
         <div className="title">
@@ -121,6 +118,17 @@ export default class Player extends Component {
     );
   }
 
+  handleDoubleClick() {
+    if (window.document.webkitFullscreenElement) {
+      window.document.webkitExitFullscreen();
+    } else {
+      this.refs.player.webkitRequestFullscreen();
+    }
+  }
+
+  /**
+   * Shows UI
+   */
   showUi() {
     this.setState({ uiHidden: false });
 
@@ -129,6 +137,9 @@ export default class Player extends Component {
     this.uiHideTimer = setTimeout(::this.hideUi, 2000);
   }
 
+  /**
+   * Hides UI
+   */
   hideUi() {
     this.setState({ uiHidden: true });
   }
@@ -363,6 +374,10 @@ export default class Player extends Component {
    */
   _setupOnFrameReadyEvent() {
     const gl = this.renderContext.gl;
+
+    this.videoPlayer.onFrameSetup = (width, height, pixelFormat, videoFrame) => {
+      console.log('Frame size', width, height, pixelFormat);
+    };
 
     this.videoPlayer.onFrameReady = frame => {
       if (this.canvasResizeRequest) {
