@@ -7,15 +7,15 @@ layer {
   left: 0;
   right: 0;
   bottom: 0;
-  backdrop-filter: blur(3px) brightness(.5);
   background-color: $backgroundColour;
   opacity: 1;
+  transform: scale(1);
   transition: all .2s ease;
 
   &.hidden {
     opacity: 0;
+    transform: scale(1.5);
     pointer-events: none;
-    backdrop-filter: blur(0) brightness(1);
   }
 
   &>* {

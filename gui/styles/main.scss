@@ -53,3 +53,14 @@ gui {
 
   font-family: "Open Sans";
 }
+
+dragger {
+  -webkit-app-region: drag;
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: $headerHeight;
+  height: 25px;
+  z-index: 9999;
+}

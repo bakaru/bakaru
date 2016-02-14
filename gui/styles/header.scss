@@ -11,24 +11,20 @@ header {
 
   color: $foregroundContrastColour;
   background: linear-gradient(45deg, #ff016b 0%,#cc0267 100%);
+  transform: translateY(0);
   transition: all .2s ease;
 
   &.hidden {
-    background: transparent;
-
-    actions {
-      opacity: 0;
-    }
+    transform: translateY(-$headerHeight);
   }
 
   title {
-    -webkit-app-region: drag;
     display: block;
     position: absolute;
     top: 0;
     left: 0;
     padding: $baseInnerPadding $baseInnerPadding 0 $baseInnerPadding;
-    width: calc(100% - #{$headerHeight/2});
+    width: 100%;
     text-transform: uppercase;
     line-height: 1;
     font-size: 16px;
@@ -62,14 +58,14 @@ header {
   }
 
   controls {
-    display: block;
+    display: flex;
     position: absolute;
     right: 0;
     top: 0;
-    width: $headerHeight/2;
-    height: $headerHeight;
+    width: $headerHeight;
+    height: $headerHeight/2;
     font-size: 20px;
-    z-index: 1;
+    z-index: 2;
 
     * {
       text-align: center;

@@ -97,6 +97,7 @@ export default class Anime extends Component {
 
     this.folder.episodes.map((episode, index) => {
       const item = {
+        title: `${this.folder.name} ${episode.name}`,
         videoPath: `file:///${episode.path}`,
         audioPath: false,
         subtitlesPath: false

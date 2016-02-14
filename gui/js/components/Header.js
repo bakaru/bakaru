@@ -32,10 +32,10 @@ export default function Header({ minimizeMainWindow, openSelectFolderDialog, fla
         </button>
       </actions>
       <controls>
-        <exit dangerouslySetInnerHTML={{__html: '&times;'}} onClick={ () => window.close() }/>
         <minimize onClick={ () => minimizeMainWindow() }>
           -
         </minimize>
+        <exit dangerouslySetInnerHTML={{__html: '&times;'}} onClick={ () => window.close() }/>
       </controls>
     </header>
   );

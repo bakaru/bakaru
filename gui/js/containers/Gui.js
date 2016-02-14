@@ -12,6 +12,7 @@ import Layer from 'components/Layer';
 
 const Gui = (props) => (
   <gui>
+    <dragger></dragger>
     <Player wcjs={ props.wcjs } actions={ props.actions } { ...props.player } />
     <Header
       minimizeMainWindow={ minimizeMainWindow }

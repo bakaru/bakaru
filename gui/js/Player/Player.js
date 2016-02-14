@@ -28,10 +28,14 @@ export default class Player extends Component {
     this.canvasResizeRequest = true;
 
     this.state = {
+      title: '',
       playing: false,
       length: 0,
-      pos: 0
+      pos: 0,
+      uiHidden: false
     };
+
+    this.uiHideTimer = null;
 
     this.componentWillReceiveProps(props);
   }
@@ -78,10 +82,16 @@ export default class Player extends Component {
     const currentTime = this.secondsToHms(this.state.pos/1000);
     const length = this.secondsToHms(this.state.length/1000);
 
+    let hiddenCursor = `url('data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='), auto`;
+    hiddenCursor = 'wait';
+
     return (
-      <div className="bakaru-player">
+      <div className={ `bakaru-player ${this.state.uiHidden ? 'ui-hidden' : ''}` } onMouseMove={ ::this.showUi }>
         <div className="canvas-wrapper" onClick={ ::this.togglePause }>
           <canvas ref="canvas" className="canvas"></canvas>
+        </div>
+        <div className="title">
+          { this.state.title }
         </div>
         <div className="controls">
           <div className="progressBar" onClick={ ::this.handleSeek }>
@@ -111,6 +121,23 @@ export default class Player extends Component {
     );
   }
 
+  showUi() {
+    this.setState({ uiHidden: false });
+
+    clearTimeout(this.uiHideTimer);
+
+    this.uiHideTimer = setTimeout(::this.hideUi, 2000);
+  }
+
+  hideUi() {
+    this.setState({ uiHidden: true });
+  }
+
+  /**
+   * Handle seek
+   *
+   * @param event
+   */
   handleSeek(event) {
     const clickOnPercent = 100 / event.target.offsetWidth * (event.clientX - 5);
 
@@ -128,6 +155,7 @@ export default class Player extends Component {
     this.playlist = Array.from(playlist);
     this.currentPlaylistItem = 0;
     this.setMedia(this.playlist[0]);
+    this.showUi();
   }
 
   /**
@@ -137,8 +165,10 @@ export default class Player extends Component {
    * @param audioPath
    * @param subtitlesPath
    */
-  setMedia({ videoPath, audioPath, subtitlesPath }) {
+  setMedia({ title, videoPath, audioPath, subtitlesPath }) {
     console.log(`Player: setMedia`, this.playlist);
+
+    this.setState({ title });
 
     this.videoPlayer.playlist.clear();
     this.audioPlayer.playlist.clear();
