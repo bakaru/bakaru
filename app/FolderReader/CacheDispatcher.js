@@ -34,6 +34,11 @@ class Cache {
     this.animeFolders.set(animeFolder.id, animeFolder);
   }
 
+  /**
+   * Restores cahced data
+   *
+   * @param sendTo
+   */
   restore(sendTo) {
     readdirAsync(this.pathDispatcher.cache.animeFolders).then(items => {
       if (items === null || items.length === 0) {
@@ -52,6 +57,11 @@ class Cache {
     });
   }
 
+  /**
+   * Flushes all content to FS
+   *
+   * @returns {Promise}
+   */
   flush() {
     const promises = [];
 

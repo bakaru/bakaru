@@ -6,7 +6,7 @@ const _path = require('path');
 const basename = _path.basename;
 const extname = _path.extname;
 
-const Cache = require('./Cache');
+const Cache = require('./CacheDispatcher');
 const isAnimeFolder = require('./isAnimeFolder');
 const findSameParts = require('./findSameParts');
 const classifyFolderItems = require('./ItemsClassificator');
