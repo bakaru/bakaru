@@ -5,8 +5,15 @@ import React, { Component } from 'react';
 import { setupCanvas } from 'webgl-video-renderer';
 import deepEqual from 'deep-equal';
 import Mousetrap from 'mousetrap';
+import BrowserWindow from 'utils/BrowserWindow';
 
 export default class Player extends Component {
+
+  /**
+   * Ctor
+   *
+   * @param props
+   */
   constructor(props) {
     super(props);
 
@@ -40,6 +47,11 @@ export default class Player extends Component {
     this.componentWillReceiveProps(props);
   }
 
+  /**
+   * Handles props updates
+   *
+   * @param props
+   */
   componentWillReceiveProps(props) {
     if (this.videoPlayer === null || this.audioPlayer === null) {
       return;
@@ -69,11 +81,19 @@ export default class Player extends Component {
     this.internalState = props.state;
   }
 
+  /**
+   * Initilizes players and registers hotkeys when component did mount
+   */
   componentDidMount() {
     this.setupPlayers();
     this.registerHotkeys();
   }
 
+  /**
+   * Render FFS
+   *
+   * @returns {XML}
+   */
   render() {
     const currentPlaybackPercent = this.state['length']
       ? (100 / this.state.length) * this.state.pos
@@ -118,11 +138,14 @@ export default class Player extends Component {
     );
   }
 
+  /**
+   * Toggles fullscreen
+   */
   handleDoubleClick() {
-    if (window.document.webkitFullscreenElement) {
-      window.document.webkitExitFullscreen();
+    if (BrowserWindow.isFullScreen()) {
+      BrowserWindow.exitFullScreen();
     } else {
-      this.refs.player.webkitRequestFullscreen();
+      BrowserWindow.enterFullScreen();
     }
   }
 
@@ -313,6 +336,9 @@ export default class Player extends Component {
     this.setState({ pos: time });
   }
 
+  /**
+   * Registers hotkeys
+   */
   registerHotkeys() {
     Mousetrap.bind('space', this.onlyWhenFocused(::this.togglePause));
     Mousetrap.bind('esc', this.onlyWhenFocused(() => {
@@ -321,6 +347,12 @@ export default class Player extends Component {
     }));
   }
 
+  /**
+   * Curry given function to fire only if player is focused
+   *
+   * @param func
+   * @returns {Function}
+   */
   onlyWhenFocused(func) {
     return () => {
       if (this.internalState === 'focused') {
@@ -350,12 +382,22 @@ export default class Player extends Component {
     this.renderContext.fillBlack();
   }
 
+  /**
+   * Register playback time change event
+   *
+   * @private
+   */
   _setupOnTimeChangedEvent() {
     this.videoPlayer.onTimeChanged = time => {
       this.setState({pos: time});
     };
   }
 
+  /**
+   * Register length of media change event
+   *
+   * @private
+   */
   _setupOnLengthChangedEvent() {
     this.videoPlayer.onLengthChanged = length => {
       this.setState({length});
@@ -363,6 +405,8 @@ export default class Player extends Component {
   }
 
   /**
+   * Register media file end event
+   *
    * @private
    */
   _setupOnEndReachedEvent() {
@@ -370,6 +414,8 @@ export default class Player extends Component {
   }
 
   /**
+   * Register callback for new frame
+   *
    * @private
    */
   _setupOnFrameReadyEvent() {
@@ -411,6 +457,12 @@ export default class Player extends Component {
     };
   }
 
+  /**
+   * Converts seconds to human format of hh:mm:ss
+   *
+   * @param {number} d
+   * @returns {string}
+   */
   secondsToHms(d) {
     var h = Math.floor(d / 3600);
     var m = Math.floor(d % 3600 / 60);

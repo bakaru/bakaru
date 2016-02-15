@@ -84,7 +84,11 @@ class App {
       });
     }
 
-    this.mainWindow.on('closed', function () {
+    this.mainWindow.on('focus', () => {
+      this.mainWindow.setFlashFrame(false);
+    });
+
+    this.mainWindow.on('closed', () => {
       this.mainWindow = null;
     });
   }

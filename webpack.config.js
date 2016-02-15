@@ -26,6 +26,7 @@ config.push({
     alias: {
       lib: path.join(__dirname, "app/lib"),
       ipc: path.join(__dirname, "gui/js/ipcRenderer.js"),
+      utils: path.join(__dirname, 'gui/js/utils'),
       events: path.join(__dirname, "app/events.js"),
       actions: path.join(__dirname, "gui/js/actions.js"),
       components: path.join(__dirname, "gui/js/components")

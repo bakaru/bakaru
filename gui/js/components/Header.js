@@ -1,4 +1,5 @@
 import React from 'react';
+import BrowserWindow from 'utils/BrowserWindow';
 
 export default function Header({ minimizeMainWindow, openSelectFolderDialog, flags, playerStatus, playerState, actions }) {
   const { addFolder } = flags;
@@ -32,7 +33,7 @@ export default function Header({ minimizeMainWindow, openSelectFolderDialog, fla
         </button>
       </actions>
       <controls>
-        <minimize onClick={ () => minimizeMainWindow() }>
+        <minimize onClick={ () => BrowserWindow.minimize() }>
           -
         </minimize>
         <exit dangerouslySetInnerHTML={{__html: '&times;'}} onClick={ () => window.close() }/>
