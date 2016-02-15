@@ -67,7 +67,7 @@ class BrowserWindow {
   }
 
   flashFrame() {
-    this.self().setFlashFrame(true);
+    this.self().flashFrame(true);
   }
 
   setPosition(x, y) {

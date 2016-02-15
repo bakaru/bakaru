@@ -85,7 +85,7 @@ class App {
     }
 
     this.mainWindow.on('focus', () => {
-      this.mainWindow.setFlashFrame(false);
+      this.mainWindow.flashFrame(false);
     });
 
     this.mainWindow.on('closed', () => {
