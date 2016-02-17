@@ -2,9 +2,10 @@ require('font-awesome/css/font-awesome.css');
 require('./style.css');
 
 import React, { Component } from 'react';
-import { setupCanvas } from 'webgl-video-renderer';
 import deepEqual from 'deep-equal';
 import Mousetrap from 'mousetrap';
+
+import PlayerController from './PlayerController';
 import BrowserWindow from 'utils/BrowserWindow';
 
 export default class Player extends Component {
@@ -17,28 +18,19 @@ export default class Player extends Component {
   constructor(props) {
     super(props);
 
-    this.actions = props.actions;
-
     this.wcjs = props.wcjs;
-
-    /** @type {VlcPlayer} */
-    this.videoPlayer = null;
-    /** @type {VlcPlayer} */
-    this.audioPlayer = null;
-
-    this.externalAudio = false;
-    this.playlist = false;
-    this.currentPlaylistItem = 0;
+    this.player = null;
     this.status = 'idle';
+    this.actions = props.actions;
+    this.playlist = false;
     this.internalState = 'blurred';
-
-    this.canvasResizeRequest = true;
+    this.currentPlaylistItem = 0;
 
     this.state = {
+      time: 0,
       title: '',
-      playing: false,
       length: 0,
-      pos: 0,
+      playing: false,
       uiHidden: false
     };
 
@@ -53,18 +45,12 @@ export default class Player extends Component {
    * @param props
    */
   componentWillReceiveProps(props) {
-    if (this.videoPlayer === null || this.audioPlayer === null) {
+    if (this.player === null) {
       return;
     }
 
-    if (props.playlist) {
-      if (this.playlist) {
-        if (deepEqual(this.playlist, props.playlist) === false) {
-          this.setPlaylist(props.playlist);
-        }
-      } else {
-        this.setPlaylist(props.playlist);
-      }
+    if (props.playlist && (!this.playlist || !deepEqual(this.playlist, props.playlist))) {
+      this.setPlaylist(props.playlist);
     }
 
     if (props.status !== this.status) {
@@ -82,10 +68,15 @@ export default class Player extends Component {
   }
 
   /**
-   * Initilizes players and registers hotkeys when component did mount
+   * Initialize player and registers hotkeys when component did mount
    */
   componentDidMount() {
-    this.setupPlayers();
+    this.player = new PlayerController(this.wcjs, this.refs.canvas);
+
+    this.player.registerOnEndReachedHandler(::this.next);
+    this.player.registerOnLengthHandler(length => this.setState({ length }));
+    this.player.registerOnTimeChangeHandler(time => this.setState({ time }));
+
     this.registerHotkeys();
   }
 
@@ -96,22 +87,22 @@ export default class Player extends Component {
    */
   render() {
     const currentPlaybackPercent = this.state['length']
-      ? (100 / this.state.length) * this.state.pos
+      ? (100 / this.state.length) * this.state.time
       : 0;
 
-    const currentTime = this.secondsToHms(this.state.pos/1000);
+    const time = this.secondsToHms(this.state.time/1000);
     const length = this.secondsToHms(this.state.length/1000);
 
     return (
       <div className={ `bakaru-player ${this.state.uiHidden ? 'ui-hidden' : ''}` } onMouseMove={ ::this.showUi } ref="player">
-        <div className="canvas-wrapper" onClick={ ::this.togglePause } onDoubleClick={ ::this.handleDoubleClick }>
+        <div className="canvas-wrapper" onClick={ ::this.togglePause } onDoubleClick={ ::this.toggleFullScreen }>
           <canvas ref="canvas" className="canvas"></canvas>
         </div>
         <div className="title">
           { this.state.title }
         </div>
         <div className="controls">
-          <div className="progressBar" onClick={ ::this.handleSeek }>
+          <div className="progressBar" onClick={ ::this.seek }>
             <div className="track" style={{ width: `${currentPlaybackPercent}%` }}></div>
           </div>
           <div className="buttons">
@@ -127,7 +118,7 @@ export default class Player extends Component {
           </div>
           <div className="times">
             <div className="timeNow">
-              { currentTime }
+              { time }
             </div>
             <div className="timeEnd">
               { length }
@@ -139,9 +130,9 @@ export default class Player extends Component {
   }
 
   /**
-   * Toggles fullscreen
+   * Toggles fullscreen mode
    */
-  handleDoubleClick() {
+  toggleFullScreen() {
     if (BrowserWindow.isFullScreen()) {
       BrowserWindow.exitFullScreen();
     } else {
@@ -172,7 +163,7 @@ export default class Player extends Component {
    *
    * @param event
    */
-  handleSeek(event) {
+  seek(event) {
     const clickOnPercent = 100 / event.target.offsetWidth * (event.clientX - 5);
 
     this.setTime(this.state.length / 100 * clickOnPercent);
@@ -184,60 +175,24 @@ export default class Player extends Component {
    * @param playlist
    */
   setPlaylist(playlist) {
-    console.log(`Player: setPlaylist`);
+    this.playlist = playlist.slice();
 
-    this.playlist = Array.from(playlist);
-    this.currentPlaylistItem = 0;
-    this.setMedia(this.playlist[0]);
+    this.player.setMedia(this.playlist[this.currentPlaylistItem = 0]);
     this.showUi();
-  }
-
-  /**
-   * Set current playing media
-   *
-   * @param videoPath
-   * @param audioPath
-   * @param subtitlesPath
-   */
-  setMedia({ title, videoPath, audioPath, subtitlesPath }) {
-    console.log(`Player: setMedia`, this.playlist);
-
-    this.setState({ title });
-
-    this.videoPlayer.playlist.clear();
-    this.audioPlayer.playlist.clear();
-
-    this.videoPlayer.playlist.add(videoPath);
-
-    if (audioPath) {
-      this.externalAudio = true;
-      this.videoPlayer.volume = 0;
-
-      this.audioPlayer.playlist.add(audioPath);
-    } else {
-      this.externalAudio = false;
-      this.videoPlayer.volume = 100;
-    }
-
-    this.setVolume(100);
   }
 
   /**
    * Switch to next playlist item if available
    */
   next() {
-    if (this.playlist === false) {
+    if (this.playlist === false || this.currentPlaylistItem === this.playlist.length - 1) {
       return;
     }
 
-    if (this.currentPlaylistItem === this.playlist.length - 1) {
-      return;
-    }
+    const media = this.playlist[++this.currentPlaylistItem];
 
-    this.currentPlaylistItem++;
-
-    this.setMedia(this.playlist[this.currentPlaylistItem]);
-
+    this.setState({ title: media.title });
+    this.player.setMedia(media);
     this.play();
   }
 
@@ -245,18 +200,14 @@ export default class Player extends Component {
    * Switch to previous playlist item if available
    */
   prev() {
-    if (this.playlist === false) {
+    if (this.playlist === false || this.currentPlaylistItem === 0) {
       return;
     }
 
-    if (this.currentPlaylistItem === 0) {
-      return;
-    }
+    const media = this.playlist[--this.currentPlaylistItem];
 
-    this.currentPlaylistItem--;
-
-    this.setMedia(this.playlist[this.currentPlaylistItem]);
-
+    this.setState({ title: media.title });
+    this.player.setMedia(media);
     this.play();
   }
 
@@ -264,17 +215,7 @@ export default class Player extends Component {
    * Play
    */
   play() {
-    console.log(`Player: play`);
-
-    if (this.externalAudio) {
-      this.videoPlayer.play();
-      this.audioPlayer.play();
-
-      this.audioPlayer.time = this.videoPlayer.time;
-    } else {
-      this.videoPlayer.play();
-    }
-
+    this.player.play();
     this.setState({ playing: true });
   }
 
@@ -282,11 +223,7 @@ export default class Player extends Component {
    * Pauses playback
    */
   pause() {
-    console.log(`Player: pause`);
-
-    this.videoPlayer.pause();
-    this.audioPlayer.pause();
-
+    this.player.pause();
     this.setState({ playing: false });
   }
 
@@ -294,11 +231,7 @@ export default class Player extends Component {
    * Toggles pause
    */
   togglePause() {
-    console.log(`Player: togglePause`);
-
-    this.videoPlayer.togglePause();
-    if (this.externalAudio) this.audioPlayer.togglePause();
-
+    this.player.togglePause();
     this.setState({ playing: !this.state.playing });
   }
 
@@ -306,41 +239,38 @@ export default class Player extends Component {
    * Stop playback
    */
   stop() {
-    console.log(`Player: stop`);
-
-    this.videoPlayer.stop();
-    if (this.externalAudio) this.audioPlayer.stop();
+    this.player.stop();
+    this.setState({ playing: false });
   }
 
   /**
    * Set volume
    *
-   * @param volume
+   * @param {number} volume
    */
   setVolume(volume) {
-    if (this.externalAudio) {
-      this.audioPlayer.volume = volume;
-    } else {
-      this.videoPlayer.volume = volume;
-    }
+    this.player.setVolume(volume);
+    this.setState({ volume });
   }
 
   /**
    * Set current time for video
    *
-   * @param time
+   * @param {number} time
    */
   setTime(time) {
-    this.videoPlayer.time = time;
-    if (this.externalAudio) this.audioPlayer.time = time;
-    this.setState({ pos: time });
+    this.player.setTime(time);
+    this.setState({ time });
   }
 
   /**
    * Registers hotkeys
    */
   registerHotkeys() {
-    Mousetrap.bind('space', this.onlyWhenFocused(::this.togglePause));
+    Mousetrap.bind('space', this.onlyWhenFocused(() => {
+      this.player.togglePause();
+    }));
+
     Mousetrap.bind('esc', this.onlyWhenFocused(() => {
       this.actions.playerPause();
       this.actions.playerBlur();
@@ -358,102 +288,6 @@ export default class Player extends Component {
       if (this.internalState === 'focused') {
         func();
       }
-    };
-  }
-
-  /**
-   * Setups video and audio players
-   */
-  setupPlayers() {
-    window.videoPlayer = this.videoPlayer = this.wcjs.createPlayer();
-    window.audioPlayer = this.audioPlayer = this.wcjs.createPlayer();
-
-    this.renderContext = setupCanvas(this.refs.canvas, {
-      preserveDrawingBuffer: true
-    });
-
-    window.addEventListener('resize', () => this.canvasResizeRequest = true);
-
-    this._setupOnTimeChangedEvent();
-    this._setupOnLengthChangedEvent();
-    this._setupOnFrameReadyEvent();
-    this._setupOnEndReachedEvent();
-
-    this.renderContext.fillBlack();
-  }
-
-  /**
-   * Register playback time change event
-   *
-   * @private
-   */
-  _setupOnTimeChangedEvent() {
-    this.videoPlayer.onTimeChanged = time => {
-      this.setState({pos: time});
-    };
-  }
-
-  /**
-   * Register length of media change event
-   *
-   * @private
-   */
-  _setupOnLengthChangedEvent() {
-    this.videoPlayer.onLengthChanged = length => {
-      this.setState({length});
-    };
-  }
-
-  /**
-   * Register media file end event
-   *
-   * @private
-   */
-  _setupOnEndReachedEvent() {
-    this.videoPlayer.onEndReached = ::this.next;
-  }
-
-  /**
-   * Register callback for new frame
-   *
-   * @private
-   */
-  _setupOnFrameReadyEvent() {
-    const gl = this.renderContext.gl;
-
-    this.videoPlayer.onFrameSetup = (width, height, pixelFormat, videoFrame) => {
-      console.log('Frame size', width, height, pixelFormat);
-    };
-
-    this.videoPlayer.onFrameReady = frame => {
-      if (this.canvasResizeRequest) {
-        const windowRatio = window.outerWidth / window.outerHeight;
-        const frameRatio = frame.width / frame.height;
-
-        let canvasWidth = 0;
-        let canvasHeight = 0;
-
-        if (windowRatio > frameRatio) {
-          canvasHeight = window.outerHeight;
-          canvasWidth = Math.ceil(canvasHeight * frameRatio);
-        } else {
-          canvasWidth = window.outerWidth;
-          canvasHeight = Math.ceil(canvasWidth / frameRatio);
-        }
-
-        this.refs.canvas.width = canvasWidth;
-        this.refs.canvas.height = canvasHeight;
-
-        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-
-        this.canvasResizeRequest = false;
-      }
-
-      gl.y.fill(frame.width, frame.height, frame.subarray(0, frame.uOffset));
-      gl.u.fill(frame.width >> 1, frame.height >> 1, frame.subarray(frame.uOffset, frame.vOffset));
-      gl.v.fill(frame.width >> 1, frame.height >> 1, frame.subarray(frame.vOffset, frame.length));
-
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
   }
 
