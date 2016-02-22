@@ -1,6 +1,3 @@
-require('font-awesome/css/font-awesome.css');
-require('./style.css');
-
 import React, { Component } from 'react';
 import deepEqual from 'deep-equal';
 import Mousetrap from 'mousetrap';

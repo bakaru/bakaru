@@ -54,29 +54,25 @@ export default class Anime extends Component {
           <title>{ this.folder.name }</title>
           <path>{ this.folder.path }</path>
         </summary>
-        <backery>
-          <selectors>
-            <select defaultValue={ this.selected.dub } onChange={ ::this.handleDubSelect }>
-              { dubs.length > 0 ? dubs : (<option>No dubs</option>) }
-            </select>
-            <select defaultValue={ this.selected.sub } onChange={ ::this.handleSubSelect }>
-              { subs.length > 0 ? subs : (<option>No subs</option>) }
-            </select>
-          </selectors>
-          <subtitle>Episodes</subtitle>
-          <episodes>
-            { episodes }
-          </episodes>
-          <subtitle>Settings</subtitle>
-          <settings>
-            Settings here
-          </settings>
-          <actions>
-            <button onClick={ ::this.handlePlayAllClick }>
-              Play all
-            </button>
-          </actions>
-        </backery>
+
+        <actions>
+          <button>
+            Bake
+          </button>
+          <button onClick={ ::this.handlePlayAllClick }>
+            Play all
+          </button>
+        </actions>
+
+        <list-row>
+          { subs }
+          { dubs }
+        </list-row>
+
+        <list>
+          <title>Episodes</title>
+          { episodes }
+        </list>
       </anime>
     );
   }
@@ -119,36 +115,76 @@ export default class Anime extends Component {
     this.actions.playerPlay();
   }
 
-  handleDubSelect(event) {
-    this.selected.dub = event.target.value;
+  handleDubSelect(dubId) {
+    this.selected.dub = dubId;
   }
 
-  handleSubSelect(event) {
-    this.selected.sub = event.target.value;
-  }
-
-  renderOption(id, name) {
-    return (
-      <option value={ id } key={ id }>
-        { name }
-      </option>
-    );
+  handleSubSelect(subId) {
+    this.selected.sub = subId;
   }
 
   renderSubs(subs) {
-    return subs.map(sub => this.renderOption(sub.id, sub.name));
+    if (subs.length === 0) {
+      return '';
+    }
+
+    const rendered = subs.map(sub => {
+      const isSelected = this.selected.sub === sub.id;
+
+      return (
+        <div
+          key={ sub.id }
+          title={ sub.name }
+          className={ isSelected ? 'selected' : '' }
+          onClick={ () => ::this.handleSubSelect(sub.id) }
+        >
+          { sub.name }
+        </div>
+      );
+    });
+
+    return (
+      <list>
+        <title>Subs</title>
+        { rendered }
+      </list>
+    );
   }
 
   renderDubs(dubs) {
-    return dubs.map(dub => this.renderOption(dub.id, dub.name));
+    if (dubs.length === 0) {
+      return '';
+    }
+
+    const rendered = dubs.map(dub => {
+      const isSelected = this.selected.dub === dub.id;
+
+      return (
+        <div
+          key={ dub.id }
+          title={ dub.name }
+          className={ isSelected ? 'selected' : '' }
+          onClick={ () => ::this.handleDubSelect(dub.id) }
+        >
+          { dub.name }
+        </div>
+      );
+    });
+
+    return (
+      <list>
+        <title>Dubs</title>
+        { rendered }
+      </list>
+    );
   }
 
   renderEps(eps) {
     return eps.map(episode => {
       return (
-        <episode key={ episode.id }>
+        <div key={ episode.id } title={ episode.name }>
           { episode.name }
-        </episode>
+        </div>
       );
     });
   }

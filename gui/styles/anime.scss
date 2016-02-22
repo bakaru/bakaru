@@ -5,7 +5,6 @@ $summaryHeight: 80px;
 anime {
   display: block;
   position: relative;
-  border-right: solid 1px $delimiterColour;
   overflow-y: scroll;
 
   summary {
@@ -15,6 +14,7 @@ anime {
 
     title {
       display: block;
+      font-size: 24px;
     }
 
     path {
@@ -30,107 +30,78 @@ anime {
     }
   }
 
-  backery {
+  actions {
+    display: flex;
+    margin: $baseInnerPadding;
+    border: solid 1px $mainColour;
+    border-radius: 2px;
+
+    button {
+      flex-grow: 1;
+      border: none;
+      border-right: solid 1px $mainColour;
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
+
+  list {
     display: block;
-    //margin: $baseInnerPadding;
-    border-bottom: solid 1px $delimiterColour;
+    flex-grow: 1;
+    overflow: visible;
+    margin-top: $baseInnerPadding/1.68;
+    padding-bottom: $baseInnerPadding/1.68;
+    border-bottom: solid 1px lighten($delimiterColour, 5%);
 
     title {
       display: block;
-      text-align: center;
-      font-weight: 100;
+      padding: 0 $baseInnerPadding;
+      margin-bottom: $baseInnerPadding/1.68;
       font-size: 14px;
-      text-transform: uppercase;
-      border-bottom: solid 1px $delimiterColour;
+      color: #999;
     }
 
-    subtitle {
-      display: block;
-      color: darken($delimiterColour, 50%);
-      font-size: 12px;
-      border-bottom: solid 1px lighten($delimiterColour, .1%);
-      padding: $baseInnerPadding/2 3px 0 3px;
-    }
+    &>div {
+      padding: $baseInnerPadding/1.68 $baseInnerPadding;
 
-    selectors {
-      display: flex;
-      border-bottom: solid 1px $delimiterColour;
+      @include ellipsis;
 
-      list {
-        flex: 1;
-        margin: 0;
-        border: none;
-        border-right: solid 1px $delimiterColour;
-        background-color: transparent;
-        overflow-y: visible;
-
-        subtitle {
-          padding: 0 3px;
-        }
-
-        option {
-          display: block;
-          padding: $baseInnerPadding $baseInnerPadding*1.68;
-        }
-
-        &:last-child {
-          border-right: none;
-        }
-      }
-    }
-
-    episodes {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      justify-content: flex-start;
-      width: 100%;
-
-      &::-webkit-scrollbar-thumb {
-        background-color: $mainColour;
+      &:hover {
+        background-color: rgba(0, 0, 0, .05);
       }
 
-      episode {
-        display: block;
-        flex-grow: 1;
-        padding: $baseInnerPadding;
-        border-bottom: solid 1px $delimiterColour;
-        border-right: solid 1px $delimiterColour;
-        text-align: center;
+      &.selected {
+        padding-left: $baseInnerPadding*1.68;
       }
     }
+  }
 
-    settings {
-      display: block;
-      border-bottom: solid 1px $delimiterColour;
-      padding: $baseInnerPadding;
+  list-row {
+    display: flex;
+  }
+
+  button {
+    flex-grow: 1;
+    color: $mainColour;
+    padding: $baseInnerPadding $baseInnerPadding*1.68;
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+    font-family: 'Open Sans';
+    outline: none;
+    border-right: solid 1px $delimiterColour;
+
+    &:last-child {
+      border-right: none;
     }
 
-    actions {
-      display: flex;
-
-      button {
-        flex-grow: 1;
-        color: $mainColour;
-        padding: $baseInnerPadding $baseInnerPadding*1.68;
-        background-color: transparent;
-        border: none;
-        font-size: 14px;
-        font-family: 'Open Sans';
-        outline: none;
-        border-right: solid 1px $delimiterColour;
-
-        &:last-child {
-          border-right: none;
-        }
-
-        &:hover {
-          background-color: lighten($mainColour, 40%);
-        }
-        &:disabled {
-          opacity: .8;
-        }
-      }
+    &:hover {
+      background-color: lighten($mainColour, 40%);
+    }
+    &:disabled {
+      opacity: .8;
     }
   }
 }
