@@ -14,7 +14,7 @@ const log = msg => console.log(chalk.green(msg));
 
 var GUI_BUILD = './build/staging/gui/build/';
 
-const winBuild = `set GUI_BUILD=${GUI_BUILD} && webpack -p`;
+const winBuild = `cross-env GUI_BUILD=${GUI_BUILD} webpack -p`;
 
 var promise = Promise.resolve(noop);
 

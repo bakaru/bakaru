@@ -4,7 +4,7 @@
   "description": "Bakaru, an anime tool",
   "main": "app/main.js",
   "scripts": {
-    "start": "electron app/main.js",
+    "start": "cross-env DEBUG=true electron app/main.js",
     "watch": "webpack -d -w",
     "build": "node packager"
   },
@@ -29,6 +29,7 @@
     "babel-preset-react": "6.3.13",
     "chalk": "1.1.1",
     "clean-webpack-plugin": "0.1.5",
+    "cross-env": "1.0.7",
     "css-loader": "0.14.5",
     "electron-packager": "5.2.1",
     "extract-text-webpack-plugin": "1.0.0",
