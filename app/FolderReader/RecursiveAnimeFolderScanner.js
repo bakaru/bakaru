@@ -80,7 +80,7 @@ class RecursiveAnimeFolderScanner {
       id,
       name,
       path,
-      files
+      files: folderItems
     });
   }
 

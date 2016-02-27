@@ -16,44 +16,11 @@ class MediaInfo {
     ];
   }
 
-  getInfo(filepaths) {
-    if (filepaths.length > 10) {
-      const chunks = [[filepaths[0]]];
-      let currentChunk = 0;
-
-      for (let i = 1; i < filepaths.length; i++) {
-        if (i%10 === 0) {
-          currentChunk++;
-          chunks[currentChunk] = [];
-        }
-
-        chunks[currentChunk].push(filepaths[i]);
-      }
-
-      return Promise.all(chunks.map(chunk => {
-        return this.getInfoChunked(chunk);
-      })).then(infoChunks => {
-        const map = [];
-
-        infoChunks.map(infoChunk => map.push.apply(map, [...infoChunk]));
-
-        return new Map(map);
-      });
-    } else {
-      return this.getInfoChunked(filepaths);
-    }
-  }
-
-  /**
-   * @api
-   * @param {string[]} filepaths
-   * @returns {Promise<TResult>|Promise.<T>}
-   */
-  getInfoChunked(filepaths) {
+  getInfo(filepath) {
     const promise = new Promise((resolve, reject) => {
       execFile(
         this.executable,
-        filepaths.concat(this.defaultArgs),
+        [filepath].concat(this.defaultArgs),
         (err, output) => {
           if (err) {
             reject(err);
@@ -73,8 +40,6 @@ class MediaInfo {
           audio: [],
           subtitles: []
         };
-
-        const files = new Map();
 
         for (let fileIndex in mediaObject.Mediainfo.File) {
           const info = Object.assign({}, infoBase);
@@ -135,10 +100,8 @@ class MediaInfo {
             }
           }
 
-          files.set(filepath, info);
+          return info;
         }
-
-        return files;
       });
   }
 

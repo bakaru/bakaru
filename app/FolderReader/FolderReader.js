@@ -10,6 +10,7 @@ const Cache = require('./CacheDispatcher');
 const isAnimeFolder = require('./isAnimeFolder');
 const findSameParts = require('./findSameParts');
 const classifyFolderItems = require('./ItemsClassificator');
+const MediaScanner = require('./MediaScanner');
 const RecursiveAnimeFolderScanner = require('./RecursiveAnimeFolderScanner');
 
 const readdirAsync = require('bluebird').promisify(readdir);
@@ -66,7 +67,7 @@ class FolderReader {
 
         if (classifiedItems.videos.length > 0 && isAnimeFolder(classifiedItems)) {
           // So this is anime, good, fulfill it's data
-          const animeFolder = this.makeAnimeFolderData(path, classifiedItems);
+          const animeFolder = this.makeAnimeFolder(path, classifiedItems);
 
           this.addAnimeFolder(animeFolder);
 
@@ -87,7 +88,7 @@ class FolderReader {
    * @param {ClassifiedItems} classifiedItems
    * @returns {AnimeFolder}
    */
-  makeAnimeFolderData(path, classifiedItems) {
+  makeAnimeFolder(path, classifiedItems) {
     /**
      * @type {AnimeFolder}
      */
@@ -98,18 +99,20 @@ class FolderReader {
       dubs: [],
       subs: [],
       bonuses: [],
-      selections: {
-        dub: false,
-        sub: false
-      },
       quality: "unknown",
+      media: {
+        width: 0,
+        height: 0,
+        bitDepth: 8,
+        format: ''
+      },
       episodes: classifiedItems.videos.map(episode => ({
         id: sha224(episode),
         ext: '',
         name: '',
         path: episode,
         filename: '',
-        mediainfo: null
+        duration: ''
       })),
       state: {
         scanning: true,
@@ -118,11 +121,7 @@ class FolderReader {
       }
     };
 
-    // Refine episodes names
-    process.nextTick(() => {
-      this.refineEpisodesNames(animeFolder);
-      this.updateAnimeFolder(animeFolder);
-    });
+    this.refineEpisodesNames(animeFolder);
 
     RecursiveAnimeFolderScanner.scan(animeFolder, classifiedItems.folders)
       .then(() => {
@@ -132,41 +131,7 @@ class FolderReader {
         this.updateAnimeFolder(animeFolder);
       });
 
-    // Scan eps by MediaInfo
-    process.nextTick(() => {
-      const episodesPathsMap = new Map();
-
-      for (let episodeIndex in animeFolder.episodes) {
-        episodesPathsMap.set(animeFolder.episodes[episodeIndex].path, episodeIndex);
-      }
-
-      const mediaInfoPromise = this.mediaInfo.getInfo([...episodesPathsMap.keys()]);
-
-      mediaInfoPromise
-        .then(info => {
-          let maxHeight = 0;
-
-          for (let entry of info) {
-            const episodePath = entry[0];
-            const mediainfo = entry[1];
-            const episodeIndex = episodesPathsMap.get(episodePath);
-
-            if (mediainfo.video && mediainfo.video.height > maxHeight) {
-              maxHeight = mediainfo.video.height;
-            }
-
-            animeFolder.episodes[episodeIndex].mediainfo = mediainfo;
-          }
-
-          animeFolder.quality = `${maxHeight}p`;
-          animeFolder.state.mediainfoScanning = false;
-
-          this.updateAnimeFolder(animeFolder);
-        })
-        .catch(err => {
-          console.error(err);
-        });
-    });
+    new MediaScanner(animeFolder, this.updateAnimeFolder.bind(this), this.mediaInfo);
 
     return animeFolder;
   }
