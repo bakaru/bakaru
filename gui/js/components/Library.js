@@ -9,7 +9,7 @@ import Anime from 'components/Anime';
  * @returns {XML}
  * @constructor
  */
-export default function Layer(props) {
+export default function Library(props) {
   const {
     folder,
     folders,

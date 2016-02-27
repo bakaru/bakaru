@@ -7,21 +7,20 @@ import * as actions from 'actions';
 
 import Player from 'components/Player';
 import Header from 'components/Header';
-import Layer from 'components/Layer';
+import Library from 'components/Library';
 
 const Gui = (props) => (
   <gui>
     <dragger></dragger>
     <Player wcjs={ props.wcjs } actions={ props.actions } { ...props.player } />
     <Header
-      minimizeMainWindow={ minimizeMainWindow }
       openSelectFolderDialog={ openSelectFolderDialog }
       flags={ props.flags }
       actions={ props.actions }
       playerStatus={ props.player.status }
       playerState={ props.player.state }
     />
-    <Layer { ...props } />
+    <Library { ...props } />
   </gui>
 );
 
