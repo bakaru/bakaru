@@ -1,6 +1,6 @@
 @import "variables";
 
-layer {
+library {
   display: flex;
   position: fixed;
   top: $headerHeight;
@@ -70,6 +70,17 @@ layer {
         color: #666;
         font-size: 12px;
         font-weight: 300;
+      }
+    }
+
+    adder {
+      display: block;
+      position: relative;
+      padding: $baseInnerPadding $baseInnerPadding*1.68;
+      color: #666;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, .05);
       }
     }
   }

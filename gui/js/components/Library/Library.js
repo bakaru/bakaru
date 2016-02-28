@@ -16,7 +16,7 @@ export default function Library(props) {
   const library = props.library;
   const entries = library.entries;
 
-  const entry = library.selected
+  const selectedEntry = library.selected
     ? entries.get(library.selected)
     : false;
 
@@ -44,11 +44,14 @@ export default function Library(props) {
   }
 
   return (
-    <layer className={ focus === 'player' ? 'hidden' : '' }>
+    <library className={ focus === 'player' ? 'hidden' : '' }>
       <list>
         { entriesList }
+        <adder onClick={ () => props.openSelectFolderDialog() }>
+          <i className="fa fa-plus"></i> Add folder
+        </adder>
       </list>
-      <Entry entry={ entry } actions={ actions }/>
-    </layer>
+      <Entry entry={ selectedEntry } actions={ actions }/>
+    </library>
   );
 }

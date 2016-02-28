@@ -7,9 +7,23 @@ entry {
   position: relative;
   overflow-y: scroll;
 
+  greeting {
+    display: block;
+    position: absolute;
+    color: #999;
+    font-size: 30px;
+    top: 50%;
+    left: 50%;
+    width: 270px;
+    line-height: 1;
+    margin-top: -15px;
+    margin-left: -135px;
+    text-align: center;
+  }
+
   summary {
     display: block;
-    padding: $baseInnerPadding;
+    padding: $baseInnerPadding $baseInnerPadding*1.68;
     border-bottom: solid 1px $delimiterColour;
 
     title {
@@ -32,7 +46,7 @@ entry {
 
   actions {
     display: block;
-    padding: $baseInnerPadding;
+    padding: $baseInnerPadding $baseInnerPadding*1.68;
     border-bottom: solid 1px lighten($delimiterColour, 5%);
 
     btn {
@@ -54,7 +68,6 @@ entry {
 
   list {
     display: block;
-    flex-grow: 1;
     overflow: visible;
     padding-top: $baseInnerPadding/1.68;
     padding-bottom: $baseInnerPadding/1.68;
@@ -62,7 +75,7 @@ entry {
 
     title {
       display: block;
-      padding: 0 $baseInnerPadding;
+      padding: 0 $baseInnerPadding*1.68;
       margin-bottom: $baseInnerPadding/1.68;
       font-size: 14px;
       color: #999;
@@ -70,7 +83,7 @@ entry {
 
     &>div {
       position: relative;
-      padding: $baseInnerPadding/1.68 $baseInnerPadding;
+      padding: $baseInnerPadding $baseInnerPadding*1.68;
 
       @include ellipsis;
 
@@ -78,26 +91,32 @@ entry {
         background-color: rgba(0, 0, 0, .05);
       }
 
-      &.selected {
-        padding-left: $baseInnerPadding*1.68;
+      &.selected:before {
+        background-color: $mainColour;
+        transition: all .2s ease;
+      }
 
-        &:before {
-          position: absolute;
-          display: block;
-          content: '';
-          top: calc(50% - 2px);
-          left: 7px;
-          width: 4px;
-          height: 4px;
-          border-radius: 50%;
-          background-color: $mainColour;
-        }
+      &:before {
+        position: absolute;
+        display: block;
+        content: '';
+        top: calc(50% - 2px);
+        left: 7px;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: transparent;
       }
     }
   }
 
   list-row {
     display: flex;
+
+    list {
+      flex-grow: 1;
+      width: 50%;
+    }
   }
 
   btn {

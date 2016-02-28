@@ -14,13 +14,12 @@ const Gui = (props) => (
     <dragger></dragger>
     <Player wcjs={ props.wcjs } actions={ props.actions } focus={ props.focus } { ...props.player } />
     <Header
-      openSelectFolderDialog={ openSelectFolderDialog }
       focus={ props.focus }
       flags={ props.flags }
       actions={ props.actions }
       playerActive={ props.player.playlist.length > 0 }
     />
-    <Library { ...props } />
+    <Library { ...props } openSelectFolderDialog={ openSelectFolderDialog } />
   </gui>
 );
 

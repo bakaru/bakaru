@@ -1,37 +1,24 @@
 import React from 'react';
 import BrowserWindow from 'utils/BrowserWindow';
 
-export default function Header({ openSelectFolderDialog, flags, actions, playerActive, focus }) {
-  const { addFolder } = flags;
-
-  let addFolderButton;
-
-  if (addFolder) {
-    addFolderButton = (
-      <button key="add-folder-button" onClick={ () => openSelectFolderDialog() } disabled={ addFolder }>
-        <i className="fa fa-circle-o-notch fa-spin"></i>
-      </button>
-    );
-  } else {
-    addFolderButton = (
-      <button key="add-folder-button" onClick={ () => openSelectFolderDialog() }>
-        Add folder
-      </button>
-    );
-  }
-
+export default function Header({ actions, playerActive, focus }) {
   return (
     <header className={ focus === 'player' ? 'hidden' : '' }>
       <title>BAKARU バカル</title>
-      <actions>
-        { addFolderButton }
-        <button onClick={ () => window.location.reload() }>
-          Reload
-        </button>
-        <button disabled={ !playerActive.length } onClick={ () => { actions.playerPlay();actions.focusOnPlayer(); } }>
-          <i className="fa fa-play"></i> Continue playing
-        </button>
-      </actions>
+      <tabs>
+        <tab onClick={ () => { actions.focusOnLibrary() } }>
+          <i className="fa fa-reorder"></i> Library
+        </tab>
+        <tab onClick={ () => { actions.focusOnPlayer() } }>
+          <i className="fa fa-tv"></i> Player
+        </tab>
+        <tab onClick={ () => { actions.focusOnSettings() } }>
+          <i className="fa fa-wrench"></i> Settings
+        </tab>
+        <tab className="reload-tab" onClick={ () => window.location.reload() }>
+          <i className="fa fa-refresh"></i> Reload
+        </tab>
+      </tabs>
       <controls>
         <minimize onClick={ () => BrowserWindow.minimize() }>
           -

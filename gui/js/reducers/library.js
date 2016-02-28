@@ -29,7 +29,7 @@ function addAnimeFolder(state, animeFolder) {
  * @returns {Map}
  */
 function updateAnimeFolder(state, animeFolder) {
-  const entries = new Map(state);
+  const entries = new Map(state.entries);
   entries.set(animeFolder.id, animeFolder);
 
   return {

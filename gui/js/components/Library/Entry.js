@@ -10,7 +10,7 @@ export default class Entry extends Component {
   constructor(props) {
     super(props);
 
-    this.selected = {
+    this.state = {
       dub: false,
       sub: false,
       eps: []
@@ -24,7 +24,7 @@ export default class Entry extends Component {
     this.actions = props.actions;
 
     if (this.entry !== false) {
-      this.selected = {
+      this.setState({
         dub: this.entry.dubs[0]
           ? this.entry.dubs[0].id
           : false,
@@ -32,16 +32,18 @@ export default class Entry extends Component {
           ? this.entry.subs[0].id
           : false,
         eps: []
-      };
+      });
     }
   }
 
   render() {
     if (this.entry === false) {
       return (
-        <anime>
-          Choose something!
-        </anime>
+        <entry>
+          <greeting>
+            <i className="fa fa-long-arrow-left"></i> Select anime
+          </greeting>
+        </entry>
       );
     }
 
@@ -79,12 +81,12 @@ export default class Entry extends Component {
     let dub = false;
     let sub = false;
 
-    if (this.selected.dub !== false) {
-      dub = this.entry.dubs.filter(dub => dub.id === this.selected.dub)[0];
+    if (this.state.dub !== false) {
+      dub = this.entry.dubs.filter(dub => dub.id === this.state.dub)[0];
     }
 
-    if (this.selected.sub !== false) {
-      sub = this.entry.subs.filter(sub => sub.id === this.selected.sub)[0];
+    if (this.state.sub !== false) {
+      sub = this.entry.subs.filter(sub => sub.id === this.state.sub)[0];
     }
 
     const playlist = [];
@@ -114,12 +116,12 @@ export default class Entry extends Component {
     PlayerControls.play();
   }
 
-  handleDubSelect(dubId) {
-    this.selected.dub = dubId;
+  handleDubSelect(dub) {
+    this.setState({ dub });
   }
 
-  handleSubSelect(subId) {
-    this.selected.sub = subId;
+  handleSubSelect(sub) {
+    this.setState({ sub });
   }
 
   renderSubs(subs) {
@@ -128,7 +130,7 @@ export default class Entry extends Component {
     }
 
     const rendered = subs.map(sub => {
-      const isSelected = this.selected.sub === sub.id;
+      const isSelected = this.state.sub === sub.id;
 
       return (
         <div
@@ -156,7 +158,7 @@ export default class Entry extends Component {
     }
 
     const rendered = dubs.map(dub => {
-      const isSelected = this.selected.dub === dub.id;
+      const isSelected = this.state.dub === dub.id;
 
       return (
         <div
