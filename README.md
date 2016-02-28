@@ -2,8 +2,19 @@
 
 [![Join the chat at https://gitter.im/bakaru/bakaru](https://badges.gitter.im/bakaru/bakaru.svg)](https://gitter.im/bakaru/bakaru?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-_Based on https://github.com/RBudnik/BakeMyAnime_
+_As evolved idea of https://github.com/RBudnik/Baker_
 
-Otaku's best friend.
+A tool to rule your anime (windows only ATM).
 
-[Trello board](https://trello.com/b/3w2b6g5w)
+## Features
+
+- Anime detection (w/o anime movies for now :( )
+- Player with support of all advantages anime detection gives like playing external audio track like it's embed
+
+## Roadmap
+
+- v0.1.0 - Perfect anime detection (with movies support), preferences
+- v0.2.0 - MAL and AniDB integration
+- v0.3.0 - Bakery
+- v0.4.0 - Torrent client
+- v0.5.0 - non-torrent media sources like leopard raws and horrible subs
