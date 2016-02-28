@@ -16,7 +16,7 @@
     "Bakaru",
     "anime"
   ],
-  "author": "Alexander Kukhta <me@thers.io>",
+  "author": "Alexander Kukhta <thers@violently.sexy>",
   "license": "CC0-1.0",
   "devDependencies": {
     "babel": "6.3.26",
