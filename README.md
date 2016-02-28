@@ -18,3 +18,8 @@ A tool to rule your anime (windows only ATM).
 - v0.3.0 - Bakery
 - v0.4.0 - Torrent client
 - v0.5.0 - non-torrent media sources like leopard raws and horrible subs
+
+## Badges
+
+[![forthebadge](http://forthebadge.com/images/badges/designed-in-ms-paint.svg)](http://forthebadge.com)
+[![forthebadge](http://forthebadge.com/images/badges/fuck-it-ship-it.svg)](http://forthebadge.com)
