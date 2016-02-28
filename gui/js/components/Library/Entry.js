@@ -185,6 +185,9 @@ export default class Entry extends Component {
       return (
         <div key={ episode.id } title={ episode.name }>
           { episode.name }
+          <filename>
+            { episode.filename }
+          </filename>
         </div>
       );
     });

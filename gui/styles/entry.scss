@@ -29,6 +29,7 @@ entry {
     title {
       display: block;
       font-size: 24px;
+      line-height: 1.1;
     }
 
     path {
@@ -83,7 +84,7 @@ entry {
 
     &>div {
       position: relative;
-      padding: $baseInnerPadding $baseInnerPadding*1.68;
+      padding: $baseInnerPadding/1.68 $baseInnerPadding*1.68;
 
       @include ellipsis;
 
@@ -106,6 +107,12 @@ entry {
         height: 4px;
         border-radius: 50%;
         background-color: transparent;
+      }
+
+      filename {
+        margin-left: 5px;
+        color: #aaa;
+        font-weight: 100;
       }
     }
   }

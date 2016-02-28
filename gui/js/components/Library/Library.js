@@ -10,10 +10,9 @@ import Entry from './Entry';
  * @constructor
  */
 export default function Library(props) {
-  /**
-   * @var {LibraryState}
-   */
+  /** @var {LibraryState} */
   const library = props.library;
+  /** @var {Map.<string, AnimeFolder> */
   const entries = library.entries;
 
   const selectedEntry = library.selected
