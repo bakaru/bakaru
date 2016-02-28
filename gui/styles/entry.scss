@@ -31,18 +31,23 @@ entry {
   }
 
   actions {
-    display: flex;
-    margin: $baseInnerPadding;
-    border: solid 1px $mainColour;
-    border-radius: 2px;
+    display: block;
+    padding: $baseInnerPadding;
+    border-bottom: solid 1px lighten($delimiterColour, 5%);
 
-    button {
-      flex-grow: 1;
-      border: none;
-      border-right: solid 1px $mainColour;
+    btn {
+      display: inline-block;
+      border: solid 1px $mainColour;
+      border-right: none;
 
       &:last-child {
-        border-right: none;
+        border-right: solid 1px $mainColour;
+        border-top-right-radius: 2px;
+        border-bottom-right-radius: 2px;
+      }
+      &:first-child {
+        border-top-left-radius: 2px;
+        border-bottom-left-radius: 2px;
       }
     }
   }
@@ -51,7 +56,7 @@ entry {
     display: block;
     flex-grow: 1;
     overflow: visible;
-    margin-top: $baseInnerPadding/1.68;
+    padding-top: $baseInnerPadding/1.68;
     padding-bottom: $baseInnerPadding/1.68;
     border-bottom: solid 1px lighten($delimiterColour, 5%);
 
@@ -64,6 +69,7 @@ entry {
     }
 
     &>div {
+      position: relative;
       padding: $baseInnerPadding/1.68 $baseInnerPadding;
 
       @include ellipsis;
@@ -74,6 +80,18 @@ entry {
 
       &.selected {
         padding-left: $baseInnerPadding*1.68;
+
+        &:before {
+          position: absolute;
+          display: block;
+          content: '';
+          top: calc(50% - 2px);
+          left: 7px;
+          width: 4px;
+          height: 4px;
+          border-radius: 50%;
+          background-color: $mainColour;
+        }
       }
     }
   }
@@ -82,7 +100,7 @@ entry {
     display: flex;
   }
 
-  button {
+  btn {
     flex-grow: 1;
     color: $mainColour;
     padding: $baseInnerPadding $baseInnerPadding*1.68;

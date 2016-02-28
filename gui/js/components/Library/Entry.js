@@ -57,12 +57,9 @@ export default class Entry extends Component {
         </summary>
 
         <actions>
-          <button>
-            Bake
-          </button>
-          <button onClick={ ::this.handlePlayAllClick }>
+          <btn onClick={ ::this.handlePlayAllClick }>
             Play all
-          </button>
+          </btn>
         </actions>
 
         <list-row>
