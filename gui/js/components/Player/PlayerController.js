@@ -57,6 +57,7 @@ export default class PlayerController {
     this.isExternalAudio && this.audio.playlist.add(audioPath);
 
     this.setVolume(this.volume);
+    this._resizeCanvas();
   }
 
   /**

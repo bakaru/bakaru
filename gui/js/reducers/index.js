@@ -1,12 +1,12 @@
-import folders from './folders';
+import library from './library';
 import flags from './flags';
-import state from './state';
 import player from './player';
+import focus from './focus';
 import { combineReducers } from 'redux';
 
 export default combineReducers({
   flags,
-  state,
-  folders,
-  player
+  focus,
+  player,
+  library
 });

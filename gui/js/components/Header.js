@@ -1,7 +1,7 @@
 import React from 'react';
 import BrowserWindow from 'utils/BrowserWindow';
 
-export default function Header({ minimizeMainWindow, openSelectFolderDialog, flags, playerStatus, playerState, actions }) {
+export default function Header({ openSelectFolderDialog, flags, actions, playerActive, focus }) {
   const { addFolder } = flags;
 
   let addFolderButton;
@@ -21,14 +21,14 @@ export default function Header({ minimizeMainWindow, openSelectFolderDialog, fla
   }
 
   return (
-    <header className={ playerState === 'focused' ? 'hidden' : '' }>
-      <title onClick={ () => console.log('it works!') }>BAKARU バカル</title>
+    <header className={ focus === 'player' ? 'hidden' : '' }>
+      <title>BAKARU バカル</title>
       <actions>
         { addFolderButton }
         <button onClick={ () => window.location.reload() }>
           Reload
         </button>
-        <button disabled={ playerStatus !== 'paused' } onClick={ () => { actions.playerPlay();actions.playerFocus(); } }>
+        <button disabled={ !playerActive.length } onClick={ () => { actions.playerPlay();actions.focusOnPlayer(); } }>
           <i className="fa fa-play"></i> Continue playing
         </button>
       </actions>

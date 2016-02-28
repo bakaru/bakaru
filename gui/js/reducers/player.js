@@ -2,8 +2,7 @@ import {
   PLAYER_SET_PLAYLIST,
   PLAYER_PLAY,
   PLAYER_PAUSE,
-  PLAYER_FOCUS,
-  PLAYER_BLUR
+  PLAYER_ACTION_RESET
 } from 'actions';
 
 /**
@@ -21,35 +20,27 @@ function playerSetPlaylist(state, playlist) {
 function playerPlay(state) {
   return {
     ...state,
-    status: 'playing'
+    action: 'play'
   };
 }
 
 function playerPause(state) {
   return {
     ...state,
-    status: 'paused'
+    action: 'pause'
   };
 }
 
-function playerFocus(state) {
+function playerResetAction(state) {
   return {
     ...state,
-    state: 'focused'
-  };
-}
-
-function playerBlur(state) {
-  return {
-    ...state,
-    state: 'blurred'
+    action: false
   };
 }
 
 const defaultState = {
-  playlist: false,
-  status: 'idle',
-  state: 'blurred'
+  action: false,
+  playlist: []
 };
 
 /**
@@ -68,10 +59,7 @@ export default function player (state = defaultState, action) {
     case PLAYER_PAUSE: return playerPause(state);
       break;
 
-    case PLAYER_FOCUS: return playerFocus(state);
-      break;
-
-    case PLAYER_BLUR: return playerBlur(state);
+    case PLAYER_ACTION_RESET: return playerResetAction(state);
       break;
 
     default:

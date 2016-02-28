@@ -1,3 +1,4 @@
+// Library
 export const ADD_ANIME_FOLDER = 'ADD_ANIME_FOLDER';
 export const UPDATE_ANIME_FOLDER = 'UPDATE_ANIME_FOLDER';
 export const OPEN_ANIME_FOLDER = 'OPEN_ANIME_FOLDER';
@@ -43,8 +44,7 @@ export function flagAddFolderEnd() {
 export const PLAYER_SET_PLAYLIST = 'PLAYER_SET_PLAYLIST';
 export const PLAYER_PLAY = 'PLAYER_PLAY';
 export const PLAYER_PAUSE = 'PLAYER_PAUSE';
-export const PLAYER_FOCUS = 'PLAYER_FOCUS';
-export const PLAYER_BLUR = 'PLAYER_BLUR';
+export const PLAYER_ACTION_RESET = 'PLAYER_ACTION_RESET';
 
 export function playerSetPlaylist(playlist) {
   return {
@@ -65,14 +65,31 @@ export function playerPause() {
   };
 }
 
-export function playerFocus() {
+export function playerActionReset() {
   return {
-    type: PLAYER_FOCUS
+    type: PLAYER_ACTION_RESET
   };
 }
 
-export function playerBlur() {
+// Focus
+export const FOCUS_ON_LIBRARY = 'FOCUS_ON_LIBRARY';
+export const FOCUS_ON_PLAYER = 'FOCUS_ON_PLAYER';
+export const FOCUS_ON_SETTINGS = 'FOCUS_ON_SETTINGS';
+
+export function focusOnLibrary() {
   return {
-    type: PLAYER_BLUR
+    type: FOCUS_ON_LIBRARY
+  };
+}
+
+export function focusOnPlayer() {
+  return {
+    type: FOCUS_ON_PLAYER
+  };
+}
+
+export function focusOnSettings() {
+  return {
+    type: FOCUS_ON_SETTINGS
   };
 }

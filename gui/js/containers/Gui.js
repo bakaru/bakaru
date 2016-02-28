@@ -1,7 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { minimizeMainWindow, openSelectFolderDialog } from 'ipc';
+import { openSelectFolderDialog } from 'ipc';
 
 import * as actions from 'actions';
 
@@ -12,32 +12,28 @@ import Library from 'components/Library';
 const Gui = (props) => (
   <gui>
     <dragger></dragger>
-    <Player wcjs={ props.wcjs } actions={ props.actions } { ...props.player } />
+    <Player wcjs={ props.wcjs } actions={ props.actions } focus={ props.focus } { ...props.player } />
     <Header
       openSelectFolderDialog={ openSelectFolderDialog }
+      focus={ props.focus }
       flags={ props.flags }
       actions={ props.actions }
-      playerStatus={ props.player.status }
-      playerState={ props.player.state }
+      playerActive={ props.player.playlist.length > 0 }
     />
     <Library { ...props } />
   </gui>
 );
 
+/**
+ * @param {{}} state
+ * @returns {{flags: (*|Window.CustomElements.flags|{}|Window.HTMLImports.flags|string), state: *, folders: (*|Array|string[]), folder, openedFolder: *, player: (*|player|null)}}
+ */
 function mapStateToProps(state) {
   return {
     flags: state.flags,
-    state: state.state,
-    folders: state.folders,
-    folder: (openedFolder => {
-      if (openedFolder === null) {
-        return false;
-      }
-
-      return state.folders.get(openedFolder);
-    })(state.state.openedFolder),
-    openedFolder: state.state.openedFolder,
-    player: state.player
+    focus: state.focus,
+    player: state.player,
+    library: state.library
   };
 }
 

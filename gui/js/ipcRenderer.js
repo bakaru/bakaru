@@ -1,6 +1,6 @@
 import * as actions from 'actions';
 import { ipcRenderer } from 'electron';
-import { main, renderer } from 'events';
+import { main, renderer } from 'ipc-events';
 
 let store;
 
@@ -11,14 +11,10 @@ export function setStore (originStore) {
 // Listeners
 
 ipcRenderer.on(renderer.addAnimeFolder, (event, animeFolder) => {
-  console.log('Adding anime folder', animeFolder);
-
   store.dispatch(actions.addAnimeFolder(animeFolder));
 });
 
 ipcRenderer.on(renderer.updateAnimeFolder, (event, animeFolder) => {
-  console.log('Updating anime folder', animeFolder);
-
   store.dispatch(actions.updateAnimeFolder(animeFolder));
 });
 

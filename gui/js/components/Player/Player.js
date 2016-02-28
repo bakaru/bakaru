@@ -3,7 +3,10 @@ import deepEqual from 'deep-equal';
 import Mousetrap from 'mousetrap';
 
 import PlayerController from './PlayerController';
+import PlayerControls from 'utils/PlayerControls';
 import BrowserWindow from 'utils/BrowserWindow';
+
+const FocusEvent = new window.Event('focus');
 
 export default class Player extends Component {
 
@@ -17,11 +20,12 @@ export default class Player extends Component {
 
     this.wcjs = props.wcjs;
     this.player = null;
-    this.status = 'idle';
     this.actions = props.actions;
-    this.playlist = false;
-    this.internalState = 'blurred';
+    this.playlist = [];
+    this.isFocused = false;
     this.currentPlaylistItem = 0;
+
+    this.postponedPlay = false;
 
     this.state = {
       time: 0,
@@ -39,29 +43,28 @@ export default class Player extends Component {
   /**
    * Handles props updates
    *
-   * @param props
+   * @param {{playlist: [], action: string, actions: Object.<string, function>}} props
    */
   componentWillReceiveProps(props) {
+    const { playlist, action } = props;
+
     if (this.player === null) {
       return;
     }
 
-    if (props.playlist && (!this.playlist || !deepEqual(this.playlist, props.playlist))) {
-      this.setPlaylist(props.playlist);
-    }
-
-    if (props.status !== this.status) {
-      if (props.status === 'playing') {
+    if (playlist.length > 0 && (this.playlist.length === 0 || !deepEqual(this.playlist, playlist))) {
+      this.setPlaylist(playlist);
+      if (this.postponedPlay) {
         this.play();
+        this.postponedPlay = false;
       }
-      if (props.status === 'paused') {
-        this.pause();
-      }
-
-      this.status = props.status;
     }
 
-    this.internalState = props.state;
+    this.isFocused = props.focus === 'player';
+
+    if (this.isFocused) {
+      this.refs.canvas.focus();
+    }
   }
 
   /**
@@ -73,6 +76,15 @@ export default class Player extends Component {
     this.player.registerOnEndReachedHandler(::this.next);
     this.player.registerOnLengthHandler(length => this.setState({ length }));
     this.player.registerOnTimeChangeHandler(time => this.setState({ time }));
+
+    PlayerControls.onPlay(() => {
+      if (this.playlist.length > 0) {
+        this.play();
+      } else {
+        this.postponedPlay = true;
+      }
+    });
+    PlayerControls.onPause(() => this.pause());
 
     this.registerHotkeys();
   }
@@ -174,22 +186,26 @@ export default class Player extends Component {
   setPlaylist(playlist) {
     this.playlist = playlist.slice();
 
-    this.player.setMedia(this.playlist[this.currentPlaylistItem = 0]);
+    this.setMedia(this.playlist[this.currentPlaylistItem = 0]);
     this.showUi();
+  }
+
+  setMedia(media) {
+    this.player.setMedia(media);
+    this.setState({ title: media.title });
   }
 
   /**
    * Switch to next playlist item if available
    */
   next() {
-    if (this.playlist === false || this.currentPlaylistItem === this.playlist.length - 1) {
+    if (this.playlist.length === 0 || this.currentPlaylistItem === this.playlist.length - 1) {
       return;
     }
 
     const media = this.playlist[++this.currentPlaylistItem];
 
-    this.setState({ title: media.title });
-    this.player.setMedia(media);
+    this.setMedia(media);
     this.play();
   }
 
@@ -197,14 +213,13 @@ export default class Player extends Component {
    * Switch to previous playlist item if available
    */
   prev() {
-    if (this.playlist === false || this.currentPlaylistItem === 0) {
+    if (this.playlist.length === 0 || this.currentPlaylistItem === 0) {
       return;
     }
 
     const media = this.playlist[--this.currentPlaylistItem];
 
-    this.setState({ title: media.title });
-    this.player.setMedia(media);
+    this.setMedia(media);
     this.play();
   }
 
@@ -264,13 +279,17 @@ export default class Player extends Component {
    * Registers hotkeys
    */
   registerHotkeys() {
-    Mousetrap.bind('space', this.onlyWhenFocused(() => {
-      this.player.togglePause();
-    }));
+    Mousetrap.bind('space', () => {
+      console.log('[Player] handle space press, im focused:', this.isFocused);
+
+      if (this.isFocused) {
+        this.togglePause();
+      }
+    });
 
     Mousetrap.bind('esc', this.onlyWhenFocused(() => {
-      this.actions.playerPause();
-      this.actions.playerBlur();
+      this.pause();
+      this.actions.focusOnLibrary();
     }));
   }
 
@@ -281,12 +300,9 @@ export default class Player extends Component {
    * @returns {Function}
    */
   onlyWhenFocused(func) {
-    return () => {
-      if (this.internalState === 'focused') {
-        func();
-      }
-    };
+    return () => this.isFocused && func();
   }
+
 
   /**
    * Converts seconds to human format of hh:mm:ss

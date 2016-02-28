@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import PlayerControls from 'utils/PlayerControls';
 
 /**
  * @param {AnimeFolder} folder
  * @returns {XML}
  * @constructor
  */
-export default class Anime extends Component {
+export default class Entry extends Component {
   constructor(props) {
     super(props);
 
@@ -19,16 +20,16 @@ export default class Anime extends Component {
   }
 
   componentWillReceiveProps(props) {
-    this.folder = props.folder;
+    this.entry = props.entry;
     this.actions = props.actions;
 
-    if (this.folder !== false) {
+    if (this.entry !== false) {
       this.selected = {
-        dub: props.folder.dubs[0]
-          ? props.folder.dubs[0].id
+        dub: this.entry.dubs[0]
+          ? this.entry.dubs[0].id
           : false,
-        sub: props.folder.subs[0]
-          ? props.folder.subs[0].id
+        sub: this.entry.subs[0]
+          ? this.entry.subs[0].id
           : false,
         eps: []
       };
@@ -36,7 +37,7 @@ export default class Anime extends Component {
   }
 
   render() {
-    if (this.folder === false) {
+    if (this.entry === false) {
       return (
         <anime>
           Choose something!
@@ -44,15 +45,15 @@ export default class Anime extends Component {
       );
     }
 
-    const episodes = this.renderEps(this.folder.episodes);
-    const dubs = this.renderDubs(this.folder.dubs);
-    const subs = this.renderSubs(this.folder.subs);
+    const episodes = this.renderEps(this.entry.episodes);
+    const dubs = this.renderDubs(this.entry.dubs);
+    const subs = this.renderSubs(this.entry.subs);
 
     return (
-      <anime>
+      <entry>
         <summary>
-          <title>{ this.folder.name }</title>
-          <path>{ this.folder.path }</path>
+          <title>{ this.entry.name }</title>
+          <path>{ this.entry.path }</path>
         </summary>
 
         <actions>
@@ -73,7 +74,7 @@ export default class Anime extends Component {
           <title>Episodes</title>
           { episodes }
         </list>
-      </anime>
+      </entry>
     );
   }
 
@@ -82,21 +83,22 @@ export default class Anime extends Component {
     let sub = false;
 
     if (this.selected.dub !== false) {
-      dub = this.folder.dubs.filter(dub => dub.id === this.selected.dub)[0];
+      dub = this.entry.dubs.filter(dub => dub.id === this.selected.dub)[0];
     }
 
     if (this.selected.sub !== false) {
-      sub = this.folder.subs.filter(sub => sub.id === this.selected.sub)[0];
+      sub = this.entry.subs.filter(sub => sub.id === this.selected.sub)[0];
     }
 
     const playlist = [];
 
-    this.folder.episodes.map((episode, index) => {
+    this.entry.episodes.map((episode, index) => {
       const item = {
-        title: `${this.folder.name} ${episode.name}`,
+        title: `${this.entry.name} - ${episode.name}`,
         videoPath: `file:///${episode.path}`,
         audioPath: false,
-        subtitlesPath: false
+        subtitlesPath: false,
+        videoFrameSize: [this.entry.media.width, this.entry.media.height]
       };
 
       if (dub !== false) {
@@ -111,8 +113,8 @@ export default class Anime extends Component {
     });
 
     this.actions.playerSetPlaylist(playlist);
-    this.actions.playerFocus();
-    this.actions.playerPlay();
+    this.actions.focusOnPlayer();
+    PlayerControls.play();
   }
 
   handleDubSelect(dubId) {

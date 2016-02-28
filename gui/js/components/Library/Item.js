@@ -5,13 +5,13 @@ import { openAnimeFolder } from 'actions';
 
 class Item extends Component {
   render () {
-    const { id, getAnimeFolder, openedFolder, openFolder } = this.props;
+    const { id, getAnimeFolder, selectedEntryId, selectEntry } = this.props;
 
     /**
      * @type {AnimeFolder}
      */
     const folder = getAnimeFolder(id);
-    const isOpened = openedFolder === id;
+    const isOpened = selectedEntryId === id;
     const summary = [];
 
     if (folder.state.scanning || folder.state.subScanning || folder.state.mediainfoScanning) {
@@ -33,7 +33,7 @@ class Item extends Component {
     summary[summary.length] = `Quality: ${folder.quality}`;
 
     return (
-      <item className={ isOpened ? 'opened' : '' } onClick={ () => openFolder(id) }>
+      <item className={ isOpened ? 'opened' : '' } onClick={ () => selectEntry(id) }>
         <title title={ folder.name }>
           { folder.name }
         </title>
@@ -46,12 +46,12 @@ class Item extends Component {
 }
 
 const mapStoreToProps = store => ({
-  getAnimeFolder: id => store.folders.get(id),
-  openedFolder: store.state.openedFolder
+  getAnimeFolder: id => store.library.entries.get(id),
+  selectedEntryId: store.library.selected
 });
 
 const mapDispatchToProps = dispatch => ({
-  openFolder: id => dispatch(openAnimeFolder(id))
+  selectEntry: id => dispatch(openAnimeFolder(id))
 });
 
 export default connect(mapStoreToProps, mapDispatchToProps)(Item);
