@@ -19,6 +19,10 @@ A tool to rule your anime (windows only ATM).
 - v0.4.0 - Torrent client
 - v0.5.0 - non-torrent media sources like leopard raws and horrible subs
 
+## License
+
+[![CC0](http://i.creativecommons.org/p/zero/1.0/88x31.png)](http://creativecommons.org/publicdomain/zero/1.0/)
+
 ## Badges
 
 [![forthebadge](http://forthebadge.com/images/badges/designed-in-ms-paint.svg)](http://forthebadge.com)
