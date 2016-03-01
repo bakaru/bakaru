@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PlayerControls from 'utils/PlayerControls';
 
+import { shell } from 'electron';
+
 /**
  * @param {AnimeFolder} folder
  * @returns {XML}
@@ -55,7 +57,7 @@ export default class Entry extends Component {
       <entry>
         <summary>
           <title>{ this.entry.name }</title>
-          <path>{ this.entry.path }</path>
+          <path onClick={ ::this.handleEntryPathClick }>{ this.entry.path }</path>
         </summary>
 
         <actions>
@@ -122,6 +124,10 @@ export default class Entry extends Component {
 
   handleSubSelect(sub) {
     this.setState({ sub });
+  }
+
+  handleEntryPathClick() {
+    shell.openItem(this.entry.path);
   }
 
   renderSubs(subs) {
