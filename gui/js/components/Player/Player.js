@@ -32,7 +32,8 @@ export default class Player extends Component {
       title: '',
       length: 0,
       playing: false,
-      uiHidden: false
+      uiHidden: false,
+      fullscreen: false
     };
 
     this.uiHideTimer = null;
@@ -103,38 +104,41 @@ export default class Player extends Component {
     const length = this.secondsToHms(this.state.length/1000);
 
     return (
-      <div className={ `bakaru-player ${this.state.uiHidden ? 'ui-hidden' : ''}` } onMouseMove={ ::this.showUi } ref="player">
-        <div className="canvas-wrapper" onClick={ ::this.togglePause } onDoubleClick={ ::this.toggleFullScreen }>
+      <player className={ this.state.uiHidden ? 'ui-hidden' : '' } onMouseMove={ ::this.showUi } ref="player">
+        <canvas-wrapper onClick={ ::this.togglePause } onDoubleClick={ ::this.toggleFullScreen }>
           <canvas ref="canvas" className="canvas"></canvas>
-        </div>
-        <div className="title">
+        </canvas-wrapper>
+        <title>
           { this.state.title }
-        </div>
-        <div className="controls">
-          <div className="progressBar" onClick={ ::this.seek }>
-            <div className="track" style={{ width: `${currentPlaybackPercent}%` }}></div>
-          </div>
-          <div className="buttons">
-            <button className="play-pause" onClick={ ::this.togglePause }>
-              <i className={ `fa fa-${this.state.playing ? 'pause' : 'play'}` }></i>
-            </button>
-            <button className="prev" onClick={ ::this.prev }>
-              <i className="fa fa-step-backward"></i>
-            </button>
-            <button className="next" onClick={ ::this.next }>
-              <i className="fa fa-step-forward"></i>
-            </button>
-          </div>
-          <div className="times">
-            <div className="timeNow">
+        </title>
+        <controls>
+          <progress-bar onClick={ ::this.seek }>
+            <track style={{ width: `${currentPlaybackPercent}%` }} />
+          </progress-bar>
+          <buttons className="left">
+            <btn className="play-pause" onClick={ ::this.togglePause }>
+              <i className={ `fa fa-${this.state.playing ? 'pause' : 'play'}` } />
+            </btn>
+            <btn className="prev" onClick={ ::this.prev }>
+              <i className="fa fa-step-backward" />
+            </btn>
+            <btn className="next" onClick={ ::this.next }>
+              <i className="fa fa-step-forward" />
+            </btn>
+            <btn className="fullscreen" onClick={ ::this.toggleFullScreen }>
+              <i className={ `fa fa-${this.state.fullscreen ? 'compress' : 'expand'}` } />
+            </btn>
+          </buttons>
+          <times>
+            <time className="now">
               { time }
-            </div>
-            <div className="timeEnd">
+            </time>
+            <time className="end">
               { length }
-            </div>
-          </div>
-        </div>
-      </div>
+            </time>
+          </times>
+        </controls>
+      </player>
     );
   }
 
@@ -142,11 +146,15 @@ export default class Player extends Component {
    * Toggles fullscreen mode
    */
   toggleFullScreen() {
-    if (BrowserWindow.isFullScreen()) {
+    const isFullScreen = BrowserWindow.isFullScreen();
+
+    if (isFullScreen) {
       BrowserWindow.exitFullScreen();
     } else {
       BrowserWindow.enterFullScreen();
     }
+
+    this.setState({ fullscreen: !isFullScreen });
   }
 
   /**
