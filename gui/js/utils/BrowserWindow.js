@@ -42,6 +42,10 @@ class BrowserWindow {
     this.self().setSize(width, height, true);
   }
 
+  setProgressBar(value) {
+    this.self().setProgressBar(value);
+  }
+
   enterFullScreen() {
     this.self().setFullScreen(true);
   }

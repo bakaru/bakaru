@@ -30,7 +30,7 @@ player {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
+    right: $headerHeight;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -38,11 +38,41 @@ player {
     color: #fff;
     text-shadow: 0 0 5px #000;
     font-family: 'Open Sans';
-    font-weight: 100;
+    font-weight: 400;
+    font-size: 20px;
     line-height: 1;
     z-index: 2;
     opacity: 1;
     transition: all .2s ease;
+  }
+
+  nav {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: $headerHeight;
+    height: $headerHeight/2;
+    z-index: 3;
+    opacity: 1;
+    transition: all .2s ease;
+
+    btn {
+      display: block;
+      width: $headerHeight/2;
+      height: $headerHeight/2;
+      text-align: center;
+      font-size: 14px;
+      line-height: 2.3;
+      color: rgba(255, 255, 255, .4);
+      transition: all .2s ease;
+
+      &:hover {
+        color: #fff;
+        background-color: rgba(255,255,255,.3);
+        text-shadow: 0 0 2px black;
+      }
+    }
   }
 
   controls {
@@ -156,6 +186,10 @@ player {
     }
 
     title {
+      opacity: 0;
+    }
+
+    nav {
       opacity: 0;
     }
   }

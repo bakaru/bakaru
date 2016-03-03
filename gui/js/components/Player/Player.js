@@ -76,7 +76,13 @@ export default class Player extends Component {
 
     this.player.registerOnEndReachedHandler(::this.next);
     this.player.registerOnLengthHandler(length => this.setState({ length }));
-    this.player.registerOnTimeChangeHandler(time => this.setState({ time }));
+    this.player.registerOnTimeChangeHandler(time => {
+      this.setState({ time });
+      const currentPlaybackPercent = this.state['length']
+        ? (1 / this.state.length) * time
+        : 0;
+      BrowserWindow.setProgressBar(currentPlaybackPercent);
+    });
 
     PlayerControls.onPlay(() => {
       if (this.playlist.length > 0) {
@@ -111,6 +117,14 @@ export default class Player extends Component {
         <title>
           { this.state.title }
         </title>
+        <nav>
+          <btn onClick={ () => this.pause() + this.actions.focusOnSettings() }>
+            <i className="fa fa-wrench" />
+          </btn>
+          <btn onClick={ () => this.pause() + this.actions.focusOnLibrary() }>
+            <i className="fa fa-reorder" />
+          </btn>
+        </nav>
         <controls>
           <progress-bar onClick={ ::this.seek }>
             <track style={{ width: `${currentPlaybackPercent}%` }} />
@@ -251,6 +265,7 @@ export default class Player extends Component {
    * Toggles pause
    */
   togglePause() {
+    BrowserWindow.setProgressBar(0);
     this.player.togglePause();
     this.setState({ playing: !this.state.playing });
   }
