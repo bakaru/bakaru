@@ -6,7 +6,8 @@
   "scripts": {
     "start": "cross-env DEBUG=true electron app/main.js",
     "watch": "webpack -d -w",
-    "build": "node packaging/packager"
+    "build": "node packaging/packager",
+    "thirdparty": "node scripts/download-thirdparty"
   },
   "repository": {
     "type": "git",
@@ -31,11 +32,15 @@
     "clean-webpack-plugin": "0.1.5",
     "cross-env": "1.0.7",
     "css-loader": "0.14.5",
+    "decompress": "3.0.0",
     "electron-packager": "5.2.1",
     "electron-rebuild": "1.1.3",
-    "electron-winstaller": "bakaru/windows-installer#06ba269",
+    "electron-winstaller-temp-fork": "^2.0.5-beta.3",
+    "elegant-spinner": "1.0.1",
     "extract-text-webpack-plugin": "1.0.0",
     "file-loader": "0.8.5",
+    "got": "6.2.0",
+    "log-update": "1.0.2",
     "node-cp": "0.1.1",
     "node-sass": "3.4.2",
     "progress": "1.1.8",
@@ -48,9 +53,7 @@
     "webpack-sources": "0.1.0"
   },
   "dependencies": {
-    "babel-polyfill": "6.3.14",
     "babel-preset-es2015-node": "5.0.2",
-    "babel-register": "6.4.3",
     "bluebird": "3.1.1",
     "deep-equal": "1.0.1",
     "electron-squirrel-startup": "0.1.4",

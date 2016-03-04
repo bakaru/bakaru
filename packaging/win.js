@@ -5,7 +5,7 @@ const path = require('path');
 const chalk = require('chalk');
 const bluebird = require('bluebird');
 const packager = bluebird.promisify(require('electron-packager'));
-const installer = require('electron-winstaller').createWindowsInstaller;
+const installer = require('electron-winstaller-temp-fork').createWindowsInstaller;
 
 const log = msg => console.log(chalk.green(msg));
 
@@ -13,7 +13,7 @@ const packagerConfig = {
   name: 'Bakaru',
   'build-version': pkg.version,
   'app-version': pkg.version,
-  out: './build/win',
+  out: './build/portable',
   arch: 'ia32',
   dir: './build/app',
   platform: 'win32',
@@ -29,19 +29,17 @@ const packagerConfig = {
 };
 
 const installerConfig = {
-  outputDirectory: `build/dist-${pkg.version}/win`,
+  outputDirectory: `build/dist/win`,
   authors: 'Alexander Kukhta',
-  iconUrl: './icon.ico',
+  iconUrl: 'https://raw.githubusercontent.com/bakaru/bakaru/master/icon.ico',
   noMsi: true
 };
 
 log('Packaging win app...');
 
-console.log(path.resolve(__dirname, `../build/win/${packagerConfig.name}-${packagerConfig.platform}-${packagerConfig.arch}`));
-
-module.exports = packager(packagerConfig)//Promise.resolve('C:\\Users\\alexr_000\\Documents\\Projects\\bakaru\\build\\win\\Bakaru-win32-ia32')
+module.exports = packager(packagerConfig)
   .then(appDirectory => {
-    appDirectory = path.resolve(__dirname, `../build/win/${packagerConfig.name}-${packagerConfig.platform}-${packagerConfig.arch}`);
+    appDirectory = path.resolve(__dirname, `../build/portable/${packagerConfig.name}-${packagerConfig.platform}-${packagerConfig.arch}`);
 
     log('Creating win installer... ');
     return installer(Object.assign({ appDirectory }, installerConfig));
