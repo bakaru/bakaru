@@ -1,6 +1,7 @@
 'use strict';
 
 const pkg = require('../package.json');
+const path = require('path');
 const chalk = require('chalk');
 const bluebird = require('bluebird');
 const packager = bluebird.promisify(require('electron-packager'));
@@ -28,7 +29,7 @@ const packagerConfig = {
 };
 
 const installerConfig = {
-  outputDirectory: `./build/dist-${pkg.version}/win`,
+  outputDirectory: `build/dist-${pkg.version}/win`,
   authors: 'Alexander Kukhta',
   iconUrl: './icon.ico',
   noMsi: true
@@ -36,9 +37,13 @@ const installerConfig = {
 
 log('Packaging win app...');
 
-module.exports = Promise.resolve()//packager(packagerConfig)
+console.log(path.resolve(__dirname, `../build/win/${packagerConfig.name}-${packagerConfig.platform}-${packagerConfig.arch}`));
+
+module.exports = packager(packagerConfig)//Promise.resolve('C:\\Users\\alexr_000\\Documents\\Projects\\bakaru\\build\\win\\Bakaru-win32-ia32')
   .then(appDirectory => {
-    log('Creating win installer...');
+    appDirectory = path.resolve(__dirname, `../build/win/${packagerConfig.name}-${packagerConfig.platform}-${packagerConfig.arch}`);
+
+    log('Creating win installer... ');
     return installer(Object.assign({ appDirectory }, installerConfig));
   })
   .then(() => log('Done.'));

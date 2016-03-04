@@ -16,25 +16,23 @@ process.env.GUI_BUILD = './build/app/gui/build/';
 
 const webpackConfig = require('../webpack.config');
 
-//module.exports = Promise.resolve()
-//  .then(() => {
-//    log('Cleaning build app folder...');
-//    return rimraf('./build/app');
-//  })
-//  .then(() => {
-//    log('Packing sources...');
-//    return webpack(webpackConfig);
-//  })
-//  .then(() => {
-//    log('Copying files...');
-//    return cp('./package.json', './build/app/');
-//  })
-//  .then(() => cp('./app', './build/app/app/'))
-//  .then(() => cp('./gui/index.html', './build/app/gui/'))
-//  .then(() => cp('./thirdparty', './build/app/thirdparty/'))
-//  .then(() => {
-//    log('Installing deps...');
-//    return cmd(`cd ./build/app && npm i --production`);
-//  });
-
-module.exports = Promise.resolve();
+module.exports = Promise.resolve()
+  .then(() => {
+    log('Cleaning build app folder...');
+    return rimraf('./build/app');
+  })
+  .then(() => {
+    log('Packing sources...');
+    return webpack(webpackConfig);
+  })
+  .then(() => {
+    log('Copying files...');
+    return cp('./package.json', './build/app/');
+  })
+  .then(() => cp('./app', './build/app/app/'))
+  .then(() => cp('./gui/index.html', './build/app/gui/'))
+  .then(() => cp('./thirdparty', './build/app/thirdparty/'))
+  .then(() => {
+    log('Installing deps...');
+    return cmd(`cd ./build/app && npm i --production`);
+  });
