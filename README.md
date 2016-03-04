@@ -19,6 +19,35 @@ A tool to rule your anime (windows only ATM).
 - v0.4.0 - Torrent client
 - v0.5.0 - non-torrent media sources like leopard raws and horrible subs
 
+## Running from source
+
+You'll need Node.js >=v4.2
+
+Install prebuilt electron and webpack
+```
+$ npm i -g electron-prebuilt webpack
+```
+
+Install deps
+```
+$ npm i
+```
+
+Install thirdparty software
+```
+$ npm run thirdparty
+```
+
+Run watch
+```
+$ npm run watch
+```
+
+Start Bakaru
+```
+$ npm start
+```
+
 ## [Screenshots](http://imgur.com/a/wiJNy)
 
 ## License
