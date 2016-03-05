@@ -9,11 +9,16 @@ const createFolderReader = require('./FolderReader');
 class App {
   constructor(electron) {
     this.name = 'Bakaru';
+    this.firstRun = false;
 
     this.electron = electron;
     this.dialog = electron.dialog;
     this.app = electron.app;
     this.ipc = electron.ipcMain;
+
+    this.app.setAppUserModelId('com.squirrel.bakaru.Bakaru');
+    this._handleSquirrel();
+    this._singleInstance();
 
     this.events = events;
     this.rootDir = __dirname;
@@ -23,14 +28,8 @@ class App {
     this.mainWindowUrl = `file://${this.rootDir}/../gui/index.html`;
     this.mainWindow = null;
 
-    const shouldQuit = this.makeSingleInstance();
-
-    if (shouldQuit) {
-      this.app.quit();
-    } else {
-      this.loadModules();
-      this._setupAppEventListeners();
-    }
+    this.loadModules();
+    this._setupAppEventListeners();
   }
 
   loadModules() {
@@ -91,6 +90,38 @@ class App {
     this.mainWindow.on('closed', () => {
       this.mainWindow = null;
     });
+  }
+
+  /**
+   * Handle squirrel startup commands
+   *
+   * @private
+   */
+  _handleSquirrel() {
+    switch(process.argv[1]) {
+      case '--squirrel-install':
+      case '--squirrel-updated':
+      case '--squirrel-obsolete':
+      case '--squirrel-uninstall':
+        this.app.quit();
+        break;
+
+      case '--squirrel-firstrun':
+        this.firstRun = true;
+        break;
+
+      default:
+        return;
+    }
+  }
+
+  /**
+   * Makes sure Bakaru running single instance
+   *
+   * @private
+   */
+  _singleInstance() {
+    this.makeSingleInstance() && this.app.quit();
   }
 
   /**

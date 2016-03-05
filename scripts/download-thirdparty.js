@@ -9,7 +9,6 @@ const lu = require('log-update');
 const pb = require('progress');
 const cp = bluebird.promisify(require('node-cp'));
 const got = require('got');
-const pad = require('pad');
 const path = require('path');
 const unzipper = require('decompress');
 
