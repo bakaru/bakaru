@@ -1,6 +1,6 @@
 {
   "name": "Bakaru",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Bakaru, an anime tool",
   "main": "app/main.js",
   "scripts": {
