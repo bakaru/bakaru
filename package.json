@@ -2,6 +2,7 @@
   "name": "Bakaru",
   "version": "0.0.6",
   "description": "Bakaru, an anime tool",
+  "homepage": "https://github.com/bakaru/bakaru",
   "main": "app/main.js",
   "scripts": {
     "start": "cross-env DEBUG=true electron app/main.js",
