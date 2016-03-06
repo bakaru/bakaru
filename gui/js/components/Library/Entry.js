@@ -9,6 +9,12 @@ import { shell } from 'electron';
  * @constructor
  */
 export default class Entry extends Component {
+
+  /**
+   * Ctor
+   *
+   * @param props
+   */
   constructor(props) {
     super(props);
 
@@ -21,6 +27,11 @@ export default class Entry extends Component {
     this.componentWillReceiveProps(props);
   }
 
+  /**
+   * Updates state
+   *
+   * @param props
+   */
   componentWillReceiveProps(props) {
     this.entry = props.entry;
     this.actions = props.actions;
@@ -38,6 +49,11 @@ export default class Entry extends Component {
     }
   }
 
+  /**
+   * Renderer
+   *
+   * @returns {XML}
+   */
   render() {
     if (this.entry === false) {
       return (
@@ -79,6 +95,9 @@ export default class Entry extends Component {
     );
   }
 
+  /**
+   * Play all button handler
+   */
   handlePlayAllClick() {
     let dub = false;
     let sub = false;
@@ -115,21 +134,40 @@ export default class Entry extends Component {
 
     this.actions.playerSetPlaylist(playlist);
     this.actions.focusOnPlayer();
-    PlayerControls.play();
+    PlayerControls.play(true);
   }
 
+  /**
+   * Handles dub select
+   *
+   * @param {string} dub
+   */
   handleDubSelect(dub) {
     this.setState({ dub });
   }
 
+  /**
+   * Handles sub select
+   *
+   * @param {string} sub
+   */
   handleSubSelect(sub) {
     this.setState({ sub });
   }
 
+  /**
+   * Handles click on entry path
+   */
   handleEntryPathClick() {
     shell.openItem(this.entry.path);
   }
 
+  /**
+   * Subs renderer
+   *
+   * @param subs
+   * @returns {*}
+   */
   renderSubs(subs) {
     if (subs.length === 0) {
       return '';
@@ -158,6 +196,12 @@ export default class Entry extends Component {
     );
   }
 
+  /**
+   * Dubs renderer
+   *
+   * @param dubs
+   * @returns {*}
+   */
   renderDubs(dubs) {
     if (dubs.length === 0) {
       return '';
@@ -186,6 +230,12 @@ export default class Entry extends Component {
     );
   }
 
+  /**
+   * Episodes renderer
+   *
+   * @param eps
+   * @returns {*}
+   */
   renderEps(eps) {
     return eps.map(episode => {
       return (

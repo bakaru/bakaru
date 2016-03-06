@@ -5,8 +5,8 @@ class PlayerControls {
     this.e = emitter;
   }
 
-  play() {
-    this.e.emit('play');
+  play(postponed = false) {
+    this.e.emit('play', postponed);
   }
 
   pause() {

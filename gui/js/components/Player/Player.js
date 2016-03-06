@@ -84,11 +84,11 @@ export default class Player extends Component {
       BrowserWindow.setProgressBar(currentPlaybackPercent);
     });
 
-    PlayerControls.onPlay(() => {
-      if (this.playlist.length > 0) {
-        this.play();
-      } else {
+    PlayerControls.onPlay((postponed) => {
+      if (postponed) {
         this.postponedPlay = true;
+      } else {
+        this.play();
       }
     });
     PlayerControls.onPause(() => this.pause());
@@ -97,7 +97,7 @@ export default class Player extends Component {
   }
 
   /**
-   * Render FFS
+   * Renderer
    *
    * @returns {XML}
    */
@@ -212,6 +212,11 @@ export default class Player extends Component {
     this.showUi();
   }
 
+  /**
+   * Sets currently playing media
+   *
+   * @param media
+   */
   setMedia(media) {
     this.player.setMedia(media);
     this.setState({ title: media.title });

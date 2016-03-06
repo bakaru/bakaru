@@ -11,8 +11,6 @@ import { setStore } from 'ipc';
 
 import Gui from './containers/Gui';
 
-console.log(process);
-
 const wcjs = window.require(getQueryVariable('wcjsPath'));
 const store = createStore(appReducers);
 
