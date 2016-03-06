@@ -121,7 +121,7 @@ export default class Player extends Component {
           <btn onClick={ () => this.pause() + this.actions.focusOnSettings() }>
             <i className="fa fa-wrench" />
           </btn>
-          <btn onClick={ () => this.pause() + this.actions.focusOnLibrary() }>
+          <btn onClick={ () => this.pause() + this.actions.focusOnLibrary() + this.exitFullScreen() }>
             <i className="fa fa-reorder" />
           </btn>
         </nav>
@@ -169,6 +169,15 @@ export default class Player extends Component {
     }
 
     this.setState({ fullscreen: !isFullScreen });
+  }
+
+  /**
+   * Exit from fullscreen mode
+   */
+  exitFullScreen() {
+    if (BrowserWindow.isFullScreen()) {
+      BrowserWindow.exitFullScreen();
+    }
   }
 
   /**
