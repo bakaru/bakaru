@@ -93,3 +93,22 @@ export function focusOnSettings() {
     type: FOCUS_ON_SETTINGS
   };
 }
+
+// Settings
+export const SETTINGS_SAVE = 'SETTINGS_SAVE';
+export const SETTINGS_RESET = 'SETTINGS_RESTET';
+
+export function settingsSave(setting, value) {
+  return {
+    type: SETTINGS_SAVE,
+    setting,
+    value
+  };
+}
+
+export function settingsReset(setting) {
+  return {
+    type: SETTINGS_RESET,
+    setting
+  };
+}

@@ -6,8 +6,6 @@ import PlayerController from './PlayerController';
 import PlayerControls from 'utils/PlayerControls';
 import BrowserWindow from 'utils/BrowserWindow';
 
-const FocusEvent = new window.Event('focus');
-
 export default class Player extends Component {
 
   /**
@@ -22,6 +20,7 @@ export default class Player extends Component {
     this.player = null;
     this.actions = props.actions;
     this.playlist = [];
+    this.settings = props.settings;
     this.isFocused = false;
     this.currentPlaylistItem = 0;
 
@@ -47,7 +46,9 @@ export default class Player extends Component {
    * @param {{playlist: [], action: string, actions: Object.<string, function>}} props
    */
   componentWillReceiveProps(props) {
-    const { playlist, action } = props;
+    const { playlist, settings } = props;
+
+    this.settings = settings;
 
     if (this.player === null) {
       return;
@@ -62,10 +63,6 @@ export default class Player extends Component {
     }
 
     this.isFocused = props.focus === 'player';
-
-    if (this.isFocused) {
-      this.refs.canvas.focus();
-    }
   }
 
   /**
@@ -111,7 +108,7 @@ export default class Player extends Component {
 
     return (
       <player className={ this.state.uiHidden ? 'ui-hidden' : '' } onMouseMove={ ::this.showUi } ref="player">
-        <canvas-wrapper onClick={ ::this.togglePause } onDoubleClick={ ::this.toggleFullScreen }>
+        <canvas-wrapper onClick={ ::this.handleCanvasClick } onDoubleClick={ ::this.toggleFullScreen }>
           <canvas ref="canvas" className="canvas"></canvas>
         </canvas-wrapper>
         <title>
@@ -154,6 +151,15 @@ export default class Player extends Component {
         </controls>
       </player>
     );
+  }
+
+  /**
+   * Handle click on canvas
+   */
+  handleCanvasClick() {
+    if (this.settings.player_pause_on_click) {
+      this.togglePause();
+    }
   }
 
   /**
@@ -316,17 +322,11 @@ export default class Player extends Component {
    * Registers hotkeys
    */
   registerHotkeys() {
-    Mousetrap.bind('space', () => {
-      console.log('[Player] handle space press, im focused:', this.isFocused);
-
-      if (this.isFocused) {
-        this.togglePause();
-      }
-    });
-
+    Mousetrap.bind('space', () => this.isFocused && this.togglePause());
     Mousetrap.bind('esc', this.onlyWhenFocused(() => {
       this.pause();
       this.actions.focusOnLibrary();
+      this.exitFullScreen();
     }));
   }
 

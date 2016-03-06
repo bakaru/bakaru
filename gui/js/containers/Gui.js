@@ -12,7 +12,13 @@ import Library from 'components/Library';
 const Gui = (props) => (
   <gui>
     <dragger></dragger>
-    <Player wcjs={ props.wcjs } actions={ props.actions } focus={ props.focus } { ...props.player } />
+    <Player
+      wcjs={ props.wcjs }
+      focus={ props.focus }
+      actions={ props.actions }
+      settings={ props.settings }
+      { ...props.player }
+    />
     <Header
       focus={ props.focus }
       flags={ props.flags }
@@ -32,7 +38,8 @@ function mapStateToProps(state) {
     flags: state.flags,
     focus: state.focus,
     player: state.player,
-    library: state.library
+    library: state.library,
+    settings: state.settings
   };
 }
 
