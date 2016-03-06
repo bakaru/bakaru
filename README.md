@@ -1,7 +1,5 @@
 # Bakaru
 
-Current version: _v0.0.6_
-
 [![Join the chat at https://gitter.im/bakaru/bakaru](https://badges.gitter.im/bakaru/bakaru.svg)](https://gitter.im/bakaru/bakaru?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 _As evolved idea of https://github.com/RBudnik/Baker_
