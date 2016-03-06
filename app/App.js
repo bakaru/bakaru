@@ -107,11 +107,9 @@ class App {
     this.app.on('ready', this.createMainWindow.bind(this));
 
     this.app.on('window-all-closed', () => {
-      this.folderReader.cache.flush().then(() => {
-        if (process.platform !== 'darwin') {
-          this.app.quit();
-        }
-      });
+      if (process.platform !== 'darwin') {
+        this.app.quit();
+      }
     });
 
     this.app.on('activate', () => {
