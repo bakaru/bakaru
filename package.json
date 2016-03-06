@@ -59,6 +59,7 @@
     "deep-equal": "1.0.1",
     "events": "1.1.0",
     "fast-levenshtein": "1.1.0",
+    "fs-extra": "0.26.5",
     "javascript-natural-sort": "0.7.1",
     "js-sha256": "0.3.0",
     "mkdirp": "0.5.1",

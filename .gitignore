@@ -3,5 +3,5 @@ node_modules
 bower_components
 npm-debug.log
 build
-/thirdparty
+/vendor
 /test.js

@@ -10,17 +10,18 @@ class PathDispatcher {
    * @param {App} app
    */
   constructor(app) {
-    const appPath = app.app.getAppPath();
-
-    this.appDataPath = path.join(app.app.getPath('appData'), 'BakaruData');
-    this.cache = {
-      root: path.join(this.appDataPath, 'cache'),
-      animeFolders: path.join(this.appDataPath, 'cache', 'AnimeFolders'),
-    };
+    this.appDataPath = path.join(app.app.getPath('appData'), 'Bakaru');
     this.temp = path.join(this.appDataPath, 'temp');
-    this.thirdParty = path.join(app.rootDir, '..', 'thirdparty');
 
-    this.wcjs = path.join(app.rootDir, '..', 'thirdparty', 'wcjs');
+    this.thirdParty = path.join(
+      app.rootDir,
+      app.runningDevMode
+        ? '..'
+        : '../..',
+      'vendor'
+    );
+
+    this.wcjs = path.join(this.thirdParty, 'wcjs');
 
     this._createPaths();
   }
@@ -28,8 +29,6 @@ class PathDispatcher {
   _createPaths() {
     mkdirpAsync(this.appDataPath);
     mkdirpAsync(this.temp);
-    mkdirpAsync(this.cache.root);
-    mkdirpAsync(this.cache.animeFolders);
   }
 }
 

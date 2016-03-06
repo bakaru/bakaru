@@ -31,7 +31,6 @@ module.exports = Promise.resolve()
   })
   .then(() => cp('./app', './build/app/app/'))
   .then(() => cp('./gui/index.html', './build/app/gui/'))
-  .then(() => cp('./thirdparty', './build/app/thirdparty/'))
   .then(() => {
     log('Installing deps...');
     return cmd(`cd ./build/app && npm i --production`);
