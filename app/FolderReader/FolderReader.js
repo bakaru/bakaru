@@ -6,7 +6,6 @@ const _path = require('path');
 const basename = _path.basename;
 const extname = _path.extname;
 
-const Cache = require('./CacheDispatcher');
 const isAnimeFolder = require('./isAnimeFolder');
 const findSameParts = require('./findSameParts');
 const classifyFolderItems = require('./ItemsClassificator');
@@ -22,7 +21,6 @@ class FolderReader {
    */
   constructor(app) {
     this.mediaInfo = app.mediaInfo;
-    this.cache = new Cache(app.pathDispatcher, app.events);
   }
 
   /**
@@ -40,7 +38,6 @@ class FolderReader {
    */
   addAnimeFolder(animeFolder) {
     this._addAnimeFolder(animeFolder);
-    this.cache.setAnimeFolder(animeFolder);
   }
 
   /**
@@ -48,7 +45,6 @@ class FolderReader {
    */
   updateAnimeFolder(animeFolder) {
     this._updateAnimeFolder(animeFolder);
-    this.cache.setAnimeFolder(animeFolder);
   }
 
   /**

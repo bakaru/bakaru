@@ -9,15 +9,12 @@ const createFolderReader = require('./FolderReader');
 class App {
   constructor(electron) {
     this.name = 'Bakaru';
-    this.firstRun = false;
 
     this.electron = electron;
     this.dialog = electron.dialog;
     this.app = electron.app;
     this.ipc = electron.ipcMain;
 
-    this.app.setAppUserModelId('com.squirrel.bakaru.Bakaru');
-    this._handleSquirrel();
     this._singleInstance();
 
     this.events = events;
@@ -73,10 +70,6 @@ class App {
 
     this.mainWindow.loadURL(this.mainWindowUrl + '?wcjsPath=' + encodeURIComponent(this.pathDispatcher.wcjs));
 
-    this.mainWindow.webContents.on('dom-ready', () => {
-      this.folderReader.cache.restore(this.mainWindow.webContents);
-    });
-
     if (this.runningDevMode) {
       this.mainWindow.webContents.openDevTools({
         detach: true
@@ -90,29 +83,6 @@ class App {
     this.mainWindow.on('closed', () => {
       this.mainWindow = null;
     });
-  }
-
-  /**
-   * Handle squirrel startup commands
-   *
-   * @private
-   */
-  _handleSquirrel() {
-    switch(process.argv[1]) {
-      case '--squirrel-install':
-      case '--squirrel-updated':
-      case '--squirrel-obsolete':
-      case '--squirrel-uninstall':
-        this.app.quit();
-        break;
-
-      case '--squirrel-firstrun':
-        this.firstRun = true;
-        break;
-
-      default:
-        return;
-    }
   }
 
   /**
