@@ -37,7 +37,7 @@ $ npm i
 
 Install thirdparty software
 ```
-$ npm run thirdparty
+$ npm run vendor
 ```
 
 Run watch

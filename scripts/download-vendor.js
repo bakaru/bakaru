@@ -15,7 +15,7 @@ const unzipper = require('decompress');
 let downloadTarget = 'https://github.com/bakaru/bakaru-thirdparty/archive/win.zip';
 const archTarget = path.join(os.tmpdir(), './bakaru-thirdparty.zip');
 const unzipTarget = path.join(os.tmpdir(), './bakaru-thirdparty');
-const copyTarget = path.join(__dirname, '../thirdparty') + '/';
+const copyTarget = path.join(__dirname, '../vendor') + '/';
 
 download();
 

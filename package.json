@@ -8,7 +8,7 @@
     "start": "cross-env DEBUG=true electron app/main.js",
     "watch": "webpack -d -w",
     "build": "node packaging/packager",
-    "thirdparty": "node scripts/download-thirdparty"
+    "vendor": "node scripts/download-vendor"
   },
   "repository": {
     "type": "git",
