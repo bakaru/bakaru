@@ -22,6 +22,7 @@ export default class Player extends Component {
     this.playlist = [];
     this.settings = props.settings;
     this.isFocused = false;
+    this.lastVolume = 0;
     this.currentPlaylistItem = 0;
 
     this.postponedPlay = false;
@@ -30,6 +31,8 @@ export default class Player extends Component {
       time: 0,
       title: '',
       length: 0,
+      volume: 100,
+      muted: false,
       playing: false,
       uiHidden: false,
       fullscreen: false
@@ -71,6 +74,7 @@ export default class Player extends Component {
   componentDidMount() {
     this.player = new PlayerController(this.wcjs, this.refs.canvas);
 
+    this.player.setVolume(this.state.volume);
     this.player.registerOnEndReachedHandler(::this.next);
     this.player.registerOnLengthHandler(length => this.setState({ length }));
     this.player.registerOnTimeChangeHandler(time => {
@@ -126,28 +130,40 @@ export default class Player extends Component {
           <progress-bar onClick={ ::this.seek }>
             <track style={{ width: `${currentPlaybackPercent}%` }} />
           </progress-bar>
-          <buttons className="left">
-            <btn className="play-pause" onClick={ ::this.togglePause }>
-              <i className={ `fa fa-${this.state.playing ? 'pause' : 'play'}` } />
-            </btn>
-            <btn className="prev" onClick={ ::this.prev }>
-              <i className="fa fa-step-backward" />
-            </btn>
-            <btn className="next" onClick={ ::this.next }>
-              <i className="fa fa-step-forward" />
-            </btn>
-            <btn className="fullscreen" onClick={ ::this.toggleFullScreen }>
-              <i className={ `fa fa-${this.state.fullscreen ? 'compress' : 'expand'}` } />
-            </btn>
-          </buttons>
-          <times>
-            <time className="now">
-              { time }
-            </time>
-            <time className="end">
-              { length }
-            </time>
-          </times>
+          <row>
+            <left>
+              <btn className="play-pause" onClick={ ::this.togglePause }>
+                <i className={ `fa fa-${this.state.playing ? 'pause' : 'play'}` } />
+              </btn>
+              <btn className="prev" onClick={ ::this.prev }>
+                <i className="fa fa-fast-backward" />
+              </btn>
+              <btn className="next" onClick={ ::this.next }>
+                <i className="fa fa-fast-forward" />
+              </btn>
+              <volume>
+                <btn className="volume" onClick={ ::this.toggleMute }>
+                  <i className={ 'fa fa-volume-' + (this.state.volume === 0 ? 'off' : (this.state.volume > 50 ? 'up' : 'down')) } />
+                </btn>
+                <bar onClick={ ::this.volume }>
+                  <track style={{ width: (this.state.volume/2)+'px' }}/>
+                </bar>
+              </volume>
+            </left>
+            <right>
+              <times>
+                <time className="now">
+                  { time }
+                </time>
+                <time className="end">
+                  { length }
+                </time>
+              </times>
+              <btn className="fullscreen" onClick={ ::this.toggleFullScreen }>
+                <i className={ `fa fa-${this.state.fullscreen ? 'compress' : 'expand'}` } />
+              </btn>
+            </right>
+          </row>
         </controls>
       </player>
     );
@@ -216,6 +232,26 @@ export default class Player extends Component {
   }
 
   /**
+   * Handle volume change
+   *
+   * @param event
+   */
+  volume(event) {
+    const clickOnPixel = event.clientX - event.target.offsetLeft;
+
+    if (clickOnPixel <= 5) {
+      return this.setVolume(0);
+    }
+    if (clickOnPixel >= (event.target.offsetWidth - 5)) {
+      return this.setVolume(100);
+    }
+
+    const clickOnPercent = 100 / event.target.offsetWidth * clickOnPixel;
+
+    this.setVolume(clickOnPercent);
+  }
+
+  /**
    * Set playlist
    *
    * @param playlist
@@ -279,6 +315,20 @@ export default class Player extends Component {
   pause() {
     this.player.pause();
     this.setState({ playing: false });
+  }
+
+  /**
+   * Toggles mute
+   */
+  toggleMute() {
+    if (this.state.muted) {
+      this.setVolume(this.lastVolume);
+      this.setState({ muted: false });
+    } else {
+      this.lastVolume = this.state.volume;
+      this.setVolume(0);
+      this.setState({ muted: true });
+    }
   }
 
   /**
