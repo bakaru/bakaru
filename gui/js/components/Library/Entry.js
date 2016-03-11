@@ -56,13 +56,7 @@ export default class Entry extends Component {
    */
   render() {
     if (this.entry === false) {
-      return (
-        <entry>
-          <greeting>
-            <i className="fa fa-long-arrow-left"></i> Select anime
-          </greeting>
-        </entry>
-      );
+      return this.renderPlaceholder();
     }
 
     const episodes = this.renderEps(this.entry.episodes);
@@ -91,6 +85,16 @@ export default class Entry extends Component {
           <title>Episodes</title>
           { episodes }
         </list>
+      </entry>
+    );
+  }
+
+  renderPlaceholder() {
+    return (
+      <entry>
+        <greeting>
+          <i className="fa fa-long-arrow-left"></i> Select anime
+        </greeting>
       </entry>
     );
   }
