@@ -57,7 +57,7 @@ export default class Player extends Component {
       return;
     }
 
-    if (playlist.length > 0 && (this.playlist.length === 0 || !deepEqual(this.playlist, playlist))) {
+    if (playlist.length > 0) {
       this.setPlaylist(playlist);
       if (this.postponedPlay) {
         this.play();
