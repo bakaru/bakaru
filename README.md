@@ -13,7 +13,7 @@ An app rule your anime (windows only ATM).
 
 ## Roadmap
 
-- [0.1.0](https://github.com/bakaru/bakaru/milestones/v0.1.0) - Perfect anime detection (with movies support), settings
+- [v0.1.0](https://github.com/bakaru/bakaru/milestones/v0.1.0) - Perfect anime detection (with movies support), settings
 - v0.2.0 - MAL and AniDB integration
 - v0.3.0 - Bakery
 - v0.4.0 - Torrent client
