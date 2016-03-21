@@ -1,10 +1,13 @@
 'use strict';
 
+const bluebird = require('bluebird');
 const sha224 = require('js-sha256').sha224;
 const readdir = require('fs').readdir;
 const _path = require('path');
 const basename = _path.basename;
 const extname = _path.extname;
+const normalize = _path.normalize;
+const sep = _path.sep;
 
 const isAnimeFolder = require('./isAnimeFolder');
 const findSameParts = require('./findSameParts');
@@ -21,6 +24,7 @@ class FolderReader {
    */
   constructor(app) {
     this.mediaInfo = app.mediaInfo;
+    this.skipMediaScanning = false;
   }
 
   /**
@@ -52,31 +56,32 @@ class FolderReader {
    * @returns {Promise.<T>}
    */
   findAnime(path) {
-    return readdirAsync(path)
-      .then(itemsNames => classifyFolderItems(path, itemsNames))
-      .then(classifiedItems => {
-        if ((classifiedItems.videos.length + classifiedItems.folders.length) === 0) {
-          // So this folder contains nor anime neither folders, WTF?
-          console.log(`Found nothing interesting in ${path}`);
-          throw new Error(`${path}, no folders or videos found, are you sure you pick correct folder?`);
-        }
+    const that = this;
 
-        if (classifiedItems.videos.length > 0 && isAnimeFolder(classifiedItems)) {
-          // So this is anime, good, fulfill it's data
-          const animeFolder = this.makeAnimeFolder(path, classifiedItems);
+    return bluebird.coroutine(function* () {
+      const dirchunks = normalize(path).split(sep);
+      const dirname = normalizeAnimeName(dirchunks[dirchunks.length-1]);
+      const itemsNames = yield readdirAsync(path);
+      const classifiedItems = yield classifyFolderItems(path, itemsNames);
 
-          this.addAnimeFolder(animeFolder);
+      if ((classifiedItems.videos.length + classifiedItems.folders.length) === 0) {
+        // So this folder contains nor anime neither folders, WTF?
+        console.log(`Found nothing interesting in ${path}`);
+        throw new Error(`${path}, no folders or videos found, are you sure you pick correct folder?`);
+      }
 
-          return true;
-        } else if (classifiedItems.folders.length > 0) {
-          // Okay, we have some folders here, lets check'em all
-          return Promise.all(classifiedItems.folders.map(subPath => this.findAnime(subPath)))
-            .catch(errors => {
-              // So we catch here all errors from reading all sub folders
-              // Dunno if we should do something with it :c
-            });
-        }
-      })
+      if (classifiedItems.videos.length > 0 && isAnimeFolder(classifiedItems, dirname)) {
+        // So this is anime, good, fulfill it's data
+        const animeFolder = that.makeAnimeFolder(path, classifiedItems);
+
+        that.addAnimeFolder(animeFolder);
+
+        return Promise.resolve(true);
+      } else if (classifiedItems.folders.length > 0) {
+        // Okay, we have some folders here, lets check'em all
+        return Promise.all(classifiedItems.folders.map(subPath => that.findAnime(subPath))).catch(()=>{});
+      }
+    })();
   }
 
   /**
@@ -127,7 +132,9 @@ class FolderReader {
         this.updateAnimeFolder(animeFolder);
       });
 
-    new MediaScanner(animeFolder, this.updateAnimeFolder.bind(this), this.mediaInfo);
+    if (!this.skipMediaScanning) {
+      new MediaScanner(animeFolder, this.updateAnimeFolder.bind(this), this.mediaInfo);
+    }
 
     return animeFolder;
   }
