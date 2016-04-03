@@ -2,9 +2,7 @@
 
 [![Join the chat at https://gitter.im/bakaru/bakaru](https://badges.gitter.im/bakaru/bakaru.svg)](https://gitter.im/bakaru/bakaru?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-_As evolved idea of https://github.com/RBudnik/Baker_
-
-An app rule your anime (windows only ATM).
+An app to watch your anime (windows only ATM).
 
 ## Features
 
@@ -13,11 +11,7 @@ An app rule your anime (windows only ATM).
 
 ## Roadmap
 
-- [v0.1.0](https://github.com/bakaru/bakaru/milestones/v0.1.0) - Perfect anime detection (with movies support), settings
-- v0.2.0 - MAL and AniDB integration
-- v0.3.0 - Bakery
-- v0.4.0 - Torrent client
-- v0.5.0 - non-torrent media sources like leopard raws and horrible subs
+- [v0.1.0](https://github.com/bakaru/bakaru/milestones/v0.1.0) - Perfect anime detection (with movies support), settings, MAL integration
 
 ## Running from source
 
