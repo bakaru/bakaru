@@ -42,8 +42,6 @@ export default class Player extends Component {
 
     this.uiHideTimer = null;
 
-    window.psb  =require('electron').remote;
-
     this.componentWillReceiveProps(props);
   }
 
