@@ -1,7 +1,7 @@
 
 class PowerSaverBlocker {
   constructor(remote) {
-    this.psb = remote.powerSaverBlocker;
+    this.psb = remote.powerSaveBlocker;
   }
 
   start(type = 'prevent-display-sleep') {

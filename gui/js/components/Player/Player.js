@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import deepEqual from 'deep-equal';
 import Mousetrap from 'mousetrap';
 
+import PowerSaverBlocker from 'utils/PowerSaverBlocker';
 import PlayerController from './PlayerController';
 import PlayerControls from 'utils/PlayerControls';
 import BrowserWindow from 'utils/BrowserWindow';
@@ -16,6 +17,7 @@ export default class Player extends Component {
   constructor(props) {
     super(props);
 
+    this.psb = null;
     this.wcjs = props.wcjs;
     this.player = null;
     this.actions = props.actions;
@@ -39,6 +41,8 @@ export default class Player extends Component {
     };
 
     this.uiHideTimer = null;
+
+    window.psb  =require('electron').remote;
 
     this.componentWillReceiveProps(props);
   }
@@ -307,6 +311,7 @@ export default class Player extends Component {
   play() {
     this.player.play();
     this.setState({ playing: true });
+    this.blockPowerSaver();
   }
 
   /**
@@ -315,6 +320,7 @@ export default class Player extends Component {
   pause() {
     this.player.pause();
     this.setState({ playing: false });
+    this.unblockPowerSaver();
   }
 
   /**
@@ -335,9 +341,15 @@ export default class Player extends Component {
    * Toggles pause
    */
   togglePause() {
-    BrowserWindow.setProgressBar(0);
     this.player.togglePause();
     this.setState({ playing: !this.state.playing });
+    BrowserWindow.setProgressBar(0);
+
+    if (this.isBlockingPowerSaver()) {
+      this.unblockPowerSaver();
+    } else {
+      this.blockPowerSaver();
+    }
   }
 
   /**
@@ -346,6 +358,7 @@ export default class Player extends Component {
   stop() {
     this.player.stop();
     this.setState({ playing: false });
+    this.unblockPowerSaver();
   }
 
   /**
@@ -390,6 +403,33 @@ export default class Player extends Component {
     return () => this.isFocused && func();
   }
 
+  /**
+   * Start blocking power saver
+   */
+  blockPowerSaver() {
+    if (!this.isBlockingPowerSaver()) {
+      this.psb = PowerSaverBlocker.start();
+    }
+  }
+
+  /**
+   * Stops blocking power saver
+   */
+  unblockPowerSaver() {
+    if (this.psb !== null) {
+      PowerSaverBlocker.stop(this.psb);
+      this.psb = null;
+    }
+  }
+
+  /**
+   * Checks if now blocking power saver
+   *
+   * @returns {boolean}
+   */
+  isBlockingPowerSaver() {
+    return this.psb === null ? false : PowerSaverBlocker.isStarted(this.psb);
+  }
 
   /**
    * Converts seconds to human format of hh:mm:ss
