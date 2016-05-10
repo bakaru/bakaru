@@ -148,6 +148,15 @@ export default class PlayerController {
   }
 
   /**
+   * Register callback to fire when buffering happens
+   *
+   * @callback cb
+   */
+  registerOnBufferingHandler(cb) {
+    this.video.onBuffering = cb;
+  }
+
+  /**
    * Register callback to fire on video end
    *
    * @callback cb

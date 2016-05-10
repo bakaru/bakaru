@@ -37,6 +37,7 @@ export default class Player extends Component {
       muted: false,
       playing: false,
       uiHidden: false,
+      buffering: false,
       fullscreen: false
     };
 
@@ -77,6 +78,8 @@ export default class Player extends Component {
     this.player = new PlayerController(this.wcjs, this.refs.canvas);
 
     this.player.setVolume(this.state.volume);
+
+    this.player.registerOnBufferingHandler(percents => this.setState({ buffering: percents !== 100 }));
     this.player.registerOnEndReachedHandler(::this.next);
     this.player.registerOnLengthHandler(length => this.setState({ length }));
     this.player.registerOnTimeChangeHandler(time => {
@@ -120,6 +123,9 @@ export default class Player extends Component {
         <title>
           { this.state.title }
         </title>
+        <loading-indicator style={{ opacity: this.state.buffering ? 1 : 0 }}>
+          <i className="fa fa-spin fa-circle-o-notch"/>
+        </loading-indicator>
         <nav>
           <btn onClick={ () => this.pause() + this.actions.focusOnSettings() }>
             <i className="fa fa-wrench" />
@@ -285,6 +291,7 @@ export default class Player extends Component {
 
     const media = this.playlist[++this.currentPlaylistItem];
 
+    this.setState({ buffering: true });
     this.setMedia(media);
     this.play();
   }
@@ -299,6 +306,7 @@ export default class Player extends Component {
 
     const media = this.playlist[--this.currentPlaylistItem];
 
+    this.setState({ buffering: true });
     this.setMedia(media);
     this.play();
   }
