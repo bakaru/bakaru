@@ -67,11 +67,10 @@
     "js-sha256": "0.3.0",
     "mkdirp": "0.5.1",
     "mousetrap": "1.5.3",
-    "react": "0.14.5",
-    "react-addons-css-transition-group": "0.14.5",
-    "react-dom": "0.14.5",
-    "react-redux": "4.0.6",
-    "redux": "3.0.5",
+    "react": "15.0.2",
+    "react-dom": "15.0.2",
+    "react-redux": "4.4.5",
+    "redux": "3.5.2",
     "webgl-video-renderer": "0.2.0",
     "xml2js": "^0.4.15"
   }
