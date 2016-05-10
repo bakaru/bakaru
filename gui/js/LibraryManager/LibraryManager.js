@@ -115,7 +115,11 @@ export default class LibraryManager {
    * @private
    */
   _create ({ id, title, path }) {
-    this.library.set(id, Object.assign({}, animeTemplate, { id, title, path }));
+    const anime = Object.assign({}, animeTemplate, { id, title, path });
+
+    this.library.set(id, anime);
+
+    return anime;
   }
 
   /**
