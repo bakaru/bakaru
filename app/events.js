@@ -10,6 +10,10 @@ module.exports = {
     flagAddAnimeFolderStart: 'renderer:flagAddAnimeFolderStart',
     flagAddAnimeFolderEnd: 'renderer:flagAddAnimeFolderEnd',
     addAnimeFolder: 'renderer:addAnimeFolder',
+    updateEpisodes: 'renderer:updateEpisodes',
+    updateEpisode: 'renderer:updateEpisode',
+    updateDubs: 'renderer:updateDubs',
+    updateSubs: 'renderer:updateSubs',
     updateAnimeFolder: 'renderer:updateAnimeFolder'
   }
 };
