@@ -1,5 +1,4 @@
 import {
-  ADD_ANIME_FOLDER,
   UPDATE_ANIME_FOLDER,
   OPEN_ANIME_FOLDER
 } from 'actions';
@@ -10,13 +9,19 @@ import {
 
 let entriesIds = new Set();
 
+let cacheUpdateTimeout = null;
+
 /**
  * Updates cache
  *
  * @param {AnimeFolder} animeFolder
  */
 function updateCache(animeFolder) {
-  window.setImmediate(() => window.localStorage['library'] = JSON.stringify([...entriesIds.add(animeFolder.id)]));
+  window.clearTimeout(cacheUpdateTimeout);
+
+  cacheUpdateTimeout = window.setTimeout(() => {
+    window.localStorage['library'] = JSON.stringify([...entriesIds.add(animeFolder.id)]);
+  }, 200);
 
   window.localStorage[animeFolder.id] = JSON.stringify(animeFolder);
 }
@@ -38,23 +43,6 @@ function restoreFromCache() {
   }
 
   return entries;
-}
-
-/**
- * @param {LibraryState} state
- * @param {AnimeFolder} animeFolder
- * @returns {Map}
- */
-function addAnimeFolder(state, animeFolder) {
-  const entries = new Map(state.entries);
-  entries.set(animeFolder.id, animeFolder);
-
-  updateCache(animeFolder);
-
-  return {
-    ...state,
-    entries
-  };
 }
 
 /**
@@ -101,9 +89,6 @@ const initialState = {
  */
 export default function library (state = initialState, action) {
   switch (action.type) {
-    case ADD_ANIME_FOLDER: return addAnimeFolder(state, action.animeFolder);
-      break;
-
     case UPDATE_ANIME_FOLDER: return updateAnimeFolder(state, action.animeFolder);
       break;
 

@@ -1,6 +1,6 @@
 'use strict';
 
-const Promise = require('bluebird');
+const bluebird = require('bluebird');
 const readdir = require('fs').readdir;
 const sha224 = require('js-sha256').sha224;
 const _path = require('path');
@@ -17,7 +17,7 @@ class RecursiveAnimeFolderScanner {
    * @returns {Promise}
    */
   scan(animeFolder, folders) {
-    return Promise.all(folders.map(folderPath => {
+    return bluebird.all(folders.map(folderPath => {
       readdirAsync(folderPath)
         .then(itemsNames => classifyFolderItems(folderPath, itemsNames))
         .then(classifiedItems => {

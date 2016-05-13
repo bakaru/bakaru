@@ -3,61 +3,87 @@ import { ipcRenderer } from 'electron';
 import { renderer } from 'ipc-events';
 
 /**
- * @typedef {{id: string, title: string, path: string, dubs: Map, subs: Map, bonuses: Map, episodes: Map, quality: string, media: {width: number, height: number, bitDepth: number, format: string}, state: {scanning: boolean, subScanning: boolean, mediainfoScanning: boolean}}} Anime
+ * @typedef {{
+  * id: string,
+  * title: string,
+  * path: string,
+  * dubs: Map,
+  * subs: Map,
+  * bonuses: Map,
+  * episodes: Map,
+  * quality: string,
+  * width: number,
+  * height: number,
+  * bitDepth: number,
+  * format: string,
+  * state: {scanning: boolean, subScanning: boolean, mediainfoScanning: boolean}
+  * }} Anime
  */
-const animeTemplate = {
-  id: '',
-  title: '',
-  path: '',
-  dubs: new Map(),
-  subs: new Map(),
-  bonuses: new Map(),
-  episodes: new Map(),
-  quality: "unknown",
-  media: {
+
+function getAnimeTemplate () {
+  return {
+    id: '',
+    title: '',
+    path: '',
+    dubs: new Map(),
+    subs: new Map(),
+    bonuses: new Map(),
+    episodes: new Map(),
+    quality: "unknown",
     width: 0,
     height: 0,
     bitDepth: 8,
-    format: ''
-  },
-  state: {
-    scanning: true,
-    subScanning: true,
-    mediainfoScanning: true
-  }
-};
+    format: '',
+    state: {
+      scanning: true,
+      subScanning: true,
+      mediainfoScanning: true
+    }
+  };
+}
 
 /**
  * @typedef {{id: string, title: string, path: string, files: Array}} Dub
  */
-const dubTemplate = {
-  id: '',
-  title: '',
-  path: '',
-  files: []
-};
+function getDubTemplate () {
+  return {
+    id: '',
+    title: '',
+    path: '',
+    files: [],
+    embedded: false,
+    embeddedStreamIndex: -1
+  };
+}
 
 /**
  * @typedef {{id: string, title: string, path: string, files: Array}} Sub
  */
-const subTemplate = {
-  id: '',
-  title: '',
-  path: '',
-  files: []
-};
+function getSubTemplate () {
+  return {
+    id: '',
+    title: '',
+    path: '',
+    files: [],
+    embedded: false,
+    embeddedStreamIndex: -1
+  };
+}
 
 /**
- * @typedef {{id: string, ext: string, name: string, path: string, filename: string, duration: string}} Episode
+ * @typedef {{id: string, ext: string, name: string, path: string, filename: string, duration: string, scanning: boolean}} Episode
  */
-const episodeTemplate = {
-  id: '',
-  ext: '',
-  name: '',
-  path: '',
-  filename: '',
-  duration: ''
-};
+function getEpisodeTemplate () {
+  return {
+    id: '',
+    ext: '',
+    name: '',
+    path: '',
+    filename: '',
+    duration: '',
+    scanning: false
+  };
+}
 
 export default class LibraryManager {
   constructor (store) {
@@ -73,27 +99,23 @@ export default class LibraryManager {
 
   _setupIpcHandlers () {
     ipcRenderer.on(renderer.addAnimeFolder, (event, data) => {
-      this.store.dispatch(actions.addAnimeFolder(this._create(data)));
+      this.store.dispatch(actions.updateAnimeFolder(this.create(data)));
     });
 
     ipcRenderer.on(renderer.updateEpisodes, (event, data) => {
-      this.store.dispatch(actions.updateAnimeFolder(this._updateEpisodes(data)));
+      this.store.dispatch(actions.updateAnimeFolder(this.addEpisodes(data)));
     });
 
     ipcRenderer.on(renderer.updateEpisode, (event, data) => {
-      this.store.dispatch(actions.updateAnimeFolder(this._updateEpisode(data)));
+      this.store.dispatch(actions.updateAnimeFolder(this.updateEpisode(data)));
     });
 
     ipcRenderer.on(renderer.updateDubs, (event, data) => {
-      this.store.dispatch(actions.updateAnimeFolder(this._updateDubs(data)));
+      this.store.dispatch(actions.updateAnimeFolder(this.updateDubs(data)));
     });
 
     ipcRenderer.on(renderer.updateSubs, (event, data) => {
-      this.store.dispatch(actions.updateAnimeFolder(this._updateSubs(data)));
-    });
-
-    ipcRenderer.on(renderer.updateAnimeFolder, (event, animeFolder) => {
-      this.store.dispatch(actions.updateAnimeFolder(animeFolder));
+      this.store.dispatch(actions.updateAnimeFolder(this.updateSubs(data)));
     });
 
     ipcRenderer.on(renderer.flagAddAnimeFolderStart, () => {
@@ -108,14 +130,19 @@ export default class LibraryManager {
   /**
    * Create new anime entry
    *
-   * @param {string} id
-   * @param {string} title
-   * @param {string} path
+   * @param {{id: string, title: string, path: string}} animeStub
    * @returns {Anime}
-   * @private
    */
-  _create ({ id, title, path }) {
-    const anime = Object.assign({}, animeTemplate, { id, title, path });
+  create (animeStub) {
+    let anime = this.getAnime(animeStub.id);
+
+    if (anime !== null) {
+      anime.state.scanning = true;
+
+      return anime;
+    }
+
+    anime = Object.assign({}, getAnimeTemplate(), animeStub);
 
     this.library.set(id, anime);
 
@@ -123,21 +150,40 @@ export default class LibraryManager {
   }
 
   /**
-   * Update episodes
+   * Sets anime media info
    *
    * @param {string} id
-   * @param {Episode[]} episodes
-   * @returns {Anime}
-   * @private
+   * @param {{width: number, height: number, bitDepth: number, format: string}} mediaInfo
    */
-  _updateEpisodes ({ id, episodes }) {
-    const episodesMap = new Map();
+  setMediaInfo ({ id, mediaInfo }) {
+    const anime = this.getAnime(id);
 
-    episodes.map(episode => {
+    const { width, height, bitDepth, format } = mediaInfo;
+
+    anime.width = width;
+    anime.height = height;
+    anime.bitDepth = bitDepth;
+    anime.format = format;
+
+    return anime;
+  }
+
+  /**
+   * Add episodes
+   *
+   * @param {string} id
+   * @param {{id: string, title: string, path: string, filename: string}[]} episodesStubs
+   * @returns {Anime}
+   */
+  addEpisodes ({ id, episodesStubs }) {
+    const anime = this.getAnime(id);
+    const episodesMap = new Map(anime.episodes);
+
+    episodesStubs.map(episodeStub => {
+      const episode = Object.assign({}, getEpisodeTemplate(), episodeStub);
+
       episodesMap.set(episode.id, episode);
     });
-
-    const anime = this._getAnime(id);
 
     anime.episodes = episodesMap;
 
@@ -148,14 +194,16 @@ export default class LibraryManager {
    * Update episode
    *
    * @param {string} id
-   * @param {Episode} episode
+   * @param {Episode} episodeStub
    * @returns {Anime}
-   * @private
    */
-  _updateEpisode ({ id, episode }) {
-    const anime = this._getAnime(id);
+  updateEpisode ({ id, episodeStub }) {
+    const anime = this.getAnime(id);
+    const episodesMap = new Map(anime.episodes);
 
-    anime.episodes.set(episode.id, episode);
+    episodesMap.set(episodeStub.id, episodeStub);
+
+    anime.episodes = episodesMap;
 
     return anime;
   }
@@ -164,18 +212,16 @@ export default class LibraryManager {
    * Update dubs
    *
    * @param {string} id
-   * @param {Dub[]} dubs
+   * @param {Dub[]} dubsStubs
    * @returns {Anime}
-   * @private
    */
-  _updateDubs ({ id, dubs }) {
-    const dubsMap = new Map();
+  updateDubs ({ id, dubsStubs }) {
+    const anime = this.getAnime(id);
+    const dubsMap = new Map(anime.dubs);
 
-    dubs.map(dub => {
+    dubsStubs.map(dub => {
       dubsMap.set(dub.id, dub);
     });
-
-    const anime = this._getAnime(id);
 
     anime.dubs = dubsMap;
 
@@ -188,16 +234,15 @@ export default class LibraryManager {
    * @param {string} id
    * @param {Dub[]} subs
    * @returns {Anime}
-   * @private
    */
-  _updateSubs ({ id, subs }) {
+  updateSubs ({ id, subs }) {
     const subsMap = new Map();
 
     subs.map(dub => {
       subsMap.set(dub.id, dub);
     });
 
-    const anime = this._getAnime(id);
+    const anime = this.getAnime(id);
 
     anime.subs = subsMap;
 
@@ -209,9 +254,8 @@ export default class LibraryManager {
    *
    * @param {string} id
    * @returns {Anime}
-   * @private
    */
-  _getAnime (id) {
+  getAnime (id) {
     return this.library.get(id);
   }
 }
