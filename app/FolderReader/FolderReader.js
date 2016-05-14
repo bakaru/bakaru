@@ -4,6 +4,7 @@ const bluebird = require('bluebird');
 const sha224 = require('js-sha256').sha224;
 const readdir = require('fs').readdir;
 const _path = require('path');
+const events = require('../events').renderer;
 const basename = _path.basename;
 const extname = _path.extname;
 const normalize = _path.normalize;
@@ -25,6 +26,15 @@ class FolderReader {
   constructor(app) {
     this.mediaInfo = app.mediaInfo;
     this.skipMediaScanning = false;
+  }
+
+  /**
+   * Set sender
+   *
+   * @param sender
+   */
+  setSender(sender) {
+    this.send = sender;
   }
 
   /**
@@ -60,7 +70,7 @@ class FolderReader {
 
     return bluebird.coroutine(function* () {
       const dirchunks = normalize(path).split(sep);
-      const dirname = normalizeAnimeName(dirchunks[dirchunks.length-1]);
+      const dirname = normalizeTitle(dirchunks[dirchunks.length-1]);
       const itemsNames = yield readdirAsync(path);
       const classifiedItems = yield classifyFolderItems(path, itemsNames);
 
@@ -72,9 +82,7 @@ class FolderReader {
 
       if (classifiedItems.videos.length > 0 && isAnimeFolder(classifiedItems, dirname)) {
         // So this is anime, good, fulfill it's data
-        const animeFolder = that.makeAnimeFolder(path, classifiedItems);
-
-        that.addAnimeFolder(animeFolder);
+        that.makeAnimeFolder(path, classifiedItems);
 
         return Promise.resolve(true);
       } else if (classifiedItems.folders.length > 0) {
@@ -90,12 +98,23 @@ class FolderReader {
    * @returns {AnimeFolder}
    */
   makeAnimeFolder(path, classifiedItems) {
+    const id = sha224(path);
+    const title = normalizeTitle(path);
+
+    // Sending anime stub
+    this.send(events.addAnimeFolder, { id, title, path });
+
+    const episodesStubs = this.makeEpisodes(classifiedItems.videos);
+
+    // Sending episodes stubs
+    this.send(events.addEpisodes, { id, episodesStubs });
+
     /**
      * @type {AnimeFolder}
      */
     const animeFolder = {
       id: sha224(path),
-      name: normalizeAnimeName(path),
+      name: normalizeTitle(path),
       path,
       dubs: [],
       subs: [],
@@ -122,8 +141,6 @@ class FolderReader {
       }
     };
 
-    this.refineEpisodesNames(animeFolder);
-
     RecursiveAnimeFolderScanner.scan(animeFolder, classifiedItems.folders)
       .then(() => {
         animeFolder.state.scanning = false;
@@ -140,21 +157,30 @@ class FolderReader {
   }
 
   /**
-   * @param {AnimeFolder} animeFolder
+   * Makes episodes objects
+   *
+   * @param {string[]} episodesPaths
+   * @returns {{id: string, ext: string, title: string, path: string, filename: string}[]}
    */
-  refineEpisodesNames(animeFolder) {
-    animeFolder.episodes = animeFolder.episodes.map(episode => {
-      const originalExt = extname(episode.path);
+  makeEpisodes(episodesPaths) {
+    let episodes = episodesPaths.map(episodePath => {
+      const originalExt = extname(episodePath);
 
-      episode.ext = originalExt.replace('.', '').toLowerCase();
-      episode.name = basename(episode.path, `.${originalExt}`);
-      episode.filename = basename(episode.path);
+      const ext = originalExt.replace('.', '').toLowerCase();
+      const title = basename(episodePath, `.${originalExt}`);
+      const filename = title;
+      const id = sha224(title);
 
-      return episode;
+      return {
+        id,
+        ext,
+        title,
+        filename
+      };
     });
 
-    if (animeFolder.episodes.length > 1) {
-      const sameParts = findSameParts(animeFolder.episodes.map(episode => episode.name));
+    if (episodes.length > 1) {
+      const sameParts = findSameParts(episodes.map(episode => episode.title));
       let sameStart = sameParts[0];
       let sameEnd = sameParts[1];
 
@@ -165,12 +191,14 @@ class FolderReader {
         from--;
       }
 
-      animeFolder.episodes = animeFolder.episodes.map(episode => {
-        episode.name = episode.filename.slice(from, episode.filename.length - to).trim();
+      episodes = episodes.map(episode => {
+        episode.title = episode.title.slice(from, episode.title.length - to).trim();
 
         return episode;
       });
     }
+
+    return episodes;
   }
 }
 
@@ -182,7 +210,7 @@ module.exports = FolderReader;
  * @param {string} path
  * @returns {string}
  */
-function normalizeAnimeName(path) {
+function normalizeTitle(path) {
   let name = basename(path);
 
   // Get rid of [720p] and similar shit

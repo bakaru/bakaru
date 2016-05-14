@@ -7,7 +7,7 @@ const _path = require('path');
 const basename = _path.basename;
 const classifyFolderItems = require('./ItemsClassificator');
 
-const readdirAsync = Promise.promisify(readdir);
+const readdirAsync = bluebird.promisify(readdir);
 
 class RecursiveAnimeFolderScanner {
 
@@ -17,10 +17,13 @@ class RecursiveAnimeFolderScanner {
    * @returns {Promise}
    */
   scan(animeFolder, folders) {
-    return bluebird.all(folders.map(folderPath => {
+    return Promise.all(folders.map(folderPath => {
       readdirAsync(folderPath)
         .then(itemsNames => classifyFolderItems(folderPath, itemsNames))
         .then(classifiedItems => {
+          let type;
+          let files;
+
           switch (true) {
             case classifiedItems.folders.length > 0:
               return this.scan(animeFolder, classifiedItems.folders);

@@ -3,6 +3,10 @@ import {
   OPEN_ANIME_FOLDER
 } from 'actions';
 
+import ARSON from 'arson';
+
+window.ARSON = ARSON;
+
 /**
  * @typedef {{selected: boolean|string, entries: Map.<string, AnimeFolder>}} LibraryState
  */
@@ -23,7 +27,7 @@ function updateCache(animeFolder) {
     window.localStorage['library'] = JSON.stringify([...entriesIds.add(animeFolder.id)]);
   }, 200);
 
-  window.localStorage[animeFolder.id] = JSON.stringify(animeFolder);
+  window.localStorage[animeFolder.id] = ARSON.stringify(animeFolder);
 }
 
 /**
@@ -38,7 +42,7 @@ function restoreFromCache() {
     entriesIds = new Set(JSON.parse(window.localStorage['library']));
 
     for (let entryId of entriesIds) {
-      entries.set(entryId, JSON.parse(window.localStorage[entryId]));
+      entries.set(entryId, ARSON.parse(window.localStorage[entryId]));
     }
   }
 

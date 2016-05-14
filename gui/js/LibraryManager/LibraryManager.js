@@ -102,7 +102,7 @@ export default class LibraryManager {
       this.store.dispatch(actions.updateAnimeFolder(this.create(data)));
     });
 
-    ipcRenderer.on(renderer.updateEpisodes, (event, data) => {
+    ipcRenderer.on(renderer.addEpisodes, (event, data) => {
       this.store.dispatch(actions.updateAnimeFolder(this.addEpisodes(data)));
     });
 
