@@ -15,6 +15,7 @@ module.exports = {
     updateEpisode: 'renderer:updateEpisode',
     updateDubs: 'renderer:updateDubs',
     updateSubs: 'renderer:updateSubs',
-    updateAnimeFolder: 'renderer:updateAnimeFolder'
+    updateAnimeFolder: 'renderer:updateAnimeFolder',
+    setMediaInfo: 'renderer:setMediaInfo'
   }
 };

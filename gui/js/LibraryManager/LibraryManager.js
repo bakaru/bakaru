@@ -43,28 +43,28 @@ function getAnimeTemplate () {
 }
 
 /**
- * @typedef {{id: string, title: string, path: string, files: Array}} Dub
+ * @typedef {{id: string, title: string, path: string, episodes: Map.<string, string>}} Dub
  */
 function getDubTemplate () {
   return {
     id: '',
     title: '',
     path: '',
-    files: [],
+    episodes: new Map(),
     embedded: false,
     embeddedStreamIndex: -1
   };
 }
 
 /**
- * @typedef {{id: string, title: string, path: string, files: Array}} Sub
+ * @typedef {{id: string, title: string, path: string, episodes: Map.<string, string>}} Sub
  */
 function getSubTemplate () {
   return {
     id: '',
     title: '',
     path: '',
-    files: [],
+    episodes: new Map(),
     embedded: false,
     embeddedStreamIndex: -1
   };
@@ -118,6 +118,10 @@ export default class LibraryManager {
       this.store.dispatch(actions.updateAnimeFolder(this.updateSubs(data)));
     });
 
+    ipcRenderer.on(renderer.setMediaInfo, (event, data) => {
+      this.store.dispatch(actions.updateAnimeFolder(this.setMediaInfo(data)));
+    });
+
     ipcRenderer.on(renderer.flagAddAnimeFolderStart, () => {
       this.store.dispatch(actions.flagAddFolderStart());
     });
@@ -158,14 +162,7 @@ export default class LibraryManager {
   setMediaInfo ({ id, mediaInfo }) {
     const anime = this.getAnime(id);
 
-    const { width, height, bitDepth, format } = mediaInfo;
-
-    anime.width = width;
-    anime.height = height;
-    anime.bitDepth = bitDepth;
-    anime.format = format;
-
-    return anime;
+    return Object.assign({}, anime, mediaInfo);
   }
 
   /**
@@ -220,7 +217,9 @@ export default class LibraryManager {
     const dubsMap = new Map(anime.dubs);
 
     dubsStubs.map(dub => {
-      dubsMap.set(dub.id, dub);
+      dub.episodes = new Map(dub.episodes);
+
+      dubsMap.set(dub.id, Object.assign({}, getDubTemplate(), dub));
     });
 
     anime.dubs = dubsMap;
@@ -232,17 +231,18 @@ export default class LibraryManager {
    * Update subs
    *
    * @param {string} id
-   * @param {Dub[]} subs
+   * @param {Sub[]} subsStubs
    * @returns {Anime}
    */
-  updateSubs ({ id, subs }) {
-    const subsMap = new Map();
-
-    subs.map(dub => {
-      subsMap.set(dub.id, dub);
-    });
-
+  updateSubs ({ id, subsStubs }) {
     const anime = this.getAnime(id);
+    const subsMap = new Map(anime.subs);
+
+    subsStubs.map(sub => {
+      sub.episodes = new Map(sub.episodes);
+
+      subsMap.set(sub.id, Object.assign({}, getSubTemplate(), sub));
+    });
 
     anime.subs = subsMap;
 

@@ -8,7 +8,8 @@
     "start": "cross-env DEBUG=true electron app/main.js",
     "watch": "webpack -d -w",
     "build": "node packaging/packager",
-    "vendor": "node scripts/download-vendor"
+    "vendor": "node scripts/download-vendor",
+    "test": "mocha --compilers js:babel-core/register --recursive"
   },
   "repository": {
     "type": "git",

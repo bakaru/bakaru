@@ -5,25 +5,27 @@ const readdir = require('fs').readdir;
 const sha224 = require('js-sha256').sha224;
 const _path = require('path');
 const basename = _path.basename;
+const extname = _path.extname;
 const classifyFolderItems = require('./ItemsClassificator');
 
 const readdirAsync = bluebird.promisify(readdir);
 
+/**
+ * @typedef {{id: string, title: string, episodesIds: string[]}} SubEntry
+ */
+
 class RecursiveAnimeFolderScanner {
 
   /**
-   * @param {AnimeFolder} animeFolder
+   * @param {{dubs: SubEntry[], subs: SubEntry[]}} animeFolder
    * @param {string[]} folders
    * @returns {Promise}
    */
   scan(animeFolder, folders) {
     return Promise.all(folders.map(folderPath => {
-      readdirAsync(folderPath)
+      return readdirAsync(folderPath)
         .then(itemsNames => classifyFolderItems(folderPath, itemsNames))
         .then(classifiedItems => {
-          let type;
-          let files;
-
           switch (true) {
             case classifiedItems.folders.length > 0:
               return this.scan(animeFolder, classifiedItems.folders);
@@ -46,11 +48,11 @@ class RecursiveAnimeFolderScanner {
               break;
           }
         })
-    }));
+    })).then(() => animeFolder);
   }
 
   /**
-   * @param {AnimeFolder} animeFolder
+   * @param {{dubs: SubEntry[], subs: SubEntry[]}} animeFolder
    * @param {string} folderPath
    * @param {string[]} folderItems
    * @private
@@ -64,12 +66,12 @@ class RecursiveAnimeFolderScanner {
       id,
       name,
       path,
-      files: folderItems
+      episodes: this._folderItemsToPairs(folderItems)
     });
   }
 
   /**
-   * @param {AnimeFolder} animeFolder
+   * @param {{dubs: SubEntry[], subs: SubEntry[]}} animeFolder
    * @param {string} folderPath
    * @param {string[]} folderItems
    * @private
@@ -83,12 +85,26 @@ class RecursiveAnimeFolderScanner {
       id,
       name,
       path,
-      files: folderItems
+      episodes: this._folderItemsToPairs(folderItems)
     });
   }
 
   /**
-   * @param {AnimeFolder} animeFolder
+   * @param {string[]} folderItems
+   * @returns {[]}
+   * @private
+   */
+  _folderItemsToPairs(folderItems) {
+    return folderItems.map(itemPath => {
+      return [
+        sha224(basename(itemPath, extname(itemPath))),
+        itemPath
+      ];
+    });
+  }
+
+  /**
+   * @param {{dubs: SubEntry[], subs: SubEntry[]}} animeFolder
    * @param {string} folderPath
    * @param {string[]} folderItems
    * @private

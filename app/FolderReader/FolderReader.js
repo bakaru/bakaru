@@ -109,44 +109,16 @@ class FolderReader {
     // Sending episodes stubs
     this.send(events.addEpisodes, { id, episodesStubs });
 
-    /**
-     * @type {AnimeFolder}
-     */
     const animeFolder = {
-      id: sha224(path),
-      name: normalizeTitle(path),
-      path,
       dubs: [],
       subs: [],
-      bonuses: [],
-      quality: "unknown",
-      media: {
-        width: 0,
-        height: 0,
-        bitDepth: 8,
-        format: ''
-      },
-      episodes: classifiedItems.videos.map(episode => ({
-        id: sha224(episode),
-        ext: '',
-        name: '',
-        path: episode,
-        filename: '',
-        duration: ''
-      })),
-      state: {
-        scanning: true,
-        subScanning: true,
-        mediainfoScanning: true
-      }
+      bonuses: []
     };
 
     RecursiveAnimeFolderScanner.scan(animeFolder, classifiedItems.folders)
       .then(() => {
-        animeFolder.state.scanning = false;
-        animeFolder.state.subScanning = false;
-
-        this.updateAnimeFolder(animeFolder);
+        this.send(events.updateDubs, { id, dubsStubs: animeFolder.dubs });
+        this.send(events.updateSubs, { id, subsStubs: animeFolder.subs });
       });
 
     if (!this.skipMediaScanning) {
