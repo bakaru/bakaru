@@ -39,10 +39,6 @@ class RecursiveAnimeFolderScanner {
               return this._parseAndAddSub(animeFolder, folderPath, classifiedItems.subtitles);
               break;
 
-            case classifiedItems.videos.length > 0:
-              return this._parseAndAddBonuses(animeFolder, folderPath, classifiedItems.videos);
-              break;
-
             default:
               return null;
               break;
@@ -100,24 +96,6 @@ class RecursiveAnimeFolderScanner {
         sha224(basename(itemPath, extname(itemPath))),
         itemPath
       ];
-    });
-  }
-
-  /**
-   * @param {{dubs: SubEntry[], subs: SubEntry[]}} animeFolder
-   * @param {string} folderPath
-   * @param {string[]} folderItems
-   * @private
-   */
-  _parseAndAddBonuses(animeFolder, folderPath, folderItems) {
-    const name = basename(folderPath);
-    const path = folderPath;
-    const id = sha224(name);
-
-    animeFolder.bonuses.push({
-      id,
-      name,
-      path
     });
   }
 }

@@ -1,20 +1,28 @@
 'use strict';
 
+const sha224 = require('js-sha256').sha224;
+const events = require('../events').renderer;
+
 class MediaScanner {
 
   /**
    * Ctor
    *
-   * @param {AnimeFolder} animeFolder
-   * @callback updateAnimeFolderCallback
+   * @callback send
    * @param {MediaInfo} mediaInfo
    */
-  constructor(animeFolder, updateAnimeFolderCallback, mediaInfo) {
-    this.animeFolder= animeFolder;
+  constructor(animeId, animeTitle, episodes, send, mediaInfo) {
+    this.animeId = animeId;
+    this.animeTitle = animeTitle;
+    this.episodes = episodes;
+
     this.mediaInfo = mediaInfo;
-    this.updateAnimeFolder = updateAnimeFolderCallback;
+    this.send = send;
 
     this.currentEpisodeIndex = 0;
+
+    // Sending media info scanning started
+    this.send(events.startMediaInfoScanning, { id: this.animeId });
 
     this.processCurrentEpisode();
   }
@@ -26,20 +34,69 @@ class MediaScanner {
 
     this.mediaInfo.getInfo([episodePath]).then(episodeInfo => {
       if (episodeInfo.duration !== null) {
-        this.animeFolder.quality = `${episodeInfo.video.height}p`;
-        this.animeFolder.episodes[this.currentEpisodeIndex].duration = episodeInfo.duration;
-        this.animeFolder.media.width = episodeInfo.video.width;
-        this.animeFolder.media.height = episodeInfo.video.height;
-        this.animeFolder.media.format = episodeInfo.video.format;
-        this.animeFolder.media.bitDepth = episodeInfo.video.bitDepth;
-        this.animeFolder.state.mediainfoScanning = false;
 
-        this.updateAnimeFolder(this.animeFolder);
+        // Sending media info
+        this.send(events.setMediaInfo, {
+          id: this.animeId,
+          mediaInfo: {
+            width: episodeInfo.video.width,
+            height: episodeInfo.video.height,
+            format: episodeInfo.video.format,
+            bitDepth: episodeInfo.video.bitDepth
+          }
+        });
 
+        // Sending discovered episode duration
+        this.send(events.updateEpisode, {
+          id: this.animeId,
+          episodeStub: {
+            duration: episodeInfo.duration
+          }
+        });
+
+        // Processing dubs
+        if (episodeInfo.audio.length > 0) {
+          const dubsStubs = episodeInfo.audio.map(audio => {
+            const dubId = sha224(`${episodePath}:${audio.id}`);
+
+            let title = audio.title
+              ? audio.title
+              : `${this.animeTitle}:${audio.id}`;
+
+            if (audio.language) {
+              title += ` [${audio.language}]`;
+            }
+
+            return {
+              id: dubId,
+              title,
+              embedded: true,
+              embeddedStreamIndex: audio.id
+            };
+          });
+
+          // Sending embedded dubs
+          this.send(events.updateDubs, { id: this.animeId, dubsStubs });
+        }
+
+        // Sending media info scanning done
+        this.send(events.stopMediaInfoScanning, { id: this.animeId });
+
+        // Preventing memory leaks
         this.animeFolder = null;
         this.updateAnimeFolder = null;
         this.mediaInfo = null;
+
       } else {
+
+        // Sending episode invalid
+        this.send(events.updateEpisode, {
+          id: this.animeId,
+          episodeStub: {
+            duration: false
+          }
+        });
+
         this.currentEpisodeIndex++;
         this.processCurrentEpisode();
       }

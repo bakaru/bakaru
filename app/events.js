@@ -9,6 +9,7 @@ module.exports = {
   renderer: {
     flagAddAnimeFolderStart: 'renderer:flagAddAnimeFolderStart',
     flagAddAnimeFolderEnd: 'renderer:flagAddAnimeFolderEnd',
+
     addAnimeFolder: 'renderer:addAnimeFolder',
     addEpisodes: 'renderer:addEpisodes',
     updateEpisodes: 'renderer:updateEpisodes',
@@ -16,6 +17,14 @@ module.exports = {
     updateDubs: 'renderer:updateDubs',
     updateSubs: 'renderer:updateSubs',
     updateAnimeFolder: 'renderer:updateAnimeFolder',
-    setMediaInfo: 'renderer:setMediaInfo'
+    setMediaInfo: 'renderer:setMediaInfo',
+
+    stopScanning: 'renderer:stopScanning',
+
+    startMediaInfoScanning: 'renderer:startMediaInfoScanning',
+    stopMediaInfoScanning: 'renderer:stopMediaInfoScanning',
+
+    startSubsScanning: 'renderer:startSubsScanning',
+    finishSubsScanning: 'renderer:finishSubsScanning',
   }
 };

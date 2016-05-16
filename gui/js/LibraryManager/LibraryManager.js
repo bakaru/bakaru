@@ -35,9 +35,9 @@ function getAnimeTemplate () {
     bitDepth: 8,
     format: '',
     state: {
-      scanning: true,
-      subScanning: true,
-      mediainfoScanning: true
+      scanning: false,
+      subScanning: false,
+      mediainfoScanning: false
     }
   };
 }
@@ -71,7 +71,7 @@ function getSubTemplate () {
 }
 
 /**
- * @typedef {{id: string, ext: string, name: string, path: string, filename: string, duration: string, scanning: boolean}} Episode
+ * @typedef {{id: string, ext: string, name: string, path: string, filename: string, duration: string|boolean}} Episode
  */
 function getEpisodeTemplate () {
   return {
@@ -80,8 +80,7 @@ function getEpisodeTemplate () {
     name: '',
     path: '',
     filename: '',
-    duration: '',
-    scanning: false
+    duration: false
   };
 }
 
@@ -122,6 +121,26 @@ export default class LibraryManager {
       this.store.dispatch(actions.updateAnimeFolder(this.setMediaInfo(data)));
     });
 
+    ipcRenderer.on(renderer.startSubsScanning, (event, id) => {
+      this.store.dispatch(actions.updateAnimeFolder(this.startSubsScanning(id)));
+    });
+
+    ipcRenderer.on(renderer.stopSubsScanning, (event, id) => {
+      this.store.dispatch(actions.updateAnimeFolder(this.stopSubsScanning(id)));
+    });
+
+    ipcRenderer.on(renderer.startMediaInfoScanning, (event, id) => {
+      this.store.dispatch(actions.updateAnimeFolder(this.startMediaInfoScanning(id)));
+    });
+
+    ipcRenderer.on(renderer.stopMediaInfoScanning, (event, id) => {
+      this.store.dispatch(actions.updateAnimeFolder(this.stopMediaInfoScanning(id)));
+    });
+
+    ipcRenderer.on(renderer.stopScanning, (event, id) => {
+      this.store.dispatch(actions.updateAnimeFolder(this.stopScanning(id)));
+    });
+
     ipcRenderer.on(renderer.flagAddAnimeFolderStart, () => {
       this.store.dispatch(actions.flagAddFolderStart());
     });
@@ -129,6 +148,46 @@ export default class LibraryManager {
     ipcRenderer.on(renderer.flagAddAnimeFolderEnd, () => {
       this.store.dispatch(actions.flagAddFolderEnd());
     });
+  }
+
+  stopScanning (id) {
+    const anime = this.getAnime(id);
+
+    anime.state.scanning = false;
+
+    return anime;
+  }
+
+  startSubsScanning (id) {
+    const anime = this.getAnime(id);
+
+    anime.state.subScanning = true;
+
+    return anime;
+  }
+
+  stopSubsScanning (id) {
+    const anime = this.getAnime(id);
+
+    anime.state.subScanning = false;
+
+    return anime;
+  }
+
+  startMediaInfoScanning (id) {
+    const anime = this.getAnime(id);
+
+    anime.state.mediainfoScanning = true;
+
+    return anime;
+  }
+
+  stopMediaInfoScanning (id) {
+    const anime = this.getAnime(id);
+
+    anime.state.mediainfoScanning = false;
+
+    return anime;
   }
 
   /**
@@ -161,6 +220,14 @@ export default class LibraryManager {
    */
   setMediaInfo ({ id, mediaInfo }) {
     const anime = this.getAnime(id);
+
+    if (mediaInfo.width < 1000) {
+      mediaInfo.quality = 'SD';
+    } else {
+      mediaInfo.quality = 'HD';
+    }
+
+    mediaInfo.quality += ` ${mediaInfo.width}x${mediaInfo.height}`;
 
     return Object.assign({}, anime, mediaInfo);
   }
@@ -198,7 +265,10 @@ export default class LibraryManager {
     const anime = this.getAnime(id);
     const episodesMap = new Map(anime.episodes);
 
-    episodesMap.set(episodeStub.id, episodeStub);
+    episodesMap.set(
+      episodeStub.id,
+      Object.assign({}, episodesMap.get(episodeStub.id) || getEpisodeTemplate(), episodeStub)
+    );
 
     anime.episodes = episodesMap;
 

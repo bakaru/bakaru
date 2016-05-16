@@ -38,30 +38,6 @@ class FolderReader {
   }
 
   /**
-   * @callback addAnimeFolder
-   * @callback updateAnimeFolder
-   * @returns void
-   */
-  setHandlers(addAnimeFolder, updateAnimeFolder) {
-    this._addAnimeFolder = addAnimeFolder;
-    this._updateAnimeFolder = updateAnimeFolder;
-  }
-
-  /**
-   * @param {AnimeFolder} animeFolder
-   */
-  addAnimeFolder(animeFolder) {
-    this._addAnimeFolder(animeFolder);
-  }
-
-  /**
-   * @param {AnimeFolder} animeFolder
-   */
-  updateAnimeFolder(animeFolder) {
-    this._updateAnimeFolder(animeFolder);
-  }
-
-  /**
    * @param {string} path
    * @returns {Promise.<T>}
    */
@@ -95,7 +71,6 @@ class FolderReader {
   /**
    * @param {string} path
    * @param {ClassifiedItems} classifiedItems
-   * @returns {AnimeFolder}
    */
   makeAnimeFolder(path, classifiedItems) {
     const id = sha224(path);
@@ -109,23 +84,37 @@ class FolderReader {
     // Sending episodes stubs
     this.send(events.addEpisodes, { id, episodesStubs });
 
-    const animeFolder = {
-      dubs: [],
-      subs: [],
-      bonuses: []
-    };
+    // Sending subs scanning started
+    this.send(events.startSubsScanning, id);
 
-    RecursiveAnimeFolderScanner.scan(animeFolder, classifiedItems.folders)
-      .then(() => {
-        this.send(events.updateDubs, { id, dubsStubs: animeFolder.dubs });
-        this.send(events.updateSubs, { id, subsStubs: animeFolder.subs });
+    RecursiveAnimeFolderScanner.scan({ dubs: [], subs: [] }, classifiedItems.folders)
+      .then(animeFolder => {
+        if (animeFolder.dubs.length > 0) {
+          // Sending external dubs
+          this.send(events.updateDubs, { id, dubsStubs: animeFolder.dubs });
+        }
+
+        if (animeFolder.subs.length > 0) {
+          // Seding external subs
+          this.send(events.updateSubs, { id, subsStubs: animeFolder.subs });
+        }
+
+        // Sending subs scanning done
+        this.send(events.finishSubsScanning, id);
       });
 
     if (!this.skipMediaScanning) {
-      new MediaScanner(animeFolder, this.updateAnimeFolder.bind(this), this.mediaInfo);
+      new MediaScanner(
+        id,
+        title,
+        episodesStubs,
+        ::this.send,
+        this.mediaInfo
+      );
     }
 
-    return animeFolder;
+    // Sending main scanning done
+    this.send(events.stopScanning, id);
   }
 
   /**
