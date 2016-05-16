@@ -61,6 +61,7 @@
     "arson": "0.2.3",
     "babel-preset-es2015-node": "5.0.2",
     "bluebird": "3.1.1",
+    "classnames": "2.2.5",
     "deep-equal": "1.0.1",
     "double-ended-queue": "2.1.0-0",
     "events": "1.1.0",
@@ -75,6 +76,7 @@
     "react-redux": "4.4.5",
     "redux": "3.5.2",
     "webgl-video-renderer": "0.2.0",
+    "winston": "2.2.0",
     "xml2js": "^0.4.15"
   }
 }

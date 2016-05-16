@@ -52,18 +52,17 @@ class FolderReader {
 
       if ((classifiedItems.videos.length + classifiedItems.folders.length) === 0) {
         // So this folder contains nor anime neither folders, WTF?
-        console.log(`Found nothing interesting in ${path}`);
         throw new Error(`${path}, no folders or videos found, are you sure you pick correct folder?`);
       }
 
       if (classifiedItems.videos.length > 0 && isAnimeFolder(classifiedItems, dirname)) {
         // So this is anime, good, fulfill it's data
-        that.makeAnimeFolder(path, classifiedItems);
+        that.makeAnimeFolder.apply(that, [path, classifiedItems]);
 
         return Promise.resolve(true);
       } else if (classifiedItems.folders.length > 0) {
         // Okay, we have some folders here, lets check'em all
-        return Promise.all(classifiedItems.folders.map(subPath => that.findAnime(subPath))).catch(()=>{});
+        return Promise.all(classifiedItems.folders.map(subPath => that.findAnime.apply(that, [subPath]))).catch(()=>{});
       }
     })();
   }
@@ -95,12 +94,12 @@ class FolderReader {
         }
 
         if (animeFolder.subs.length > 0) {
-          // Seding external subs
+          // Sending external subs
           this.send(events.updateSubs, { id, subsStubs: animeFolder.subs });
         }
 
         // Sending subs scanning done
-        this.send(events.finishSubsScanning, id);
+        this.send(events.stopSubsScanning, id);
       });
 
     if (!this.skipMediaScanning) {
@@ -108,7 +107,7 @@ class FolderReader {
         id,
         title,
         episodesStubs,
-        ::this.send,
+        this.send,
         this.mediaInfo
       );
     }
@@ -135,6 +134,7 @@ class FolderReader {
       return {
         id,
         ext,
+        path: episodePath,
         title,
         filename
       };

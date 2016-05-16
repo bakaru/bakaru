@@ -35,9 +35,9 @@ function getAnimeTemplate () {
     bitDepth: 8,
     format: '',
     state: {
-      scanning: false,
-      subScanning: false,
-      mediainfoScanning: false
+      scanning: true,
+      subScanning: true,
+      mediainfoScanning: true
     }
   };
 }
@@ -52,6 +52,7 @@ function getDubTemplate () {
     path: '',
     episodes: new Map(),
     embedded: false,
+    embeddedIndex: -1,
     embeddedStreamIndex: -1
   };
 }
@@ -66,6 +67,7 @@ function getSubTemplate () {
     path: '',
     episodes: new Map(),
     embedded: false,
+    embeddedIndex: -1,
     embeddedStreamIndex: -1
   };
 }
@@ -88,12 +90,20 @@ export default class LibraryManager {
   constructor (store) {
     this.store = store;
 
+    console.log(this.store);
+
     /**
      * @type {Map.<string, Anime>}
      */
     this.library = new Map();
 
     this._setupIpcHandlers();
+  }
+
+  openSelectFolderDialog () {
+    return () => {
+      ipcRenderer.send('main:openSelectFolderDialog');
+    };
   }
 
   _setupIpcHandlers () {
@@ -121,9 +131,9 @@ export default class LibraryManager {
       this.store.dispatch(actions.updateAnimeFolder(this.setMediaInfo(data)));
     });
 
-    ipcRenderer.on(renderer.startSubsScanning, (event, id) => {
-      this.store.dispatch(actions.updateAnimeFolder(this.startSubsScanning(id)));
-    });
+    //ipcRenderer.on(renderer.startSubsScanning, (event, id) => {
+    //  this.store.dispatch(actions.updateAnimeFolder(this.startSubsScanning(id)));
+    //});
 
     ipcRenderer.on(renderer.stopSubsScanning, (event, id) => {
       this.store.dispatch(actions.updateAnimeFolder(this.stopSubsScanning(id)));
@@ -151,6 +161,8 @@ export default class LibraryManager {
   }
 
   stopScanning (id) {
+    console.log('LM:stopScanning', id);
+
     const anime = this.getAnime(id);
 
     anime.state.scanning = false;
@@ -159,6 +171,8 @@ export default class LibraryManager {
   }
 
   startSubsScanning (id) {
+    console.log('LM:startSubsScanning', id);
+
     const anime = this.getAnime(id);
 
     anime.state.subScanning = true;
@@ -167,6 +181,8 @@ export default class LibraryManager {
   }
 
   stopSubsScanning (id) {
+    console.log('LM:stopSubsScanning', id);
+
     const anime = this.getAnime(id);
 
     anime.state.subScanning = false;
@@ -175,6 +191,8 @@ export default class LibraryManager {
   }
 
   startMediaInfoScanning (id) {
+    console.log('LM:startMediaInfoScanning', id);
+
     const anime = this.getAnime(id);
 
     anime.state.mediainfoScanning = true;
@@ -183,6 +201,8 @@ export default class LibraryManager {
   }
 
   stopMediaInfoScanning (id) {
+    console.log('LM:stopMediaInfoScanning', id);
+
     const anime = this.getAnime(id);
 
     anime.state.mediainfoScanning = false;
@@ -197,9 +217,11 @@ export default class LibraryManager {
    * @returns {Anime}
    */
   create (animeStub) {
+    console.log('LM:create', animeStub);
+
     let anime = this.getAnime(animeStub.id);
 
-    if (anime !== null) {
+    if (anime) {
       anime.state.scanning = true;
 
       return anime;
@@ -207,7 +229,7 @@ export default class LibraryManager {
 
     anime = Object.assign({}, getAnimeTemplate(), animeStub);
 
-    this.library.set(id, anime);
+    this.library.set(animeStub.id, anime);
 
     return anime;
   }
@@ -219,6 +241,7 @@ export default class LibraryManager {
    * @param {{width: number, height: number, bitDepth: number, format: string}} mediaInfo
    */
   setMediaInfo ({ id, mediaInfo }) {
+
     const anime = this.getAnime(id);
 
     if (mediaInfo.width < 1000) {
@@ -228,8 +251,9 @@ export default class LibraryManager {
     }
 
     mediaInfo.quality += ` ${mediaInfo.width}x${mediaInfo.height}`;
+    console.log('LM:setMediaInfo', anime, id, mediaInfo);
 
-    return Object.assign({}, anime, mediaInfo);
+    return Object.assign(anime, mediaInfo);
   }
 
   /**
@@ -240,6 +264,8 @@ export default class LibraryManager {
    * @returns {Anime}
    */
   addEpisodes ({ id, episodesStubs }) {
+    console.log('LM:addEpisodes', id, episodesStubs);
+
     const anime = this.getAnime(id);
     const episodesMap = new Map(anime.episodes);
 
@@ -262,6 +288,8 @@ export default class LibraryManager {
    * @returns {Anime}
    */
   updateEpisode ({ id, episodeStub }) {
+    console.log('LM:updateEpisode', id, episodeStub);
+
     const anime = this.getAnime(id);
     const episodesMap = new Map(anime.episodes);
 
@@ -283,6 +311,8 @@ export default class LibraryManager {
    * @returns {Anime}
    */
   updateDubs ({ id, dubsStubs }) {
+    console.log('LM:updateDubs', id, dubsStubs);
+
     const anime = this.getAnime(id);
     const dubsMap = new Map(anime.dubs);
 
@@ -305,6 +335,8 @@ export default class LibraryManager {
    * @returns {Anime}
    */
   updateSubs ({ id, subsStubs }) {
+    console.log('LM:updateSubs', id, subsStubs);
+
     const anime = this.getAnime(id);
     const subsMap = new Map(anime.subs);
 

@@ -29,7 +29,7 @@ export default function Library(props) {
     const aFolder = entries.get(a);
     const bFolder = entries.get(b);
 
-    return aFolder.name.toLowerCase().charCodeAt(0) - bFolder.name.toLowerCase().charCodeAt(0);
+    return aFolder.title.toLowerCase().charCodeAt(0) - bFolder.title.toLowerCase().charCodeAt(0);
   });
 
   const entriesList = new Array(sortedEntries.length);

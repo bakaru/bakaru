@@ -22,15 +22,15 @@ class MediaScanner {
     this.currentEpisodeIndex = 0;
 
     // Sending media info scanning started
-    this.send(events.startMediaInfoScanning, { id: this.animeId });
+    this.send(events.startMediaInfoScanning, this.animeId);
 
     this.processCurrentEpisode();
   }
 
   processCurrentEpisode() {
-    const episodePath = this.animeFolder.episodes[this.currentEpisodeIndex].path;
+    const episodePath = this.episodes[this.currentEpisodeIndex].path;
 
-    console.log(`Now scanning ${episodePath}`);
+    log(`Now scanning ${episodePath}`);
 
     this.mediaInfo.getInfo([episodePath]).then(episodeInfo => {
       if (episodeInfo.duration !== null) {
@@ -50,13 +50,14 @@ class MediaScanner {
         this.send(events.updateEpisode, {
           id: this.animeId,
           episodeStub: {
+            id: this.episodes[this.currentEpisodeIndex].id,
             duration: episodeInfo.duration
           }
         });
 
         // Processing dubs
         if (episodeInfo.audio.length > 0) {
-          const dubsStubs = episodeInfo.audio.map(audio => {
+          const dubsStubs = episodeInfo.audio.map((audio, index) => {
             const dubId = sha224(`${episodePath}:${audio.id}`);
 
             let title = audio.title
@@ -71,6 +72,7 @@ class MediaScanner {
               id: dubId,
               title,
               embedded: true,
+              embeddedIndex: index,
               embeddedStreamIndex: audio.id
             };
           });
@@ -80,7 +82,7 @@ class MediaScanner {
         }
 
         // Sending media info scanning done
-        this.send(events.stopMediaInfoScanning, { id: this.animeId });
+        this.send(events.stopMediaInfoScanning, this.animeId);
 
         // Preventing memory leaks
         this.animeFolder = null;

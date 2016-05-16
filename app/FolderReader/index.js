@@ -20,7 +20,7 @@ function createFolderReader (app) {
       { properties: [ 'openDirectory', 'multiSelections' ] },
       itemsPaths => {
         if (itemsPaths) {
-          folderReader.setSender((event, payload) => event.sender.send(event, payload));
+          folderReader.setSender((e, payload) => event.sender.send(e, payload));
 
           itemsPaths.map(itemPath => {
             folderReader.findAnime(itemPath)

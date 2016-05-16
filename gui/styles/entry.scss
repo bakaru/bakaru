@@ -89,6 +89,21 @@ entry {
 
       @include ellipsis;
 
+      &.embedded {
+        color: rgba(0, 0, 0, .85);
+
+        .icon {
+          background: transparent;
+          padding: 0px 2px 0px 2px;
+          line-height: 1;
+          font-weight: normal;
+          border-radius: 2px;
+          box-shadow: 0 0 0 1px #999;
+          color: #999;
+          margin-right: 3px;
+        }
+      }
+
       &:hover {
         background-color: rgba(0, 0, 0, .05);
       }

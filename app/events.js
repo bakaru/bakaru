@@ -25,6 +25,6 @@ module.exports = {
     stopMediaInfoScanning: 'renderer:stopMediaInfoScanning',
 
     startSubsScanning: 'renderer:startSubsScanning',
-    finishSubsScanning: 'renderer:finishSubsScanning',
+    stopSubsScanning: 'renderer:stopSubsScanning',
   }
 };

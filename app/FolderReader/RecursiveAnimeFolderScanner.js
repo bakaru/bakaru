@@ -22,7 +22,7 @@ class RecursiveAnimeFolderScanner {
    * @returns {Promise}
    */
   scan(animeFolder, folders) {
-    return Promise.all(folders.map(folderPath => {
+    return bluebird.all(folders.map(folderPath => {
       return readdirAsync(folderPath)
         .then(itemsNames => classifyFolderItems(folderPath, itemsNames))
         .then(classifiedItems => {
@@ -54,13 +54,13 @@ class RecursiveAnimeFolderScanner {
    * @private
    */
   _parseAndAddDub(animeFolder, folderPath, folderItems) {
-    const name = basename(folderPath);
+    const title = basename(folderPath);
     const path = folderPath;
-    const id = sha224(name);
+    const id = sha224(title);
 
     animeFolder.dubs.push({
       id,
-      name,
+      title,
       path,
       episodes: this._folderItemsToPairs(folderItems)
     });
@@ -73,13 +73,13 @@ class RecursiveAnimeFolderScanner {
    * @private
    */
   _parseAndAddSub(animeFolder, folderPath, folderItems) {
-    const name = basename(folderPath);
+    const title = basename(folderPath);
     const path = folderPath;
-    const id = sha224(name);
+    const id = sha224(title);
 
     animeFolder.subs.push({
       id,
-      name,
+      title,
       path,
       episodes: this._folderItemsToPairs(folderItems)
     });

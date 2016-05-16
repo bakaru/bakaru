@@ -1,5 +1,6 @@
 'use strict';
 
+const winston = require('winston');
 const events = require('./events');
 
 const createPathDispatcher = require('./PathDispatcher');
@@ -11,6 +12,18 @@ const icon  = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4i
 class App {
   constructor(electron) {
     this.name = 'Bakaru';
+
+    this.logger = new (winston.Logger)({
+      transports: [
+        new (winston.transports.File)({
+          filename: 'bakaru.log'
+        })
+      ]
+    });
+
+    GLOBAL.log = msg => {
+      this.logger.error(msg);
+    };
 
     this.electron = electron;
     this.dialog = electron.dialog;

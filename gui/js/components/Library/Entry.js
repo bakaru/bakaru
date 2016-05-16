@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import PlayerControls from 'utils/PlayerControls';
 
 import { shell } from 'electron';
@@ -57,6 +58,8 @@ export default class Entry extends Component {
   render() {
     if (this.entry === false) {
       return this.renderPlaceholder();
+    } else {
+      console.log('Entry', this.entry);
     }
 
     const episodes = this.renderEps(this.entry.episodes);
@@ -66,7 +69,7 @@ export default class Entry extends Component {
     return (
       <entry>
         <summary>
-          <title>{ this.entry.name }</title>
+          <title>{ this.entry.title }</title>
           <path onClick={ ::this.handleEntryPathClick }>{ this.entry.path }</path>
         </summary>
 
@@ -118,7 +121,7 @@ export default class Entry extends Component {
 
     this.entry.episodes.map((episode, index) => {
       const item = {
-        title: `${this.entry.name} - ${episode.name}`,
+        title: `${this.entry.title} - ${episode.name}`,
         videoPath: `file:///${episode.path}`,
         audioPath: false,
         subtitlesPath: false,
@@ -177,17 +180,25 @@ export default class Entry extends Component {
       return '';
     }
 
-    const rendered = subs.map(sub => {
-      const isSelected = this.state.sub === sub.id;
+    const rendered = [];
 
-      return (
+    subs.forEach(sub => {
+      const subClass = classNames({
+        selected: this.state.sub === sub.id,
+        embedded: sub.embedded
+      });
+
+      rendered.push(
         <div
           key={ sub.id }
-          title={ sub.name }
-          className={ isSelected ? 'selected' : '' }
+          title={ sub.title }
+          className={ subClass }
           onClick={ () => ::this.handleSubSelect(sub.id) }
         >
-          { sub.name }
+          <span className="icon" title="Embedded subtitles">
+            { sub.embedded ? this.renderEmbeddedIcon() : '' }
+          </span>
+          { sub.title }
         </div>
       );
     });
@@ -211,17 +222,25 @@ export default class Entry extends Component {
       return '';
     }
 
-    const rendered = dubs.map(dub => {
-      const isSelected = this.state.dub === dub.id;
+    const rendered = [];
 
-      return (
+    dubs.forEach(dub => {
+      const dubClass = classNames({
+        selected: this.state.dub === dub.id,
+        embedded: dub.embedded
+      });
+
+      rendered.push(
         <div
           key={ dub.id }
-          title={ dub.name }
-          className={ isSelected ? 'selected' : '' }
+          title={ dub.title }
+          className={ dubClass }
           onClick={ () => ::this.handleDubSelect(dub.id) }
         >
-          { dub.name }
+          <span className="icon" title="Embedded dubs">
+            { dub.embedded ? this.renderEmbeddedIcon() : '' }
+          </span>
+          { dub.title }
         </div>
       );
     });
@@ -234,6 +253,10 @@ export default class Entry extends Component {
     );
   }
 
+  renderEmbeddedIcon() {
+    return 'e';
+  }
+
   /**
    * Episodes renderer
    *
@@ -241,15 +264,19 @@ export default class Entry extends Component {
    * @returns {*}
    */
   renderEps(eps) {
-    return eps.map(episode => {
-      return (
-        <div key={ episode.id } title={ episode.name }>
-          { episode.name }
+    const rendered = [];
+
+    eps.forEach(episode => {
+      rendered.push(
+        <div key={ episode.id } title={ episode.title }>
+          { episode.title }
           <filename>
-            { episode.filename }
+            { episode.duration }
           </filename>
         </div>
       );
     });
+
+    return rendered;
   }
 }

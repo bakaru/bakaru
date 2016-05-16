@@ -25,7 +25,7 @@ const Gui = (props) => (
       actions={ props.actions }
       playerActive={ props.player.playlist.length > 0 }
     />
-    <Library { ...props } openSelectFolderDialog={ openSelectFolderDialog } />
+    <Library { ...props } />
   </gui>
 );
 

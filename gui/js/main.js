@@ -17,7 +17,7 @@ const libraryManager = new LibraryManager(store);
 
 ReactDom.render(
   <Provider store={store}>
-    <Gui wcjs={ wcjs } />
+    <Gui wcjs={ wcjs } openSelectFolderDialog={ libraryManager.openSelectFolderDialog() } />
   </Provider>,
   document.getElementById('gui-mount')
 );
