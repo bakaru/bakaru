@@ -17,6 +17,7 @@ export default class PlayerController {
     this.audio = wcjs.createPlayer();
     this.volume = volume;
 
+    this.audioTrackIndex = 1;
     this.videoFrameSize = false;
     this.isExternalAudio = false;
     this.externalAudioOffset = 0;
@@ -45,7 +46,7 @@ export default class PlayerController {
    * @param {string|boolean} audioPath
    * @param {[number, number]} videoFrameSize
    */
-  setMedia({videoPath, audioPath = false, videoFrameSize = false}) {
+  setMedia({videoPath, audioPath = false, audioIndex = 0, videoFrameSize = false}) {
     this.videoFrameSize = videoFrameSize;
 
     this.video.playlist.clear();
@@ -55,6 +56,12 @@ export default class PlayerController {
 
     this.isExternalAudio = !!audioPath;
     this.isExternalAudio && this.audio.playlist.add(audioPath);
+
+    if (!this.isExternalAudio) {
+      this.audioTrackIndex = audioIndex + 1;
+    }
+
+    window.plr = this.video;
 
     this.setVolume(this.volume);
     this._resizeCanvas();
@@ -188,6 +195,10 @@ export default class PlayerController {
       if (this.videoFrameSize === false) {
         this.videoFrameSize = [frameWidth, frameHeight];
         this._resizeCanvas();
+      }
+
+      if (!this.isExternalAudio) {
+        this.video.audio.track = this.audioTrackIndex;
       }
     };
   }

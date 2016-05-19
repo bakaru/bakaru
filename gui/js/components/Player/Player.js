@@ -312,8 +312,6 @@ export default class Player extends Component {
       }
     }
 
-    console.log(suitableMedia);
-
     this.player.setMedia(suitableMedia);
     this.setState({ title: `${entry.title} - ${episode.title}` });
   }
