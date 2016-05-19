@@ -73,13 +73,13 @@ function getSubTemplate () {
 }
 
 /**
- * @typedef {{id: string, ext: string, name: string, path: string, filename: string, duration: string|boolean}} Episode
+ * @typedef {{id: string, ext: string, title: string, path: string, filename: string, duration: string|boolean}} Episode
  */
 function getEpisodeTemplate () {
   return {
     id: '',
     ext: '',
-    name: '',
+    title: '',
     path: '',
     filename: '',
     duration: false

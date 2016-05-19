@@ -127,8 +127,8 @@ class FolderReader {
       const originalExt = extname(episodePath);
 
       const ext = originalExt.replace('.', '').toLowerCase();
-      const title = basename(episodePath, `.${originalExt}`);
-      const filename = title;
+      const title = basename(episodePath, extname(episodePath));
+      const filename = basename(episodePath);
       const id = sha224(title);
 
       return {
