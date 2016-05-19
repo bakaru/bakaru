@@ -12,6 +12,11 @@ const levenshtein = require('fast-levenshtein').get;
 module.exports = function isAnimeFolder(classifiedItems) {
   const videos = classifiedItems.videos.slice().sort(naturalSort);
   const videosLength = videos.length;
+
+  if (videosLength === 0) {
+    return false;
+  }
+
   const distances = [];
   const pairs = [];
   const percentile = .9;
