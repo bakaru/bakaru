@@ -432,6 +432,10 @@ export default class Player extends Component {
       this.actions.focusOnLibrary();
       this.exitFullScreen();
     }));
+    Mousetrap.bind('pageup', () => this.isFocused && this.prev());
+    Mousetrap.bind('pagedown', () => this.isFocused && this.next());
+    Mousetrap.bind('ctrl+left', () => this.isFocused && this.setTime(this.state.time - 10000));
+    Mousetrap.bind('ctrl+right', () => this.isFocused && this.setTime(this.state.time + 10000));
   }
 
   /**
