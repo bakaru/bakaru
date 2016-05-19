@@ -119,17 +119,6 @@ export default class Entry extends Component {
    * Play all button handler
    */
   handlePlayAllClick() {
-    let dub = false;
-    let sub = false;
-
-    if (this.state.dub !== false) {
-      dub = this.entry.dubs.get(this.state.dub);
-    }
-
-    if (this.state.sub !== false) {
-      sub = this.entry.subs.get(this.state.sub);
-    }
-
     const playlist = [];
 
     this.entry.episodes.forEach((episode, episodeId) => {
@@ -140,23 +129,6 @@ export default class Entry extends Component {
         subId: this.state.sub,
         videoFrameSize: [this.entry.width, this.entry.height]
       });
-
-      const item = {
-        episodeId,
-        title: `${this.entry.title} - ${episode.title}`,
-        videoPath: `file:///${episode.path}`,
-        audioPath: false,
-        subtitlesPath: false,
-        videoFrameSize: [this.entry.width, this.entry.height]
-      };
-
-      if (dub !== false) {
-        item.audioPath = `file:///${dub.episodes.get(episodeId)}`;
-      }
-
-      if (sub !== false) {
-        item.subtitlesPath = `file:///${sub.episodes.get(episodeId)}`;
-      }
     });
 
     this.actions.playerSetPlaylist(playlist);
