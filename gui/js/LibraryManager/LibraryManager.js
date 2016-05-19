@@ -90,8 +90,6 @@ export default class LibraryManager {
   constructor (store) {
     this.store = store;
 
-    console.log(this.store);
-
     /**
      * @type {Map.<string, Anime>}
      */

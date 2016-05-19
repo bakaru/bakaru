@@ -25,7 +25,24 @@ export default class Entry extends Component {
       eps: []
     };
 
+    /**
+     * @type {Anime|boolean}
+     */
+    this.entry = false;
+
+    this.mounted = false;
+
     this.componentWillReceiveProps(props);
+  }
+
+  /**
+   * Fuck off react, plz
+   */
+  componentDidMount() {
+    this.mounted = true;
+
+    // Uh-hu, wut?!
+    this.componentWillReceiveProps(this);
   }
 
   /**
@@ -37,14 +54,12 @@ export default class Entry extends Component {
     this.entry = props.entry;
     this.actions = props.actions;
 
-    if (this.entry !== false) {
+    if (this.entry !== false && this.mounted) {
       this.setState({
-        dub: this.entry.dubs[0]
-          ? this.entry.dubs[0].id
+        dub: this.entry.dubs.size
+          ? [...this.entry.dubs.keys()][0]
           : false,
-        sub: this.entry.subs[0]
-          ? this.entry.subs[0].id
-          : false,
+        sub: false, // LETS NOT, OK?!
         eps: []
       });
     }
@@ -58,8 +73,6 @@ export default class Entry extends Component {
   render() {
     if (this.entry === false) {
       return this.renderPlaceholder();
-    } else {
-      console.log('Entry', this.entry);
     }
 
     const episodes = this.renderEps(this.entry.episodes);
@@ -110,33 +123,40 @@ export default class Entry extends Component {
     let sub = false;
 
     if (this.state.dub !== false) {
-      dub = this.entry.dubs.filter(dub => dub.id === this.state.dub)[0];
+      dub = this.entry.dubs.get(this.state.dub);
     }
 
     if (this.state.sub !== false) {
-      sub = this.entry.subs.filter(sub => sub.id === this.state.sub)[0];
+      sub = this.entry.subs.get(this.state.sub);
     }
 
     const playlist = [];
 
-    this.entry.episodes.map((episode, index) => {
+    this.entry.episodes.forEach((episode, episodeId) => {
+      playlist.push({
+        entryId: this.entry.id,
+        episodeId: episodeId,
+        dubId: this.state.dub,
+        subId: this.state.sub,
+        videoFrameSize: [this.entry.width, this.entry.height]
+      });
+
       const item = {
-        title: `${this.entry.title} - ${episode.name}`,
+        episodeId,
+        title: `${this.entry.title} - ${episode.title}`,
         videoPath: `file:///${episode.path}`,
         audioPath: false,
         subtitlesPath: false,
-        videoFrameSize: [this.entry.media.width, this.entry.media.height]
+        videoFrameSize: [this.entry.width, this.entry.height]
       };
 
       if (dub !== false) {
-        item.audioPath = `file:///${dub.files[index]}`;
+        item.audioPath = `file:///${dub.episodes.get(episodeId)}`;
       }
 
       if (sub !== false) {
-        item.subtitlesPath = `file:///${sub.files[index]}`;
+        item.subtitlesPath = `file:///${sub.episodes.get(episodeId)}`;
       }
-
-      playlist.push(item);
     });
 
     this.actions.playerSetPlaylist(playlist);
@@ -156,9 +176,13 @@ export default class Entry extends Component {
   /**
    * Handles sub select
    *
-   * @param {string} sub
+   * @param {string|boolean} sub
    */
   handleSubSelect(sub) {
+    if (sub === this.state.sub) {
+      sub = false;
+    }
+
     this.setState({ sub });
   }
 

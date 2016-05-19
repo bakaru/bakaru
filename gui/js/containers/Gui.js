@@ -17,6 +17,7 @@ const Gui = (props) => (
       focus={ props.focus }
       actions={ props.actions }
       settings={ props.settings }
+      library={ props.library }
       { ...props.player }
     />
     <Header

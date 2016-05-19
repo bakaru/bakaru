@@ -21,6 +21,11 @@ export default class Player extends Component {
     this.wcjs = props.wcjs;
     this.player = null;
     this.actions = props.actions;
+
+    /**
+     * @type {{entries: Map.<string, Anime>}}
+     */
+    this.library = props.library;
     this.playlist = [];
     this.settings = props.settings;
     this.isFocused = false;
@@ -52,9 +57,10 @@ export default class Player extends Component {
    * @param {{playlist: [], action: string, actions: Object.<string, function>}} props
    */
   componentWillReceiveProps(props) {
-    const { playlist, settings } = props;
+    const { playlist, settings, library } = props;
 
     this.settings = settings;
+    this.library = library;
 
     if (this.player === null) {
       return;
@@ -274,11 +280,42 @@ export default class Player extends Component {
   /**
    * Sets currently playing media
    *
-   * @param media
+   * @param {{entryId: string, episodeId: string, dubId: string, subId: string|boolean, videoFrameSize: Array.<number>}} media
    */
   setMedia(media) {
-    this.player.setMedia(media);
-    this.setState({ title: media.title });
+    const entry = this.library.entries.get(media.entryId);
+    const episode = entry.episodes.get(media.episodeId);
+    const dub = entry.dubs.get(media.dubId);
+
+    const suitableMedia = {
+      videoPath: `file:///${episode.path}`,
+      audioPath: false,
+      audioIndex: 0,
+      subtitlesPath: false,
+      subtitlesIndex: 0,
+      videoFrameSize: media.videoFrameSize
+    };
+
+    if (dub.embedded) {
+      suitableMedia.audioIndex = parseInt(dub.embeddedIndex);
+    } else {
+      suitableMedia.audioPath = `file:///${dub.episodes.get(media.episodeId)}`;
+    }
+
+    if (media.subId) {
+      const sub = entry.subs.get(media.subId);
+
+      if (sub.embedded) {
+        suitableMedia.subtitlesIndex = parseInt(sub.embeddedIndex);
+      } else {
+        suitableMedia.subtitlesPath = `file:///${sub.episodes.get(media.episodeId)}`;
+      }
+    }
+
+    console.log(suitableMedia);
+
+    this.player.setMedia(suitableMedia);
+    this.setState({ title: `${entry.title} - ${episode.title}` });
   }
 
   /**

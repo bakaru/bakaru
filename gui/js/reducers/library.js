@@ -49,6 +49,27 @@ function restoreFromCache() {
   return entries;
 }
 
+function restoreSelectedAnimeFolderId() {
+  if (typeof window.localStorage['selected'] !== "undefined") {
+    const selectedAnimeFolderId = window.localStorage['selected'];
+
+    if (entriesIds.has(selectedAnimeFolderId)) {
+      return selectedAnimeFolderId;
+    }
+  }
+
+  return false;
+}
+
+/**
+ * @param {string} id
+ */
+function updateSelectedAnimeFolderId(id) {
+  setImmediate(() => {
+    window.localStorage['selected'] = id;
+  });
+}
+
 /**
  * @param {LibraryState} state
  * @param {AnimeFolder} animeFolder
@@ -72,6 +93,8 @@ function updateAnimeFolder(state, animeFolder) {
  * @returns {{selected: *}}
  */
 function openAnimeFolder(state, animeFolderId) {
+  updateSelectedAnimeFolderId(animeFolderId);
+
   return {
     ...state,
     selected: animeFolderId
@@ -82,8 +105,8 @@ function openAnimeFolder(state, animeFolderId) {
  * @type {LibraryState}
  */
 const initialState = {
-  selected: false,
-  entries: restoreFromCache()
+  entries: restoreFromCache(),
+  selected: restoreSelectedAnimeFolderId()
 };
 
 /**
