@@ -9,10 +9,20 @@ const initialSettings = {
 };
 // Default settings ====================================================================================================
 
+/**
+ * This is not a java, this is not a java they said
+ *
+ * @param settings
+ */
 function persist(settings) {
   window.localStorage['settings'] = JSON.stringify(settings);
 }
 
+/**
+ * This is not a java, this is not a java they said
+ *
+ * @returns {{player_pause_on_click: boolean}}
+ */
 function hydrate() {
   if (typeof window.localStorage['settings'] === "undefined") {
     return initialSettings;
