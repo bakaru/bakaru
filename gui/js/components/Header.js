@@ -1,9 +1,15 @@
 import React from 'react';
 import BrowserWindow from 'utils/BrowserWindow';
 
+import classname from 'classnames';
+
 export default function Header({ actions, playerActive, focus }) {
+  const headerClass = classname({
+    hidden: focus !== 'library'
+  });
+
   return (
-    <header className={ focus === 'player' ? 'hidden' : '' }>
+    <header className={ headerClass }>
       <title>BAKARU バカル</title>
       <tabs>
         <tab onClick={ () => { actions.focusOnLibrary() } }>

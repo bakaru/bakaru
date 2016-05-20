@@ -1,0 +1,84 @@
+@import "variables";
+
+settings {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  background: $backgroundColour;
+
+  title {
+    display: block;
+    padding: $baseInnerPadding $baseInnerPadding*1.68 $baseInnerPadding*1.68 $baseInnerPadding*1.68;
+    font-size: 20px;
+  }
+
+  tabs {
+    width: 150px;
+    background: darken($backgroundColour, 5%);
+
+    tab {
+      position: relative;
+      display: block;
+      padding: $baseInnerPadding $baseInnerPadding*1.68;
+      border-bottom: solid 1px darken($backgroundColour, 5%);
+      font-size: 18px;
+      color: $mainColour;
+
+      &.shown:before {
+        display: block;
+        content: '';
+        position: absolute;
+        top: $baseInnerPadding + 7;
+        left: -5px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: $mainColour;
+      }
+
+      &:hover {
+        background: rgba($mainColour, .05);
+      }
+    }
+  }
+
+  pane {
+    display: none;
+    padding: $baseInnerPadding $baseInnerPadding*1.68;
+
+    title {
+      padding-top: 0;
+      padding-left: 0;
+    }
+
+    &.shown {
+      display: block;
+    }
+  }
+
+  &.hidden {
+    display: none;
+  }
+
+  exit {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: $headerHeight/2;
+    height: $headerHeight/2;
+    font-size: 20px;
+    text-align: center;
+    line-height: 1.7;
+    color: rgba(0, 0, 0, .8);
+    transition: all .2s ease;
+
+    &:hover {
+      color: rgba(0, 0, 0, 1);
+    }
+  }
+}

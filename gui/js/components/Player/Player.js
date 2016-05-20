@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import deepEqual from 'deep-equal';
 import Mousetrap from 'mousetrap';
+import classname from 'classnames';
 
 import PowerSaverBlocker from 'utils/PowerSaverBlocker';
 import PlayerController from './PlayerController';
@@ -121,8 +122,12 @@ export default class Player extends Component {
     const time = this.secondsToHms(this.state.time/1000);
     const length = this.secondsToHms(this.state.length/1000);
 
+    const playerClass = classname({
+      'ui-hidden': this.state.uiHidden
+    });
+
     return (
-      <player className={ this.state.uiHidden ? 'ui-hidden' : '' } onMouseMove={ ::this.showUi } ref="player">
+      <player className={ playerClass } onMouseMove={ ::this.showUi } ref="player">
         <canvas-wrapper onClick={ ::this.handleCanvasClick } onDoubleClick={ ::this.toggleFullScreen }>
           <canvas ref="canvas" className="canvas"></canvas>
         </canvas-wrapper>

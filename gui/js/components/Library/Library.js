@@ -2,6 +2,8 @@ import React from 'react';
 import Item from './Item';
 import Entry from './Entry';
 
+import classname from 'classnames';
+
 /**
  * @param folder
  * @param folders
@@ -42,8 +44,12 @@ export default function Library(props) {
     );
   }
 
+  const libraryClass = classname({
+    hidden: focus !== 'library'
+  });
+
   return (
-    <library className={ focus === 'player' ? 'hidden' : '' }>
+    <library className={ libraryClass }>
       <list>
         { entriesList }
         <adder onClick={ () => props.openSelectFolderDialog() }>

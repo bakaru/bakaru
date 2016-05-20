@@ -8,6 +8,7 @@ import * as actions from 'actions';
 import Player from 'components/Player';
 import Header from 'components/Header';
 import Library from 'components/Library';
+import Settings from 'components/Settings';
 
 const Gui = (props) => (
   <gui>
@@ -27,6 +28,11 @@ const Gui = (props) => (
       playerActive={ props.player.playlist.length > 0 }
     />
     <Library { ...props } />
+    <Settings
+      focus={ props.focus }
+      actions={ props.actions }
+      settings={ props.settings }
+    />
   </gui>
 );
 

@@ -96,7 +96,7 @@ export function focusOnSettings() {
 
 // Settings
 export const SETTINGS_SAVE = 'SETTINGS_SAVE';
-export const SETTINGS_RESET = 'SETTINGS_RESTET';
+export const SETTINGS_RESET = 'SETTINGS_RESET';
 
 export function settingsSave(setting, value) {
   return {
