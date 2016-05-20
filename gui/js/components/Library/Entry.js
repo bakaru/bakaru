@@ -92,10 +92,8 @@ export default class Entry extends Component {
           </btn>
         </actions>
 
-        <list-row>
-          { subs }
+          { this.entry.subs.size ? subs : '' }
           { dubs }
-        </list-row>
 
         <list>
           <title>Episodes</title>

@@ -21,9 +21,6 @@ export default function Header({ actions, playerActive, focus }) {
         <tab onClick={ () => { actions.focusOnSettings() } }>
           <i className="fa fa-wrench"></i> Settings
         </tab>
-        <tab className="reload-tab" onClick={ () => window.location.reload() }>
-          <i className="fa fa-refresh"></i> Reload app
-        </tab>
       </tabs>
       <controls>
         <minimize onClick={ () => BrowserWindow.minimize() }>
