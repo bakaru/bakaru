@@ -16,7 +16,7 @@ function focusOnSettings() {
  * @param {string} state
  * @param {{type: string}} action
  */
-export default function focus(state = 'library', action) {
+export default function focus(state = 'settings', action) {
   switch(action.type) {
     case actions.FOCUS_ON_LIBRARY:
       return focusOnLibrary();

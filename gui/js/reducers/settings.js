@@ -9,11 +9,27 @@ const initialSettings = {
 };
 // Default settings ====================================================================================================
 
+function persist(settings) {
+  window.localStorage['settings'] = JSON.stringify(settings);
+}
+
+function hydrate() {
+  if (typeof window.localStorage['settings'] === "undefined") {
+    return initialSettings;
+  } else {
+    return JSON.parse(window.localStorage['settings']);
+  }
+}
+
 function save(state, setting, value) {
-  return {
+  const settings = {
     ...state,
     [setting]: value
   };
+
+  persist(settings);
+
+  return settings;
 }
 
 function reset(state, setting) {
@@ -23,7 +39,7 @@ function reset(state, setting) {
   };
 }
 
-export default function settings(state = initialSettings, action) {
+export default function settings(state = hydrate(), action) {
   switch(action.type) {
     case SETTINGS_SAVE:
       return save(state, action.setting, action.value);

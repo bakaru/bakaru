@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 
+import Checkbox from './elements/Checkbox';
+
 import classname from 'classnames';
 
 export default class Settings extends Component {
+
+  /**
+   * Ctor
+   * @param props
+   */
   constructor(props) {
     super(props);
 
@@ -16,7 +23,13 @@ export default class Settings extends Component {
     this.componentWillReceiveProps(props);
   }
 
+  /**
+   * Do you even props bruh?
+   *
+   * @param props
+   */
   componentWillReceiveProps(props) {
+    this.settings = props.settings;
     this.isFocused = props.focus === 'settings';
 
     if (!this.isFocused) {
@@ -24,6 +37,9 @@ export default class Settings extends Component {
     }
   }
 
+  /**
+   * Blur settings to previous screen
+   */
   blur () {
     switch (this.blurTo) {
       case 'library':
@@ -36,6 +52,11 @@ export default class Settings extends Component {
     }
   }
 
+  /**
+   * Render all the things
+   *
+   * @returns {XML}
+   */
   render() {
     const settingsClass = classname({
       hidden: !this.isFocused
@@ -57,31 +78,74 @@ export default class Settings extends Component {
           </tab>
         </tabs>
 
-        { [this.renderPlayerPane(), this.renderSettingsPane()] }
+        { [this.renderPlayerPane(), this.renderLibraryPane()] }
       </settings>
     );
   }
 
+  /**
+   * Render player settings pane
+   *
+   * @returns {XML}
+   */
   renderPlayerPane() {
     return (
       <pane className={ this.state.pane === 'player' ? 'shown' : '' } key="player">
         <title>
           Player
         </title>
-        settings for player go here
+
+        <row onClick={ () => this.save('player_pause_on_click', !this.settings.player_pause_on_click) }>
+          <name>Pause on click { this.path() }</name>
+          <control>
+            <Checkbox checked={ this.settings.player_pause_on_click }/>
+          </control>
+        </row>
       </pane>
     );
   }
 
-  renderSettingsPane() {
+  /**
+   * Render library settings pane
+   *
+   * @returns {XML}
+   */
+  renderLibraryPane() {
     return (
       <pane className={ this.state.pane === 'library' ? 'shown' : '' } key="library">
         <title>
           Library
         </title>
 
-        settings for library go here
+        <row>
+          <name>
+            MB MAL settings will be here, I dunno yet
+          </name>
+        </row>
       </pane>
     );
+  }
+
+  /**
+   * Lol
+   *
+   * @returns {XML}
+   */
+  path() {
+    return (
+      <path>
+        ................................................................................................................
+      </path>
+    );
+  }
+
+  /**
+   * Save setting value
+   *
+   * @param settingName
+   * @param value
+   */
+  save(settingName, value) {
+    this.actions.settingsSave(settingName, value);
   }
 }

@@ -15,3 +15,8 @@ $delimiterColour: #dedede;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+@mixin noUserSelect {
+  -webkit-user-select: none;
+  user-select: none;
+}

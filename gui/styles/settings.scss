@@ -10,6 +10,8 @@ settings {
   z-index: 4;
   background: $backgroundColour;
 
+  @include noUserSelect;
+
   title {
     display: block;
     padding: $baseInnerPadding $baseInnerPadding*1.68 $baseInnerPadding*1.68 $baseInnerPadding*1.68;
@@ -47,16 +49,38 @@ settings {
   }
 
   pane {
+    width: 100%;
     display: none;
-    padding: $baseInnerPadding $baseInnerPadding*1.68;
-
-    title {
-      padding-top: 0;
-      padding-left: 0;
-    }
 
     &.shown {
       display: block;
+    }
+
+    row {
+      width: 100%;
+      display: flex;
+      padding: $baseInnerPadding/1.68 $baseInnerPadding*1.68;
+
+      name {
+        width: 50%;
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+
+        path {
+          color: darken($backgroundColour, 15%);
+          font-size: 10px;
+        }
+      }
+
+      control {
+        display: block;
+        color: $mainColour;
+      }
+
+      &:hover {
+        background: darken($backgroundColour, 5%);
+      }
     }
   }
 
