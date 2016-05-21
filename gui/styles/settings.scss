@@ -74,8 +74,10 @@ settings {
       }
 
       control {
+        width: 50%;
         display: block;
         color: $mainColour;
+        margin-left: $baseInnerPadding;
       }
 
       &:hover {
@@ -103,6 +105,42 @@ settings {
 
     &:hover {
       color: rgba(0, 0, 0, 1);
+    }
+  }
+
+  /* Elements */
+
+  dropdown {
+    width: 100%;
+    display: block;
+    position: relative;
+
+    selected {
+      display: block;
+    }
+
+    items {
+      position: absolute;
+      display: none;
+      top: -$baseInnerPadding;
+      left: -$baseInnerPadding*1.68;
+      right: -$baseInnerPadding;
+      z-index: 10;
+      background: $backgroundColour;
+      box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+
+      &.opened {
+        display: block;
+      }
+
+      item {
+        display: block;
+        padding: $baseInnerPadding $baseInnerPadding*1.68;
+
+        &:hover {
+          background: darken($backgroundColour, 5%);
+        }
+      }
     }
   }
 }

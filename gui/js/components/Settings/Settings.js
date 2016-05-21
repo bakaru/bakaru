@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Checkbox from './elements/Checkbox';
+import Select from './elements/Select';
 
 import classname from 'classnames';
 
@@ -89,6 +90,13 @@ export default class Settings extends Component {
    * @returns {XML}
    */
   renderPlayerPane() {
+    const afterPlayActions = new Map([
+      ['next', 'Play next in playlist'],
+      ['nothing', 'Do nothing'],
+      ['library', 'Go back to library'],
+      ['wait', 'Wait 7 seconds and play next in playlist']
+    ]);
+
     return (
       <pane className={ this.state.pane === 'player' ? 'shown' : '' } key="player">
         <title>
@@ -99,6 +107,17 @@ export default class Settings extends Component {
           <name>Pause on click { this.path() }</name>
           <control>
             <Checkbox checked={ this.settings.player_pause_on_click }/>
+          </control>
+        </row>
+
+        <row>
+          <name>After media end { this.path() }</name>
+          <control>
+            <Select
+              onSelect={ (actionId) => this.save('player_after_play_action', actionId) }
+              options={ afterPlayActions }
+              selected={ this.settings.player_after_play_action }
+            />
           </control>
         </row>
       </pane>

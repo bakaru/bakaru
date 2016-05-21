@@ -5,7 +5,8 @@ import {
 
 // Default settings ====================================================================================================
 const initialSettings = {
-  player_pause_on_click: true
+  player_pause_on_click: true,
+  player_after_play_action: 'next'
 };
 // Default settings ====================================================================================================
 
