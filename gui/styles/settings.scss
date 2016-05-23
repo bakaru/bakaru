@@ -138,7 +138,7 @@ settings {
         padding: $baseInnerPadding $baseInnerPadding*1.68;
 
         &:hover {
-          background: darken($backgroundColour, 5%);
+          background: rgba($mainColour, .05);
         }
       }
     }

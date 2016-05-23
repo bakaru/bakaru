@@ -44,7 +44,8 @@ export default class Player extends Component {
       playing: false,
       uiHidden: false,
       buffering: false,
-      fullscreen: false
+      fullscreen: false,
+      playlistOpen: false
     };
 
     this.uiHideTimer = null;
@@ -123,7 +124,24 @@ export default class Player extends Component {
     const length = this.secondsToHms(this.state.length/1000);
 
     const playerClass = classname({
-      'ui-hidden': this.state.uiHidden
+      'ui-hidden': this.state.uiHidden && !this.state.playlistOpen
+    });
+
+    const playlistClass = classname({
+      open: this.state.playlistOpen
+    });
+
+    const playlist = this.playlist.map((media, index) => {
+      const entry = this.library.entries.get(media.entryId);
+      const episode = entry.episodes.get(media.episodeId);
+
+      return (
+        <item className={ this.currentPlaylistItem === index ? 'current' : '' } onClick={ () => this.selectPlaylistItem(index) } key={ entry.id + episode.id }>
+          { entry.title }
+          &nbsp;-&nbsp;
+          { episode.title }
+        </item>
+      );
     });
 
     return (
@@ -145,6 +163,9 @@ export default class Player extends Component {
             <i className="fa fa-reorder" />
           </btn>
         </nav>
+        <playlist className={ playlistClass }>
+          { playlist }
+        </playlist>
         <controls>
           <progress-bar onClick={ ::this.seek }>
             <track style={{ width: `${currentPlaybackPercent}%` }} />
@@ -178,6 +199,15 @@ export default class Player extends Component {
                   { length }
                 </time>
               </times>
+              <btn className="subs" onClick={ ::this.openSubsSelector }>
+                <i className="fa fa-fw fa-text-width"/>
+              </btn>
+              <btn className="dubs" onClick={ ::this.openDubsSelector }>
+                <i className="fa fa-fw fa-microphone"/>
+              </btn>
+              <btn className="playlist" onClick={ ::this.togglePlaylist }>
+                <i className="fa fa-fw fa-indent"/>
+              </btn>
               <btn className="fullscreen" onClick={ ::this.toggleFullScreen }>
                 <i className={ `fa fa-${this.state.fullscreen ? 'compress' : 'expand'}` } />
               </btn>
@@ -186,6 +216,24 @@ export default class Player extends Component {
         </controls>
       </player>
     );
+  }
+
+  openSubsSelector() {
+
+  }
+
+  openDubsSelector() {
+
+  }
+
+  togglePlaylist() {
+    this.setState({ playlistOpen: !this.state.playlistOpen });
+  }
+
+  selectPlaylistItem(index) {
+    this.setState({ playlistOpen: false });
+    this.setMedia(this.playlist[this.currentPlaylistItem = parseInt(index)]);
+    this.play();
   }
 
   /**
