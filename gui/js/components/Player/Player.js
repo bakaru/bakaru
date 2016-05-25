@@ -241,7 +241,7 @@ export default class Player extends Component {
                   { subs }
                 </dropdown>
               </btn>
-              <btn className="dubs" onClick={ ::this.toggleDubsSelector }>
+              <btn className="dubs" onClick={ ::this.toggleDubsSelector } disabled={ dubs.length <= 1 }>
                 <i className="fa fa-fw fa-microphone"/>
                 <dropdown className={ this.state.dubsOpen ? 'open' : '' }>
                   { dubs }
