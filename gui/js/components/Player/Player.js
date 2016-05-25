@@ -45,7 +45,9 @@ export default class Player extends Component {
       uiHidden: false,
       buffering: false,
       fullscreen: false,
-      playlistOpen: false
+      playlistOpen: false,
+      subsOpen: false,
+      dubsOpen: false
     };
 
     this.uiHideTimer = null;
@@ -124,7 +126,7 @@ export default class Player extends Component {
     const length = this.secondsToHms(this.state.length/1000);
 
     const playerClass = classname({
-      'ui-hidden': this.state.uiHidden && !this.state.playlistOpen
+      'ui-hidden': this.state.uiHidden && !(this.state.playlistOpen || this.state.subsOpen || this.state.dubsOpen)
     });
 
     const playlistClass = classname({
@@ -143,6 +145,32 @@ export default class Player extends Component {
         </item>
       );
     });
+
+    const subs = [];
+    const dubs = [];
+
+    if (this.playlist.length > 0) {
+      const media = this.playlist[this.currentPlaylistItem];
+      const entry = this.library.entries.get(media.entryId);
+
+      if (media.subId) {
+        entry.subs.forEach(sub => {
+          subs.push(
+            <item className={ media.subId === sub.id ? 'current' : '' } onClick={ () => this.selectSub(sub.id) } key={ sub.id }>
+              { sub.title }
+            </item>
+          );
+        });
+      }
+
+      entry.dubs.forEach(dub => {
+        dubs.push(
+          <item className={ media.dubId === dub.id ? 'current' : '' } onClick={ () => this.selectDub(dub.id) } key={ dub.id }>
+            { dub.title }
+          </item>
+        );
+      });
+    }
 
     return (
       <player className={ playerClass } onMouseMove={ ::this.showUi } ref="player">
@@ -199,11 +227,17 @@ export default class Player extends Component {
                   { length }
                 </time>
               </times>
-              <btn className="subs" onClick={ ::this.openSubsSelector }>
+              <btn className="subs" onClick={ ::this.toggleSubsSelector } disabled={ subs.length <= 0 }>
                 <i className="fa fa-fw fa-text-width"/>
+                <dropdown className={ this.state.subsOpen ? 'open' : '' }>
+                  { subs }
+                </dropdown>
               </btn>
-              <btn className="dubs" onClick={ ::this.openDubsSelector }>
+              <btn className="dubs" onClick={ ::this.toggleDubsSelector }>
                 <i className="fa fa-fw fa-microphone"/>
+                <dropdown className={ this.state.dubsOpen ? 'open' : '' }>
+                  { dubs }
+                </dropdown>
               </btn>
               <btn className="playlist" onClick={ ::this.togglePlaylist }>
                 <i className="fa fa-fw fa-indent"/>
@@ -218,18 +252,62 @@ export default class Player extends Component {
     );
   }
 
-  openSubsSelector() {
-
+  /**
+   * Toggle subs selector
+   */
+  toggleSubsSelector() {
+    this.setState({
+      subsOpen: !this.state.subsOpen,
+      dubsOpen: false,
+      playlistOpen: false
+    });
   }
 
-  openDubsSelector() {
-
+  /**
+   * Toggle dubs selector
+   */
+  toggleDubsSelector() {
+    this.setState({
+      dubsOpen: !this.state.dubsOpen,
+      subsOpen: false,
+      playlistOpen: false
+    });
   }
 
+  /**
+   * Toggle playlist
+   */
   togglePlaylist() {
-    this.setState({ playlistOpen: !this.state.playlistOpen });
+    this.setState({
+      playlistOpen: !this.state.playlistOpen,
+      subsOpen: false,
+      dubsOpen: false
+    });
   }
 
+  /**
+   * Select sub
+   *
+   * @param {string} id
+   */
+  selectSub(id) {
+
+  }
+
+  /**
+   * Select dub
+   *
+   * @param {string} id
+   */
+  selectDub(id) {
+
+  }
+
+  /**
+   * Select media from playlist
+   *
+   * @param {number} index
+   */
   selectPlaylistItem(index) {
     this.setState({ playlistOpen: false });
     this.setMedia(this.playlist[this.currentPlaylistItem = parseInt(index)]);
@@ -240,6 +318,14 @@ export default class Player extends Component {
    * Handle click on canvas
    */
   handleCanvasClick() {
+    if (this.state.playlistOpen || this.state.subsOpen || this.state.dubsOpen) {
+      this.setState({
+        subsOpen: false,
+        dubsOpen: false,
+        playlistOpen: false
+      });
+    }
+
     if (this.settings.player_pause_on_click) {
       this.togglePause();
     }
