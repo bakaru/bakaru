@@ -61,10 +61,33 @@ export default class PlayerController {
       this.audioTrackIndex = audioIndex + 1;
     }
 
-    window.plr = this.video;
-
     this.setVolume(this.volume);
     this._resizeCanvas();
+  }
+
+  /**
+   * Swap audio track
+   *
+   * @param {string|boolean} audioPath
+   * @param {number} audioIndex
+   */
+  swapAudio(audioPath = false, audioIndex = 0) {
+    this.audio.playlist.clear();
+    this.isExternalAudio = !!audioPath;
+
+    if (audioPath) {
+      this.audio.playlist.add(audioPath);
+
+      if (this.video.state === 3) {
+        this.audio.play();
+      }
+
+      this.setTime(this.video.time);
+    } else {
+      this.video.audio.track = this.audioTrackIndex = audioIndex + 1;
+    }
+
+    this.setVolume(this.volume);
   }
 
   /**

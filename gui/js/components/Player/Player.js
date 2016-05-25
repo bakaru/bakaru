@@ -47,7 +47,9 @@ export default class Player extends Component {
       fullscreen: false,
       playlistOpen: false,
       subsOpen: false,
-      dubsOpen: false
+      dubsOpen: false,
+      subId: false,
+      dubId: false
     };
 
     this.uiHideTimer = null;
@@ -139,9 +141,15 @@ export default class Player extends Component {
 
       return (
         <item className={ this.currentPlaylistItem === index ? 'current' : '' } onClick={ () => this.selectPlaylistItem(index) } key={ entry.id + episode.id }>
-          { entry.title }
-          &nbsp;-&nbsp;
-          { episode.title }
+          <entry-title>
+            { entry.title }
+          </entry-title>
+          <delimiter>
+            &nbsp;-&nbsp;
+          </delimiter>
+          <episode-title>
+            { episode.title }
+          </episode-title>
         </item>
       );
     });
@@ -156,7 +164,7 @@ export default class Player extends Component {
       if (media.subId) {
         entry.subs.forEach(sub => {
           subs.push(
-            <item className={ media.subId === sub.id ? 'current' : '' } onClick={ () => this.selectSub(sub.id) } key={ sub.id }>
+            <item className={ this.state.subId === sub.id ? 'current' : '' } onClick={ () => this.selectSub(sub.id) } key={ entry.id + sub.id }>
               { sub.title }
             </item>
           );
@@ -165,7 +173,7 @@ export default class Player extends Component {
 
       entry.dubs.forEach(dub => {
         dubs.push(
-          <item className={ media.dubId === dub.id ? 'current' : '' } onClick={ () => this.selectDub(dub.id) } key={ dub.id }>
+          <item className={ this.state.dubId === dub.id ? 'current' : '' } onClick={ () => this.selectDub(dub.id) } key={ entry.id + dub.id }>
             { dub.title }
           </item>
         );
@@ -300,7 +308,17 @@ export default class Player extends Component {
    * @param {string} id
    */
   selectDub(id) {
+    const media = this.playlist[this.currentPlaylistItem];
+    const entry = this.library.entries.get(media.entryId);
+    const dub = entry.dubs.get(id);
 
+    this.setState({ dubId: id });
+
+    if (dub.embedded) {
+      this.player.swapAudio(false, parseInt(dub.embeddedIndex));
+    } else {
+      this.player.swapAudio(`file:///${dub.episodes.get(media.episodeId)}`);
+    }
   }
 
   /**
@@ -452,7 +470,11 @@ export default class Player extends Component {
     }
 
     this.player.setMedia(suitableMedia);
-    this.setState({ title: `${entry.title} - ${episode.title}` });
+    this.setState({
+      title: `${entry.title} - ${episode.title}`,
+      dubId: media.dubId,
+      subId: media.subId
+    });
   }
 
   /**
