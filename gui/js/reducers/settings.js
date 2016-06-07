@@ -6,7 +6,12 @@ import {
 // Default settings ====================================================================================================
 const initialSettings = {
   player_pause_on_click: true,
-  player_after_play_action: 'next'
+  player_after_play_action: 'next',
+  
+  interface_main_colour: 'hsl(335, 100%, 50%)',
+  interface_main_colour_light: 'hsla(335, 100%, 50%, .4)',
+  interface_main_colour_contrast: 'rgb(255, 255, 255)',
+  interface_bg_colour: '#fefefe'
 };
 // Default settings ====================================================================================================
 
@@ -28,7 +33,7 @@ function hydrate() {
   if (typeof window.localStorage['settings'] === "undefined") {
     return initialSettings;
   } else {
-    return JSON.parse(window.localStorage['settings']);
+    return Object.assign({}, initialSettings, JSON.parse(window.localStorage['settings']));
   }
 }
 

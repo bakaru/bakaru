@@ -52,11 +52,11 @@ entry {
 
     btn {
       display: inline-block;
-      border: solid 1px $mainColour;
+      border: solid 1px var(--main-colour);
       border-right: none;
 
       &:last-child {
-        border-right: solid 1px $mainColour;
+        border-right: solid 1px var(--main-colour);
         border-top-right-radius: 2px;
         border-bottom-right-radius: 2px;
       }
@@ -109,7 +109,7 @@ entry {
       }
 
       &.selected:before {
-        background-color: $mainColour;
+        background-color: var(--main-colour);
         transition: all .2s ease;
       }
 
@@ -144,7 +144,7 @@ entry {
 
   btn {
     flex-grow: 1;
-    color: $mainColour;
+    color: var(--main-colour);
     padding: $baseInnerPadding $baseInnerPadding*1.68;
     background-color: transparent;
     border: none;
@@ -158,7 +158,7 @@ entry {
     }
 
     &:hover {
-      background-color: lighten($mainColour, 40%);
+      background-color: var(--main-colour-light);
     }
     &:disabled {
       opacity: .8;

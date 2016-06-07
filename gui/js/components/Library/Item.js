@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import classname from 'classnames';
 
 import { openAnimeFolder } from 'actions';
 
@@ -13,9 +14,12 @@ class Item extends Component {
     const folder = getAnimeFolder(id);
     const isOpened = selectedEntryId === id;
     const summary = [];
+    
+    let isScanning = false;
 
     if (folder.state.scanning || folder.state.subScanning || folder.state.mediainfoScanning) {
       summary[summary.length] = `Scanning in progress`;
+      isScanning = true;
     }
     if (folder.episodes.size > 0) {
       summary[summary.length] = `Episodes: ${folder.episodes.size}`;
@@ -32,8 +36,13 @@ class Item extends Component {
 
     summary[summary.length] = `Quality: ${folder.quality}`;
 
+    const itemClass = classname({
+      opened: isOpened,
+      scanning: isScanning 
+    });
+
     return (
-      <item className={ isOpened ? 'opened' : '' } onClick={ () => selectEntry(id) }>
+      <item className={ itemClass } onClick={ () => selectEntry(id) }>
         <title title={ folder.title }>
           { folder.title }
         </title>

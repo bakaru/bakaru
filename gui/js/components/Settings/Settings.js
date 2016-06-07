@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import { ChromePicker } from 'react-color';
 import Checkbox from './elements/Checkbox';
 import Select from './elements/Select';
 
@@ -77,9 +78,12 @@ export default class Settings extends Component {
           <tab onClick={ () => this.setState({ pane: 'library' }) } className={ this.state.pane === 'library' ? 'shown' : '' }>
             Library
           </tab>
+          <tab onClick={ () => this.setState({ pane: 'interface' }) } className={ this.state.pane === 'interface' ? 'shown' : '' }>
+            Interface
+          </tab>
         </tabs>
 
-        { [this.renderPlayerPane(), this.renderLibraryPane()] }
+        { [this.renderPlayerPane(), this.renderLibraryPane(), this.renderInterfacePane()] }
       </settings>
     );
   }
@@ -140,6 +144,29 @@ export default class Settings extends Component {
           <name>
             MB MAL settings will be here, I dunno yet
           </name>
+        </row>
+      </pane>
+    );
+  }
+
+  renderInterfacePane() {
+    return (
+      <pane className={ this.state.pane === 'interface' ? 'shown' : '' } key="interface">
+        <title>
+          Interface
+        </title>
+
+        <row>
+          <name>
+            Main colo<b>u</b>r
+          </name>
+
+          <control>
+            <ChromePicker
+              color={ this.settings.interface_main_colour }
+              onChange={ ({ hex }) => this.save('interface_main_colour', hex) }
+            />
+          </control>
         </row>
       </pane>
     );

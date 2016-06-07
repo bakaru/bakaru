@@ -5,6 +5,14 @@
 @import "player";
 @import "settings";
 
+body {
+  --main-colour: $mainColour;
+  --main-colour-light: rgba($mainColour, .4);
+  --main-colour-contrast: $foregroundContrastColour;
+
+  --bg-colour: $backgroundColour;
+}
+
 * {
   cursor: default;
   box-sizing: border-box;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { openSelectFolderDialog } from 'ipc';
+import Color from 'color';
 
 import * as actions from 'actions';
 
@@ -10,7 +10,18 @@ import Header from 'components/Header';
 import Library from 'components/Library';
 import Settings from 'components/Settings';
 
-const Gui = (props) => (
+function renderStyle (settings) {
+  setImmediate(() => {
+    const mainColour = Color(settings.interface_main_colour);
+    const mainColourContrast = mainColour.light() ? Color('#333') : Color('#ededed');
+
+    window.document.body.style.setProperty('--main-colour', mainColour.hslString());
+    window.document.body.style.setProperty('--main-colour-light', mainColour.clearer(.8).hslString());
+    window.document.body.style.setProperty('--main-colour-contrast', mainColourContrast.hslString());
+  });
+}
+
+const Gui = (props) => (renderStyle(props.settings), (
   <gui>
     <dragger></dragger>
     <Player
@@ -34,7 +45,7 @@ const Gui = (props) => (
       settings={ props.settings }
     />
   </gui>
-);
+));
 
 /**
  * @param {{}} state

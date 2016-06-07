@@ -9,8 +9,9 @@ header {
 
   -webkit-user-select: none;
 
-  color: $foregroundContrastColour;
-  background: linear-gradient(45deg, #ff016b 0%,#cc0267 100%);
+  color: var(--main-colour-contrast);
+  background-color: var(--main-colour);
+  background-image: linear-gradient(45deg, rgba(0, 0, 0, .15) 0%, rgba(0, 0, 0, .35) 100%);
   transform: translateY(0);
   transition: all .2s ease;
 
@@ -46,7 +47,7 @@ header {
       display: block;
       height: $headerHeight/2;
       flex-grow: 1;
-      color: $foregroundContrastColour;
+      color: var(--main-colour-contrast);
       padding: 9px $baseInnerPadding*1.68 0 $baseInnerPadding*1.68;
       background-color: transparent;
       border: none;

@@ -132,7 +132,7 @@ player {
       position: relative;
       display: flex;
       padding: $baseInnerPadding $baseInnerPadding*1.68;
-      color: $foregroundContrastColour;
+      color: #eee;
       border-top: solid 1px $playerMainColour;
       transition: padding-left .2s ease;
 
@@ -310,6 +310,7 @@ player {
             border-bottom: solid 1px $playerMainColour;
             overflow: hidden;
             text-align: left;
+            color: #eee;
 
             @include ellipsis;
 

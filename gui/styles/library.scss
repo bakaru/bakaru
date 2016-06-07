@@ -27,7 +27,7 @@ library {
     overflow-y: scroll;
     border-right: solid 1px $delimiterColour;
 
-    item {
+    item {   
       position: relative;
       display: block;
       padding: $baseInnerPadding $baseInnerPadding*1.68;
@@ -43,7 +43,7 @@ library {
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        background-color: $mainColour;
+        background-color: var(--main-colour);
       }
 
       &.opened::before {
