@@ -21,7 +21,7 @@ class App {
       ]
     });
 
-    GLOBAL.log = msg => {
+    global.log = msg => {
       this.logger.error(msg);
     };
 
@@ -35,7 +35,11 @@ class App {
     this.events = events;
     this.rootDir = __dirname;
 
-    this.runningDevMode = !!process.env.debug;
+    this.runningDevMode = process.argv[2] === 'debug';
+    
+    if (this.runningDevMode) {
+      console.log('Dev mode!');
+    }
 
     this.mainWindowUrl = `file://${this.rootDir}/../gui/index.html`;
     this.mainWindow = null;
@@ -76,7 +80,7 @@ class App {
       height: 720,
       title: 'Bakaru',
       frame: false,
-      icon: this.electron.nativeImage.createFromDataUrl(icon),
+      icon: this.electron.nativeImage.createFromDataURL(icon),
       webPreferences: {
         experimentalFeatures: true,
         blinkFeatures: 'CSSBackdropFilter'
@@ -119,7 +123,9 @@ class App {
       this.mainWindow.minimize();
     });
 
-    this.app.on('ready', this.createMainWindow.bind(this));
+    this.app.on('ready', () => {
+      this.createMainWindow();
+    });
 
     this.app.on('window-all-closed', () => {
       if (process.platform !== 'darwin') {
