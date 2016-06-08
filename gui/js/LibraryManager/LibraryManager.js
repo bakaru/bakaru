@@ -2,6 +2,8 @@ import * as actions from 'actions';
 import { ipcRenderer } from 'electron';
 import { renderer } from 'ipc-events';
 
+const debug = false;
+
 /**
  * @typedef {{
   * id: string,
@@ -159,7 +161,7 @@ export default class LibraryManager {
   }
 
   stopScanning (id) {
-    console.log('LM:stopScanning', id);
+    debug && console.log('LM:stopScanning', id);
 
     const anime = this.getAnime(id);
 
@@ -169,7 +171,7 @@ export default class LibraryManager {
   }
 
   startSubsScanning (id) {
-    console.log('LM:startSubsScanning', id);
+    debug && console.log('LM:startSubsScanning', id);
 
     const anime = this.getAnime(id);
 
@@ -179,7 +181,7 @@ export default class LibraryManager {
   }
 
   stopSubsScanning (id) {
-    console.log('LM:stopSubsScanning', id);
+    debug && console.log('LM:stopSubsScanning', id);
 
     const anime = this.getAnime(id);
 
@@ -189,7 +191,7 @@ export default class LibraryManager {
   }
 
   startMediaInfoScanning (id) {
-    console.log('LM:startMediaInfoScanning', id);
+    debug && console.log('LM:startMediaInfoScanning', id);
 
     const anime = this.getAnime(id);
 
@@ -199,7 +201,7 @@ export default class LibraryManager {
   }
 
   stopMediaInfoScanning (id) {
-    console.log('LM:stopMediaInfoScanning', id);
+    debug && console.log('LM:stopMediaInfoScanning', id);
 
     const anime = this.getAnime(id);
 
@@ -215,7 +217,7 @@ export default class LibraryManager {
    * @returns {Anime}
    */
   create (animeStub) {
-    console.log('LM:create', animeStub);
+    debug && console.log('LM:create', animeStub);
 
     let anime = this.getAnime(animeStub.id);
 
@@ -249,7 +251,7 @@ export default class LibraryManager {
     }
 
     mediaInfo.quality += ` ${mediaInfo.width}x${mediaInfo.height}`;
-    console.log('LM:setMediaInfo', anime, id, mediaInfo);
+    debug && console.log('LM:setMediaInfo', anime, id, mediaInfo);
 
     return Object.assign(anime, mediaInfo);
   }
@@ -262,7 +264,7 @@ export default class LibraryManager {
    * @returns {Anime}
    */
   addEpisodes ({ id, episodesStubs }) {
-    console.log('LM:addEpisodes', id, episodesStubs);
+    debug && console.log('LM:addEpisodes', id, episodesStubs);
 
     const anime = this.getAnime(id);
     const episodesMap = new Map(anime.episodes);
@@ -286,7 +288,7 @@ export default class LibraryManager {
    * @returns {Anime}
    */
   updateEpisode ({ id, episodeStub }) {
-    console.log('LM:updateEpisode', id, episodeStub);
+    debug && console.log('LM:updateEpisode', id, episodeStub);
 
     const anime = this.getAnime(id);
     const episodesMap = new Map(anime.episodes);
@@ -309,7 +311,7 @@ export default class LibraryManager {
    * @returns {Anime}
    */
   updateDubs ({ id, dubsStubs }) {
-    console.log('LM:updateDubs', id, dubsStubs);
+    debug && console.log('LM:updateDubs', id, dubsStubs);
 
     const anime = this.getAnime(id);
     const dubsMap = new Map(anime.dubs);
@@ -333,7 +335,7 @@ export default class LibraryManager {
    * @returns {Anime}
    */
   updateSubs ({ id, subsStubs }) {
-    console.log('LM:updateSubs', id, subsStubs);
+    debug && console.log('LM:updateSubs', id, subsStubs);
 
     const anime = this.getAnime(id);
     const subsMap = new Map(anime.subs);

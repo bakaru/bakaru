@@ -35,8 +35,8 @@ export default class Select extends Component {
     window.document.removeEventListener('click', this.documentClickListener);
   }
   
-  documentClickHandler() {
-    this.setState({ opened: false });
+  documentClickHandler(e) {
+    (e.target.tagName !== 'SELECTED') && this.setState({ opened: false });
   }
 
   onSelect(optionId) {
