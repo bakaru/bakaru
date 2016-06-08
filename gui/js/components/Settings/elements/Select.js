@@ -16,6 +16,8 @@ export default class Select extends Component {
       opened: false
     };
 
+    this.documentClickListener = ::this.documentClickHandler;
+
     this.componentWillReceiveProps(props);
   }
 
@@ -23,6 +25,18 @@ export default class Select extends Component {
     this.onSelectCallback = props.onSelect;
     this.options = props.options;
     this.selected = props.selected;
+  }
+  
+  componentWillMount() {
+    window.document.addEventListener('click', this.documentClickListener);
+  }
+  
+  componentWillUnmount() {
+    window.document.removeEventListener('click', this.documentClickListener);
+  }
+  
+  documentClickHandler() {
+    this.setState({ opened: false });
   }
 
   onSelect(optionId) {
