@@ -26,6 +26,22 @@ class FolderReader {
   constructor(app) {
     this.mediaInfo = app.mediaInfo;
     this.skipMediaScanning = false;
+    this.durationScanningQueue = [];
+  }
+
+  /**
+   * Step by step goes through episodes duration scanning queue
+   */
+  processDurationScanningQueue() {
+    const that = this;
+
+    bluebird.coroutine(function* () {
+      const queueLength = that.durationScanningQueue.length;
+
+      for (let i = 0; i < queueLength; i++) {
+        yield that.durationScanningQueue[i]();
+      }
+    })();
   }
 
   /**
@@ -64,7 +80,7 @@ class FolderReader {
         // Okay, we have some folders here, lets check'em all
         return Promise.all(classifiedItems.folders.map(subPath => that.findAnime.apply(that, [subPath]))).catch(()=>{});
       }
-    })();
+    })().then(_ => this.processDurationScanningQueue());
   }
 
   /**
@@ -82,6 +98,15 @@ class FolderReader {
 
     // Sending episodes stubs
     this.send(events.addEpisodes, { id, episodesStubs });
+
+    // Enqueueing episodes duration scanning
+    this.durationScanningQueue.push(() => {
+      return this.mediaInfo
+        .getDuration(episodesStubs.map(_ => _.path))
+        .then(_ => _.map((duration, index) => {
+          this.send(events.updateEpisode, { id, episodeStub: Object.assign({}, episodesStubs[index], { duration }) });
+        }));
+    }); 
 
     // Sending subs scanning started
     this.send(events.startSubsScanning, id);

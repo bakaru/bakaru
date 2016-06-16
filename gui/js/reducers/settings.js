@@ -7,6 +7,7 @@ import {
 const initialSettings = {
   player_pause_on_click: true,
   player_after_play_action: 'next',
+  player_match_size: true,
   
   interface_main_colour: 'hsl(335, 100%, 50%)',
   interface_main_colour_light: 'hsla(335, 100%, 50%, .4)',

@@ -16,6 +16,42 @@ class MediaInfo {
     ];
   }
 
+  /**
+   * Returns video stream duration on given file in ms
+   * 
+   * @param {string[]} filepaths
+   * @returns {Promise.<*>}
+   */
+  getDuration(filepaths) {
+    const promise = new Promise((resolve, reject) => {
+      execFile(
+        this.executable,
+        ['--Output=General;%Duration%:'].concat(filepaths),
+        (err, output) => {
+          if (err) {
+            reject(err);
+          } else {
+            const durations = output.toString().trim().slice(0, -1).split(':');
+
+            resolve(durations.map(duration => (
+              duration.length
+                ? parseInt(duration)
+                : -1
+            )));
+          }
+        }
+      );
+    });
+
+    return promise;
+  }
+
+  /**
+   * Returns full media info about file
+   * 
+   * @param {string} filepath
+   * @returns {Promise.<*>}
+   */
   getInfo(filepath) {
     const promise = new Promise((resolve, reject) => {
       execFile(

@@ -199,7 +199,7 @@ export default class Entry extends Component {
 
     return (
       <list>
-        <title>Subs</title>
+        <title>Subtitles</title>
         { rendered }
       </list>
     );
@@ -241,14 +241,14 @@ export default class Entry extends Component {
 
     return (
       <list>
-        <title>Dubs</title>
+        <title>Voice-overs</title>
         { rendered }
       </list>
     );
   }
 
   renderEmbeddedIcon() {
-    return 'e';
+    return 'Embedded';
   }
 
   /**
@@ -261,16 +261,45 @@ export default class Entry extends Component {
     const rendered = [];
 
     eps.forEach(episode => {
+      let duration;
+
+      switch (episode.duration) {
+        case false:
+          duration = '';
+          break;
+
+        case -1:
+          duration = 'File not completely downloaded';
+          break;
+
+        default:
+          duration = this.secondsToHms(episode.duration/1000);
+          break;
+      }
+
       rendered.push(
         <div key={ episode.id } title={ episode.title }>
           { episode.title }
           <filename>
-            { episode.duration }
+            { duration }
           </filename>
         </div>
       );
     });
 
     return rendered;
+  }
+
+  /**
+   * Converts seconds to human format of hh:mm:ss
+   *
+   * @param {number} d
+   * @returns {string}
+   */
+  secondsToHms(d) {
+    var h = Math.floor(d / 3600);
+    var m = Math.floor(d % 3600 / 60);
+    var s = Math.floor(d % 3600 % 60);
+    return ((h > 0 ? h + ":" + (m < 10 ? "0" : "") : "") + m + ":" + (s < 10 ? "0" : "") + s);
   }
 }

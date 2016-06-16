@@ -66,7 +66,9 @@ export default class Settings extends Component {
 
     return (
       <settings className={ settingsClass }>
-        <exit dangerouslySetInnerHTML={{__html: '&times;'}} onClick={ () => this.blur() }/>
+        <exit onClick={ () => this.blur() }>
+          Close
+        </exit>
         <tabs>
           <title>
             Settings
@@ -156,11 +158,19 @@ export default class Settings extends Component {
           Interface
         </title>
 
+        <row onClick={ () => this.save('player_match_size', !this.settings.player_match_size) }>
+          <name>
+            Match window size to video size
+          </name>
+          <control>
+            <Checkbox checked={ this.settings.player_match_size }/>
+          </control>
+        </row>
+
         <row>
           <name>
             Main colo<b>u</b>r
           </name>
-
           <control>
             <ChromePicker
               color={ this.settings.interface_main_colour }

@@ -469,6 +469,8 @@ export default class Player extends Component {
       }
     }
 
+    this.settings.player_match_size && BrowserWindow.setWindowSize(media.videoFrameSize[0], media.videoFrameSize[1]);
+    
     this.player.setMedia(suitableMedia);
     this.setState({
       title: `${entry.title} - ${episode.title}`,
