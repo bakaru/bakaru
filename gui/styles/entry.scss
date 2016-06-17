@@ -72,15 +72,16 @@ entry {
     overflow: visible;
     padding-top: $baseInnerPadding/1.68;
     padding-bottom: $baseInnerPadding/1.68;
-    border-bottom: solid 1px lighten($delimiterColour, 5%);
     border-right: none;
 
     title {
       display: block;
       padding: 0 $baseInnerPadding*1.68;
       margin-bottom: $baseInnerPadding/1.68;
-      font-size: 14px;
+      font-size: 12px;
       color: #999;
+      font-weight: 100;
+      text-transform: uppercase;
     }
 
     &>div {

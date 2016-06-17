@@ -469,8 +469,10 @@ export default class Player extends Component {
       }
     }
 
-    this.settings.player_match_size && BrowserWindow.setWindowSize(media.videoFrameSize[0], media.videoFrameSize[1]);
-    
+    if (this.settings.player_match_size && !BrowserWindow.isMaximized()) {
+      BrowserWindow.setWindowSize(media.videoFrameSize[0], media.videoFrameSize[1]);
+    }
+
     this.player.setMedia(suitableMedia);
     this.setState({
       title: `${entry.title} - ${episode.title}`,
@@ -599,6 +601,8 @@ export default class Player extends Component {
     Mousetrap.bind('pagedown', () => this.isFocused && this.next());
     Mousetrap.bind('ctrl+left', () => this.isFocused && this.setTime(this.state.time - 10000));
     Mousetrap.bind('ctrl+right', () => this.isFocused && this.setTime(this.state.time + 10000));
+    Mousetrap.bind('ctrl+shift+left', () => this.isFocused && this.setTime(this.state.time - 90000));
+    Mousetrap.bind('ctrl+shift+right', () => this.isFocused && this.setTime(this.state.time + 90000));
   }
 
   /**

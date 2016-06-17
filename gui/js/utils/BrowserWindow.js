@@ -26,6 +26,10 @@ class BrowserWindow {
     this.self().maximize();
   }
 
+  isMaximized() {
+    return this.self().isMaximized();
+  }
+
   getContentSize() {
     return this.self().getContentSize();
   }
