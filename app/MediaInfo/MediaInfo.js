@@ -23,7 +23,7 @@ class MediaInfo {
    * @returns {Promise.<*>}
    */
   getDuration(filepaths) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       execFile(
         this.executable,
         ['--Output=General;%Duration%:'].concat(filepaths),
@@ -42,8 +42,6 @@ class MediaInfo {
         }
       );
     });
-
-    return promise;
   }
 
   /**

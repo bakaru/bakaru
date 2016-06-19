@@ -51,10 +51,15 @@ export default function Library(props) {
   return (
     <library className={ libraryClass }>
       <list>
+        <bar>
+          <search>
+            <input type="search" placeholder="Quick search" onChange={ ::this.onSearch } />
+          </search>
+          <adder onClick={ () => props.openSelectFolderDialog() } title="Add new anime or bunch of'em">
+            <i className="fa fa-plus"></i>
+          </adder>
+        </bar>
         { entriesList }
-        <adder onClick={ () => props.openSelectFolderDialog() }>
-          <i className="fa fa-plus"></i> Add folder
-        </adder>
       </list>
       <Entry entry={ selectedEntry } actions={ actions }/>
     </library>

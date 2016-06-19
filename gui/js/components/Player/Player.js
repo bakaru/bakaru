@@ -7,6 +7,7 @@ import PowerSaverBlocker from 'utils/PowerSaverBlocker';
 import PlayerController from './PlayerController';
 import PlayerControls from 'utils/PlayerControls';
 import BrowserWindow from 'utils/BrowserWindow';
+import LibraryEvents from 'utils/LibraryEvents';
 
 export default class Player extends Component {
 
@@ -94,13 +95,7 @@ export default class Player extends Component {
     this.player.registerOnBufferingHandler(percents => this.setState({ buffering: percents !== 100 }));
     this.player.registerOnEndReachedHandler(::this.next);
     this.player.registerOnLengthHandler(length => this.setState({ length }));
-    this.player.registerOnTimeChangeHandler(time => {
-      this.setState({ time });
-      const currentPlaybackPercent = this.state['length']
-        ? (1 / this.state.length) * time
-        : 0;
-      BrowserWindow.setProgressBar(currentPlaybackPercent);
-    });
+    this.player.registerOnTimeChangeHandler(::this.onTimeChange);
 
     PlayerControls.onPlay((postponed) => {
       if (postponed) {
@@ -112,6 +107,20 @@ export default class Player extends Component {
     PlayerControls.onPause(() => this.pause());
 
     this.registerHotkeys();
+  }
+
+  onTimeChange(time) {
+      this.setState({ time });
+
+      let currentPlaybackPercent;
+
+      if (this.state['length']) {
+        currentPlaybackPercent = (1 / this.state.length) * time;
+      } else {
+        currentPlaybackPercent = 0;
+      }
+
+      BrowserWindow.setProgressBar(currentPlaybackPercent);
   }
 
   /**
@@ -450,7 +459,7 @@ export default class Player extends Component {
       audioIndex: 0,
       subtitlesPath: false,
       subtitlesIndex: 0,
-      videoFrameSize: media.videoFrameSize
+      videoFrameSize: [entry.width, entry.height]
     };
 
     if (dub.embedded) {
@@ -470,7 +479,7 @@ export default class Player extends Component {
     }
 
     if (this.settings.player_match_size && !BrowserWindow.isMaximized()) {
-      BrowserWindow.setWindowSize(media.videoFrameSize[0], media.videoFrameSize[1]);
+      BrowserWindow.setWindowSize(entry.width, entry.height);
     }
 
     this.player.setMedia(suitableMedia);

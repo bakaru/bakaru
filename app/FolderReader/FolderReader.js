@@ -100,7 +100,10 @@ class FolderReader {
     this.send(events.addEpisodes, { id, episodesStubs });
 
     // Enqueueing episodes duration scanning
+    console.log(`Enqueueing entry:${id} episodes scanning`);
     this.durationScanningQueue.push(() => {
+      console.log(`Scanning entry:${id}`);
+
       return this.mediaInfo
         .getDuration(episodesStubs.map(_ => _.path))
         .then(_ => _.map((duration, index) => {

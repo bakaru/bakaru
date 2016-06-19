@@ -97,14 +97,44 @@ library {
       }
     }
 
-    adder {
-      display: block;
-      position: relative;
-      padding: $baseInnerPadding $baseInnerPadding*1.68;
-      color: #666;
+    bar {
+      display: flex;
+      height: 40px;
 
-      &:hover {
-        background-color: rgba(0, 0, 0, .05);
+      adder {
+        display: block;
+        width: 40px;
+        height: 100%;
+        color: #666;
+        text-align: center;
+        padding-top: 9px;
+        border-bottom: solid 1px $delimiterColour;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, .05);
+        }
+      }
+
+      search {
+        width: 100%;
+
+        input {
+          display: block;
+          width: 100%;
+          height: 100%;
+          border: none;
+          font-size: 18px;
+          line-height: 1.2;
+          padding: $baseInnerPadding $baseInnerPadding*1.68;
+          border-bottom: solid 1px $delimiterColour;
+          border-right: solid 1px $delimiterColour;
+
+          &:focus {
+            outline: none;
+            border-bottom: solid 1px var(--main-colour);
+            border-right: solid 1px var(--main-colour);
+          }
+        }
       }
     }
   }
