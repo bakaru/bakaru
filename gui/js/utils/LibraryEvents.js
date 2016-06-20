@@ -5,12 +5,20 @@ class LibraryEvents {
     this.e = emitter;
   }
 
-  watched(entryId, episodeId) {
-    this.e.emit('watched', {entryId, episodeId});
+  stopped(entryId, episodeId, time) {
+    setImmediate(_ => this.e.emit('stopped_at', {entryId, episodeId, time}));
   }
 
-  onWatched(cb) {
-    this.e.on('watched', cb);
+  resurrect(entries) {
+    this.e.emit('resurrect', entries);
+  }
+
+  onStopped(cb) {
+    this.e.on('stopped_at', cb);
+  }
+
+  onResurrect(cb) {
+    this.e.on('resurrect', cb);
   }
 }
 

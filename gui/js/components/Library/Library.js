@@ -53,7 +53,7 @@ export default function Library(props) {
       <list>
         <bar>
           <search>
-            <input type="search" placeholder="Quick search" onChange={ ::this.onSearch } />
+            <input type="search" placeholder="Quick search" />
           </search>
           <adder onClick={ () => props.openSelectFolderDialog() } title="Add new anime or bunch of'em">
             <i className="fa fa-plus"></i>

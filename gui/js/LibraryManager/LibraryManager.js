@@ -1,6 +1,7 @@
 import * as actions from 'actions';
 import { ipcRenderer } from 'electron';
 import { renderer } from 'ipc-events';
+import LibraryEvents from 'utils/LibraryEvents';
 
 const debug = false;
 
@@ -75,7 +76,7 @@ function getSubTemplate () {
 }
 
 /**
- * @typedef {{id: string, ext: string, title: string, path: string, filename: string, duration: string|boolean}} Episode
+ * @typedef {{id: string, ext: string, title: string, path: string, filename: string, duration: number|boolean, stoppedAt: number|boolean}} Episode
  */
 function getEpisodeTemplate () {
   return {
@@ -84,7 +85,8 @@ function getEpisodeTemplate () {
     title: '',
     path: '',
     filename: '',
-    duration: false
+    duration: false,
+    stoppedAt: false
   };
 }
 
@@ -97,6 +99,13 @@ export default class LibraryManager {
      */
     this.library = new Map();
 
+    try {
+      this.library = new Map(this.store.getState().library.entries);
+    } catch(e) {
+      // Who the fuck cares...
+    }
+
+    this._setupEventsHandlers();
     this._setupIpcHandlers();
   }
 
@@ -104,6 +113,26 @@ export default class LibraryManager {
     return () => {
       ipcRenderer.send('main:openSelectFolderDialog');
     };
+  }
+
+  _setupEventsHandlers () {
+    LibraryEvents.onResurrect(entries => {
+      dubg && console.log(`[LM] Library resurrected`);
+
+      this.library = new Map(entries);
+    });
+
+    LibraryEvents.onStopped(({ entryId, episodeId, time }) => {
+      debug && console.log(`[LM] Stopping at ${time}`, entryId, episodeId);
+
+      this.store.dispatch(actions.updateAnimeFolder(this.updateEpisode({
+        id: entryId,
+        episodeStub: {
+          id: episodeId,
+          stoppedAt: time
+        }
+      })));
+    });
   }
 
   _setupIpcHandlers () {

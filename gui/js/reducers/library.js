@@ -2,7 +2,7 @@ import {
   UPDATE_ANIME_FOLDER,
   OPEN_ANIME_FOLDER
 } from 'actions';
-
+import LibraryEvents from 'utils/LibraryEvents';
 import ARSON from 'arson';
 
 window.ARSON = ARSON;
@@ -45,6 +45,8 @@ function restoreFromCache() {
       entries.set(entryId, ARSON.parse(window.localStorage[entryId]));
     }
   }
+
+  LibraryEvents.resurrect(entries);
 
   return entries;
 }

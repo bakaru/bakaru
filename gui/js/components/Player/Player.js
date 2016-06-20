@@ -61,27 +61,12 @@ export default class Player extends Component {
   /**
    * Handles props updates
    *
-   * @param {{playlist: [], action: string, actions: Object.<string, function>}} props
+   * @param {{action: string, actions: Object.<string, function>}} props
    */
-  componentWillReceiveProps(props) {
-    const { playlist, settings, library } = props;
-
+  componentWillReceiveProps({ settings, library, focus }) {
     this.settings = settings;
     this.library = library;
-
-    if (this.player === null) {
-      return;
-    }
-
-    if (playlist.length > 0) {
-      this.setPlaylist(playlist);
-      if (this.postponedPlay) {
-        this.play();
-        this.postponedPlay = false;
-      }
-    }
-
-    this.isFocused = props.focus === 'player';
+    this.isFocused = focus === 'player';
   }
 
   /**
@@ -97,14 +82,23 @@ export default class Player extends Component {
     this.player.registerOnLengthHandler(length => this.setState({ length }));
     this.player.registerOnTimeChangeHandler(::this.onTimeChange);
 
-    PlayerControls.onPlay((postponed) => {
+    PlayerControls.onPlaylist((playlist, playImmediate) => {
+      this.setPlaylist(playlist);
+
+      if (playImmediate) {
+        this.play();
+      }
+    });
+
+    PlayerControls.onPlay(postponed => {
       if (postponed) {
         this.postponedPlay = true;
       } else {
         this.play();
       }
     });
-    PlayerControls.onPause(() => this.pause());
+
+    PlayerControls.onPause(::this.pause);
 
     this.registerHotkeys();
   }
@@ -191,7 +185,7 @@ export default class Player extends Component {
 
     return (
       <player className={ playerClass } onMouseMove={ ::this.showUi } ref="player">
-        <canvas-wrapper onClick={ ::this.handleCanvasClick } onDoubleClick={ ::this.toggleFullScreen }>
+        <canvas-wrapper onClick={ ::this.handleCanvasClick } onDoubleClick={ ::this.handleCanvasDoubleClick }>
           <canvas ref="canvas" className="canvas"></canvas>
         </canvas-wrapper>
         <title>
@@ -201,10 +195,10 @@ export default class Player extends Component {
           <i className="fa fa-spin fa-circle-o-notch"/>
         </loading-indicator>
         <nav>
-          <btn onClick={ () => this.pause() + this.actions.focusOnSettings() }>
+          <btn onClick={ ::this.handleFocusOnSettings }>
             <i className="fa fa-wrench" />
           </btn>
-          <btn onClick={ () => this.pause() + this.actions.focusOnLibrary() + this.exitFullScreen() }>
+          <btn onClick={ ::this.handleFocusOnLibrary }>
             <i className="fa fa-reorder" />
           </btn>
         </nav>
@@ -267,6 +261,19 @@ export default class Player extends Component {
         </controls>
       </player>
     );
+  }
+
+  handleFocusOnSettings() {
+    this.stopped();
+    this.pause();
+    this.actions.focusOnSettings();
+  }
+
+  handleFocusOnLibrary() {
+    this.stopped();
+    this.pause();
+    this.actions.focusOnLibrary();
+    this.exitFullScreen();
   }
 
   /**
@@ -336,6 +343,7 @@ export default class Player extends Component {
    * @param {number} index
    */
   selectPlaylistItem(index) {
+    this.stopped();
     this.setState({ playlistOpen: false });
     this.setMedia(this.playlist[this.currentPlaylistItem = parseInt(index)]);
     this.play();
@@ -356,6 +364,13 @@ export default class Player extends Component {
     if (this.settings.player_pause_on_click) {
       this.togglePause();
     }
+  }
+
+  /**
+   * Handle double click on canvas
+   */
+  handleCanvasDoubleClick() {
+    this.toggleFullScreen();
   }
 
   /**
@@ -498,6 +513,8 @@ export default class Player extends Component {
       return;
     }
 
+    this.stopped();
+
     const media = this.playlist[++this.currentPlaylistItem];
 
     this.setState({ buffering: true });
@@ -512,6 +529,8 @@ export default class Player extends Component {
     if (this.playlist.length === 0 || this.currentPlaylistItem === 0) {
       return;
     }
+
+    this.stopped();
 
     const media = this.playlist[--this.currentPlaylistItem];
 
@@ -574,6 +593,7 @@ export default class Player extends Component {
     this.player.stop();
     this.setState({ playing: false });
     this.unblockPowerSaver();
+    this.stopped();
   }
 
   /**
@@ -650,6 +670,19 @@ export default class Player extends Component {
    */
   isBlockingPowerSaver() {
     return this.psb === null ? false : PowerSaverBlocker.isStarted(this.psb);
+  }
+
+  /**
+   * Emits LibraryEvents.stopped to notify LibraryManager where the fuck you stopped watching freaking anime 
+   */
+  stopped() {
+    if (this.playlist.length === 0) {
+      return;
+    }
+
+    const media = this.playlist[this.currentPlaylistItem];
+
+    LibraryEvents.stopped(media.entryId, media.episodeId, this.state.time);
   }
 
   /**

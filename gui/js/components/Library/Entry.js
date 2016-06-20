@@ -124,14 +124,13 @@ export default class Entry extends Component {
         entryId: this.entry.id,
         episodeId: episodeId,
         dubId: this.state.dub,
-        subId: this.state.sub,
-        videoFrameSize: [this.entry.width, this.entry.height]
+        subId: this.state.sub
       });
     });
 
-    this.actions.playerSetPlaylist(playlist);
+    PlayerControls.playlist(playlist, true);
+
     this.actions.focusOnPlayer();
-    PlayerControls.play(true);
   }
 
   /**
@@ -262,6 +261,7 @@ export default class Entry extends Component {
 
     eps.forEach(episode => {
       let duration;
+      let stoppedAt;
 
       switch (episode.duration) {
         case false:
@@ -277,11 +277,17 @@ export default class Entry extends Component {
           break;
       }
 
+      if (episode.stoppedAt) {
+        stoppedAt = this.secondsToHms(episode.stoppedAt/1000);
+      } else {
+        stoppedAt = '00:00';
+      }
+
       rendered.push(
         <div key={ episode.id } title={ episode.title }>
           { episode.title }
           <filename>
-            { duration }
+            { stoppedAt } / { duration }
           </filename>
         </div>
       );
