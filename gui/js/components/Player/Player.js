@@ -89,18 +89,21 @@ export default class Player extends Component {
         this.play();
       }
     });
-
-    PlayerControls.onPlay(postponed => {
-      if (postponed) {
-        this.postponedPlay = true;
-      } else {
-        this.play();
-      }
-    });
-
+    PlayerControls.onPlay(::this.play);
     PlayerControls.onPause(::this.pause);
 
+    setInterval(::this.ticker, 5000);
+
     this.registerHotkeys();
+  }
+
+  /**
+   * Dumps stopped at time to LibraryEvents if player is focused and something is playing
+   */
+  ticker() {
+    if (this.isFocused && this.state.playing) {
+      this.stopped();
+    }
   }
 
   onTimeChange(time) {
@@ -191,9 +194,7 @@ export default class Player extends Component {
         <title>
           { this.state.title }
         </title>
-        <loading-indicator style={{ opacity: this.state.buffering ? 1 : 0 }}>
-          <i className="fa fa-spin fa-circle-o-notch"/>
-        </loading-indicator>
+        <loading-indicator style={{ opacity: this.state.buffering ? 1 : 0 }}/>
         <nav>
           <btn onClick={ ::this.handleFocusOnSettings }>
             <i className="fa fa-wrench" />

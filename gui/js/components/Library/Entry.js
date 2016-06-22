@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import classNames from 'classnames';
 import PlayerControls from 'utils/PlayerControls';
 
-import { shell } from 'electron';
+import {shell} from 'electron';
 
 /**
  * @param {AnimeFolder} folder
@@ -68,7 +68,7 @@ export default class Entry extends Component {
   /**
    * Renderer
    *
-   * @returns {XML}
+   * @returns {JSX.Element}
    */
   render() {
     if (this.entry === false) {
@@ -92,8 +92,8 @@ export default class Entry extends Component {
           </btn>
         </actions>
 
-          { this.entry.subs.size ? subs : '' }
-          { dubs }
+        { this.entry.subs.size ? subs : '' }
+        { dubs }
 
         <list>
           <title>Episodes</title>
@@ -107,7 +107,7 @@ export default class Entry extends Component {
     return (
       <entry>
         <greeting>
-          <i className="fa fa-long-arrow-left"></i> Select anime
+          <i className="fa fa-long-arrow-left"/> Select anime
         </greeting>
       </entry>
     );
@@ -139,7 +139,7 @@ export default class Entry extends Component {
    * @param {string} dub
    */
   handleDubSelect(dub) {
-    this.setState({ dub });
+    this.setState({dub});
   }
 
   /**
@@ -152,7 +152,7 @@ export default class Entry extends Component {
       sub = false;
     }
 
-    this.setState({ sub });
+    this.setState({sub});
   }
 
   /**
@@ -259,6 +259,10 @@ export default class Entry extends Component {
   renderEps(eps) {
     const rendered = [];
 
+    let hasDuration = false;
+    let hasStoppedAt = false;
+
+
     eps.forEach(episode => {
       let duration;
       let stoppedAt;
@@ -273,23 +277,31 @@ export default class Entry extends Component {
           break;
 
         default:
-          duration = this.secondsToHms(episode.duration/1000);
+          duration = this.secondsToHms(episode.duration / 1000);
+          hasDuration = true;
           break;
       }
 
       if (episode.stoppedAt) {
-        stoppedAt = this.secondsToHms(episode.stoppedAt/1000);
+        stoppedAt = this.secondsToHms(episode.stoppedAt / 1000);
+        hasStoppedAt = true;
       } else {
         stoppedAt = '00:00';
       }
 
+      let watched = false;
+
+      if (hasDuration && hasStoppedAt) {
+        watched = (episode.stoppedAt / episode.duration) >= .9;
+      }
+
       rendered.push(
-        <div key={ episode.id } title={ episode.title }>
+        <episode className={ watched ? 'watched' : '' } key={ episode.id } title={ episode.title }>
           { episode.title }
-          <filename>
+          <times>
             { stoppedAt } / { duration }
-          </filename>
-        </div>
+          </times>
+        </episode>
       );
     });
 
@@ -303,9 +315,10 @@ export default class Entry extends Component {
    * @returns {string}
    */
   secondsToHms(d) {
-    var h = Math.floor(d / 3600);
-    var m = Math.floor(d % 3600 / 60);
-    var s = Math.floor(d % 3600 % 60);
-    return ((h > 0 ? h + ":" + (m < 10 ? "0" : "") : "") + m + ":" + (s < 10 ? "0" : "") + s);
+    var h = Math.floor(d / 3600)
+    var m = Math.floor(d % 3600 / 60)
+    var s = Math.floor(d % 3600 % 60)
+
+    return ((h > 0 ? h + ":" : "") + (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" : "") + s)
   }
 }

@@ -3,6 +3,7 @@
 $summaryHeight: 80px;
 
 entry {
+  width: 65%;
   display: block;
   position: relative;
   overflow-y: scroll;
@@ -84,7 +85,8 @@ entry {
       text-transform: uppercase;
     }
 
-    &>div {
+    &>div, &>episode {
+      display: block;
       position: relative;
       padding: $baseInnerPadding/1.68 $baseInnerPadding*1.68;
 
@@ -123,11 +125,17 @@ entry {
         background-color: transparent;
       }
 
-      filename {
+      times {
         margin-left: 5px;
         color: #aaa;
         font-weight: 100;
       }
+    }
+  }
+
+  episode {
+    &.watched {
+      opacity: .5;
     }
   }
 
