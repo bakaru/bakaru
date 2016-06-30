@@ -79,6 +79,7 @@
     "react-redux": "4.4.5",
     "redux": "3.5.2",
     "webgl-video-renderer": "0.2.0",
+    "whatwg-fetch": "^1.0.0",
     "winston": "2.2.0",
     "xml2js": "0.4.15"
   }

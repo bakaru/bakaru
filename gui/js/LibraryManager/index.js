@@ -1,3 +1,3 @@
 import LibraryManager from './LibraryManager';
 
-export default LibraryManager;
+export default new LibraryManager();

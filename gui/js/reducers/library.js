@@ -2,60 +2,21 @@ import {
   UPDATE_ANIME_FOLDER,
   OPEN_ANIME_FOLDER
 } from 'actions';
-import LibraryEvents from 'utils/LibraryEvents';
-import ARSON from 'arson';
 
-window.ARSON = ARSON;
+/**
+ * @type LibraryManager
+ */
+import LibraryManager from '../LibraryManager';
 
 /**
  * @typedef {{selected: boolean|string, entries: Map.<string, AnimeFolder>}} LibraryState
  */
 
-let entriesIds = new Set();
-
-let cacheUpdateTimeout = null;
-
-/**
- * Updates cache
- *
- * @param {AnimeFolder} animeFolder
- */
-function updateCache(animeFolder) {
-  window.clearTimeout(cacheUpdateTimeout);
-
-  cacheUpdateTimeout = window.setTimeout(() => {
-    window.localStorage['library'] = JSON.stringify([...entriesIds.add(animeFolder.id)]);
-  }, 200);
-
-  window.localStorage[animeFolder.id] = ARSON.stringify(animeFolder);
-}
-
-/**
- * Restore library entries from cache
- *
- * @returns {Map}
- */
-function restoreFromCache() {
-  const entries = new Map();
-
-  if (typeof window.localStorage['library'] !== 'undefined') {
-    entriesIds = new Set(JSON.parse(window.localStorage['library']));
-
-    for (let entryId of entriesIds) {
-      entries.set(entryId, ARSON.parse(window.localStorage[entryId]));
-    }
-  }
-
-  LibraryEvents.resurrect(entries);
-
-  return entries;
-}
-
 function restoreSelectedAnimeFolderId() {
   if (typeof window.localStorage['selected'] !== "undefined") {
     const selectedAnimeFolderId = window.localStorage['selected'];
 
-    if (entriesIds.has(selectedAnimeFolderId)) {
+    if (LibraryManager.entriesIds.has(selectedAnimeFolderId)) {
       return selectedAnimeFolderId;
     }
   }
@@ -75,13 +36,13 @@ function updateSelectedAnimeFolderId(id) {
 /**
  * @param {LibraryState} state
  * @param {AnimeFolder} animeFolder
- * @returns {Map}
+ * @returns {LibraryState}
  */
 function updateAnimeFolder(state, animeFolder) {
   const entries = new Map(state.entries);
   entries.set(animeFolder.id, animeFolder);
 
-  updateCache(animeFolder);
+  LibraryManager.updateCache(animeFolder);
 
   return {
     ...state,
@@ -92,7 +53,7 @@ function updateAnimeFolder(state, animeFolder) {
 /**
  * @param {LibraryState} state
  * @param animeFolderId
- * @returns {{selected: *}}
+ * @returns {LibraryState}
  */
 function openAnimeFolder(state, animeFolderId) {
   updateSelectedAnimeFolderId(animeFolderId);
@@ -107,14 +68,14 @@ function openAnimeFolder(state, animeFolderId) {
  * @type {LibraryState}
  */
 const initialState = {
-  entries: restoreFromCache(),
+  entries: LibraryManager.getLibrary(),
   selected: restoreSelectedAnimeFolderId()
 };
 
 /**
  * @param {LibraryState} [state=]
- * @param {{type: String, animeFolder: AnimeFolder=}} action
- * @returns {Map}
+ * @param {{type: String, id: string=, animeFolder: AnimeFolder=}} action
+ * @returns {LibraryState}
  */
 export default function library (state = initialState, action) {
   switch (action.type) {

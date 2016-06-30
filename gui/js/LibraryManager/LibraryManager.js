@@ -2,6 +2,7 @@ import * as actions from 'actions';
 import { ipcRenderer } from 'electron';
 import { renderer } from 'ipc-events';
 import LibraryEvents from 'utils/LibraryEvents';
+import ARSON from 'arson';
 
 const debug = false;
 
@@ -19,6 +20,7 @@ const debug = false;
   * height: number,
   * bitDepth: number,
   * format: string,
+  * watched: number,
   * state: {scanning: boolean, subScanning: boolean, mediainfoScanning: boolean}
   * }} Anime
  */
@@ -37,6 +39,16 @@ function getAnimeTemplate () {
     height: 0,
     bitDepth: 8,
     format: '',
+    watched: 0,
+    links: {
+      mal: {
+        id: '',
+        score: '',
+        poster: '',
+        episodesTotal: 0,
+        episodesSeen: 0
+      }
+    },
     state: {
       scanning: true,
       subScanning: true,
@@ -86,27 +98,67 @@ function getEpisodeTemplate () {
     path: '',
     filename: '',
     duration: false,
-    stoppedAt: false
+    stoppedAt: false,
+    watched: false
   };
 }
 
 export default class LibraryManager {
-  constructor (store) {
-    this.store = store;
+  constructor () {
+    this.store = null;
 
+    this.cacheThrottler = null;
+
+    /**
+     * @type {Set.<string>}
+     */
+    this.entriesIds = new Set();
     /**
      * @type {Map.<string, Anime>}
      */
-    this.library = new Map();
-
-    try {
-      this.library = new Map(this.store.getState().library.entries);
-    } catch(e) {
-      // Who the fuck cares...
-    }
+    this.library = this._restoreCache();
 
     this._setupEventsHandlers();
     this._setupIpcHandlers();
+  }
+
+  setStore (store) {
+    this.store = store;
+  }
+
+  /**
+   * Restores cache
+   *
+   * @return {Map.<string, Anime>}
+   * @private
+   */
+  _restoreCache () {
+    const entries = new Map();
+
+    if (typeof window.localStorage['library'] !== 'undefined') {
+      this.entriesIds = new Set(JSON.parse(window.localStorage['library']));
+
+      for (let entryId of this.entriesIds) {
+        entries.set(entryId, ARSON.parse(window.localStorage[entryId]));
+      }
+    }
+
+    return entries;
+  }
+
+  /**
+   * Updates cached entry
+   *
+   * @param {Anime} entry
+   */
+  updateCache (entry) {
+    window.clearTimeout(this.cacheThrottler);
+
+    this.cacheThrottler = window.setTimeout(() => {
+      window.localStorage['library'] = JSON.stringify([...this.entriesIds.add(entry.id)]);
+    }, 200);
+
+    window.localStorage[entry.id] = ARSON.stringify(entry);
   }
 
   openSelectFolderDialog () {
@@ -114,10 +166,14 @@ export default class LibraryManager {
       ipcRenderer.send('main:openSelectFolderDialog');
     };
   }
+  
+  getLibrary () {
+    return this.library;
+  }
 
   _setupEventsHandlers () {
     LibraryEvents.onResurrect(entries => {
-      dubg && console.log(`[LM] Library resurrected`);
+      debug && console.log(`[LM] Library resurrected`);
 
       this.library = new Map(entries);
     });
@@ -125,13 +181,7 @@ export default class LibraryManager {
     LibraryEvents.onStopped(({ entryId, episodeId, time }) => {
       debug && console.log(`[LM] Stopping at ${time}`, entryId, episodeId);
 
-      this.store.dispatch(actions.updateAnimeFolder(this.updateEpisode({
-        id: entryId,
-        episodeStub: {
-          id: episodeId,
-          stoppedAt: time
-        }
-      })));
+      this.store.dispatch(actions.updateAnimeFolder(this.handleStoppedAt(entryId, episodeId, time)));
     });
   }
 
@@ -187,6 +237,30 @@ export default class LibraryManager {
     ipcRenderer.on(renderer.flagAddAnimeFolderEnd, () => {
       this.store.dispatch(actions.flagAddFolderEnd());
     });
+  }
+
+  handleStoppedAt (id, episodeId, time) {
+    const anime = this.getAnime(id);
+    const episodesMap = new Map(anime.episodes);
+    const episode = episodesMap.get(episodeId) || getEpisodeTemplate();
+
+    if (episode.duration) {
+      episode.stoppedAt = time;
+
+      if (!episode.watched && (episode.stoppedAt / episode.duration) >= .9) {
+        episode.watched = true;
+        anime.watched++;
+      }
+    }
+
+    episodesMap.set(
+      episodeId,
+      episode
+    );
+
+    anime.episodes = episodesMap;
+
+    return anime;
   }
 
   stopScanning (id) {
@@ -389,4 +463,8 @@ export default class LibraryManager {
   getAnime (id) {
     return this.library.get(id);
   }
+}
+
+export function getLibraryManager () {
+  return lm;
 }

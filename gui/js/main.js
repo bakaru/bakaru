@@ -13,11 +13,12 @@ import Gui from './containers/Gui';
 
 const wcjs = window.require(getQueryVariable('wcjsPath'));
 const store = createStore(appReducers);
-const libraryManager = new LibraryManager(store);
+
+LibraryManager.setStore(store);
 
 ReactDom.render(
   <Provider store={store}>
-    <Gui wcjs={ wcjs } openSelectFolderDialog={ libraryManager.openSelectFolderDialog() } />
+    <Gui wcjs={ wcjs } openSelectFolderDialog={ LibraryManager.openSelectFolderDialog() } />
   </Provider>,
   document.getElementById('gui-mount')
 );

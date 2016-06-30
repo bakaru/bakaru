@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import classNames from 'classnames';
 import PlayerControls from 'utils/PlayerControls';
-
+import MAL from '../../Link/MAL';
 import {shell} from 'electron';
+
+console.log(MAL);
 
 /**
  * @param {AnimeFolder} folder
@@ -259,10 +261,6 @@ export default class Entry extends Component {
   renderEps(eps) {
     const rendered = [];
 
-    let hasDuration = false;
-    let hasStoppedAt = false;
-
-
     eps.forEach(episode => {
       let duration;
       let stoppedAt;
@@ -278,25 +276,17 @@ export default class Entry extends Component {
 
         default:
           duration = this.secondsToHms(episode.duration / 1000);
-          hasDuration = true;
           break;
       }
 
       if (episode.stoppedAt) {
         stoppedAt = this.secondsToHms(episode.stoppedAt / 1000);
-        hasStoppedAt = true;
       } else {
         stoppedAt = '00:00';
       }
 
-      let watched = false;
-
-      if (hasDuration && hasStoppedAt) {
-        watched = (episode.stoppedAt / episode.duration) >= .9;
-      }
-
       rendered.push(
-        <episode className={ watched ? 'watched' : '' } key={ episode.id } title={ episode.title }>
+        <episode className={ episode.watched ? 'watched' : '' } key={ episode.id } title={ episode.title }>
           { episode.title }
           <times>
             { stoppedAt } / { duration }

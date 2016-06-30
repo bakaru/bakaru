@@ -78,6 +78,7 @@ class App {
     this.mainWindow = new this.electron.BrowserWindow({
       width: 1280,
       height: 720,
+      maximized: true,
       title: 'Bakaru',
       frame: false,
       icon: this.electron.nativeImage.createFromDataURL(icon),
