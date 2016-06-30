@@ -137,7 +137,7 @@ export default class Player extends Component {
       'ui-hidden': this.state.uiHidden && !(this.state.playlistOpen || this.state.subsOpen || this.state.dubsOpen)
     });
 
-    const playlistClass = classname({
+    const sidebarClass = classname({
       open: this.state.playlistOpen
     });
 
@@ -147,15 +147,7 @@ export default class Player extends Component {
 
       return (
         <item className={ this.currentPlaylistItem === index ? 'current' : '' } onClick={ () => this.selectPlaylistItem(index) } key={ entry.id + episode.id }>
-          <entry-title>
-            { entry.title }
-          </entry-title>
-          <delimiter>
-            &nbsp;-&nbsp;
-          </delimiter>
-          <episode-title>
-            { episode.title }
-          </episode-title>
+          Episode { episode.title }
         </item>
       );
     });
@@ -195,31 +187,37 @@ export default class Player extends Component {
           { this.state.title }
         </title>
         <loading-indicator style={{ opacity: this.state.buffering ? 1 : 0 }}/>
-        <nav>
-          <btn onClick={ ::this.handleFocusOnSettings }>
-            <i className="fa fa-wrench" />
-          </btn>
-          <btn onClick={ ::this.handleFocusOnLibrary }>
-            <i className="fa fa-reorder" />
-          </btn>
-        </nav>
-        <playlist className={ playlistClass }>
-          { playlist }
-        </playlist>
+        <sidebar className={ sidebarClass }>
+          <info>
+            <heading>{ this.state.title }</heading>
+            <extra>Ololo here</extra>
+          </info>
+          <playlist>
+            { playlist }
+          </playlist>
+          <buttons>
+            <btn onClick={ ::this.handleFocusOnLibrary }>
+              <i className="fa fa-fw fa-reorder" />
+              Back to library
+            </btn>
+            <btn onClick={ ::this.handleFocusOnSettings }>
+              <i className="fa fa-fw fa-wrench" />
+              Preferences
+            </btn>
+            <btn onClick={ () => window.close() }>
+              <i className="fa fa-fw fa-close"/>
+              Close Bakaru
+            </btn>
+          </buttons>
+        </sidebar>
         <controls>
           <progress-bar onClick={ ::this.seek }>
             <track style={{ width: `${currentPlaybackPercent}%` }} />
           </progress-bar>
           <row>
             <left>
-              <btn className="play-pause" onClick={ ::this.togglePause }>
-                <i className={ `fa fa-${this.state.playing ? 'pause' : 'play'}` } />
-              </btn>
-              <btn className="prev" onClick={ ::this.prev }>
-                <i className="fa fa-fast-backward" />
-              </btn>
-              <btn className="next" onClick={ ::this.next }>
-                <i className="fa fa-fast-forward" />
+              <btn className="playlist" onClick={ ::this.togglePlaylist }>
+                <i className="fa fa-fw fa-reorder"/>
               </btn>
               <volume>
                 <btn className="volume" onClick={ ::this.toggleMute }>
@@ -230,6 +228,29 @@ export default class Player extends Component {
                 </bar>
               </volume>
             </left>
+            <center>
+              <btn className="subs" onClick={ ::this.toggleSubsSelector } disabled={ subs.length <= 0 }>
+                <i className="fa fa-fw fa-commenting-o"/>
+                <dropdown className={ this.state.subsOpen ? 'open' : '' }>
+                  { subs }
+                </dropdown>
+              </btn>
+              <btn className="prev" onClick={ ::this.prev }>
+                <i className="fa fa-fast-backward" />
+              </btn>
+              <btn className="play-pause" onClick={ ::this.togglePause }>
+                <i className={ `fa fa-${this.state.playing ? 'pause' : 'play'}` } />
+              </btn>
+              <btn className="next" onClick={ ::this.next }>
+                <i className="fa fa-fast-forward" />
+              </btn>
+              <btn className="dubs" onClick={ ::this.toggleDubsSelector } disabled={ dubs.length <= 1 }>
+                <i className="fa fa-fw fa-microphone"/>
+                <dropdown className={ this.state.dubsOpen ? 'open' : '' }>
+                  { dubs }
+                </dropdown>
+              </btn>
+            </center>
             <right>
               <times>
                 <time className="now">
@@ -239,21 +260,6 @@ export default class Player extends Component {
                   { length }
                 </time>
               </times>
-              <btn className="subs" onClick={ ::this.toggleSubsSelector } disabled={ subs.length <= 0 }>
-                <i className="fa fa-fw fa-text-width"/>
-                <dropdown className={ this.state.subsOpen ? 'open' : '' }>
-                  { subs }
-                </dropdown>
-              </btn>
-              <btn className="dubs" onClick={ ::this.toggleDubsSelector } disabled={ dubs.length <= 1 }>
-                <i className="fa fa-fw fa-microphone"/>
-                <dropdown className={ this.state.dubsOpen ? 'open' : '' }>
-                  { dubs }
-                </dropdown>
-              </btn>
-              <btn className="playlist" onClick={ ::this.togglePlaylist }>
-                <i className="fa fa-fw fa-indent"/>
-              </btn>
               <btn className="fullscreen" onClick={ ::this.toggleFullScreen }>
                 <i className={ `fa fa-${this.state.fullscreen ? 'compress' : 'expand'}` } />
               </btn>
@@ -422,7 +428,7 @@ export default class Player extends Component {
    * @param event
    */
   seek(event) {
-    const clickOnPercent = 100 / event.target.offsetWidth * (event.clientX - 5);
+    const clickOnPercent = 100 / event.target.offsetWidth * event.clientX;
 
     this.setTime(this.state.length / 100 * clickOnPercent);
   }
