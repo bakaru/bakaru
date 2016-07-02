@@ -17,7 +17,7 @@ const packagerConfig = {
   arch: 'ia32',
   dir: './build/app',
   platform: 'win32',
-  version: '0.36.7',
+  version: '1.2.0',
   asar: true,
   overwrite: true,
   icon: './icon.ico',

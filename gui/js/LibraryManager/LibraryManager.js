@@ -373,6 +373,10 @@ export default class LibraryManager {
     const episodesMap = new Map(anime.episodes);
 
     episodesStubs.map(episodeStub => {
+      if (episodesMap.has(episodeStub.id)) {
+        return;
+      }
+
       const episode = Object.assign({}, getEpisodeTemplate(), episodeStub);
 
       episodesMap.set(episode.id, episode);
