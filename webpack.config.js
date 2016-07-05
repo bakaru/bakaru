@@ -24,8 +24,7 @@ config.push({
   resolve: {
     root: [path.join(__dirname, "bower_components")],
     alias: {
-      lib: path.join(__dirname, "app/lib"),
-      ipc: path.join(__dirname, "gui/js/ipcRenderer.js"),
+      common: path.join(__dirname, 'common'),
       utils: path.join(__dirname, 'gui/js/utils'),
       'ipc-events': path.join(__dirname, "app/events.js"),
       actions: path.join(__dirname, "gui/js/actions.js"),

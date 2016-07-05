@@ -1,30 +1,40 @@
 'use strict';
 
-module.exports = {
-  main: {
-    minimizeMainWindow: 'main:minimizeMainWindow',
-    openSelectFolderDialog: 'main:openSelectFolderDialog'
-  },
+/**
+ * @module ipc-events
+ */
 
-  renderer: {
-    flagAddAnimeFolderStart: 'renderer:flagAddAnimeFolderStart',
-    flagAddAnimeFolderEnd: 'renderer:flagAddAnimeFolderEnd',
+/**
+ * @typedef {{minimizeMainWindow: string, openSelectFolderDialog: string}} MainEvents
+ */
 
-    addAnimeFolder: 'renderer:addAnimeFolder',
-    addEpisodes: 'renderer:addEpisodes',
-    updateEpisodes: 'renderer:updateEpisodes',
-    updateEpisode: 'renderer:updateEpisode',
-    updateDubs: 'renderer:updateDubs',
-    updateSubs: 'renderer:updateSubs',
-    updateAnimeFolder: 'renderer:updateAnimeFolder',
-    setMediaInfo: 'renderer:setMediaInfo',
+module.exports.main = {
+  minimizeMainWindow: 'main:minimizeMainWindow',
+  openSelectFolderDialog: 'main:openSelectFolderDialog'
+};
 
-    stopScanning: 'renderer:stopScanning',
+/**
+ * @typedef {{flagAddAnimeFolderStart: string, flagAddAnimeFolderEnd: string, addAnimeFolder: string, addEpisodes: string, updateEpisodes: string, updateEpisode: string, updateDubs: string, updateSubs: string, updateAnimeFolder: string, setMediaInfo: string, stopScanning: string, startMediaInfoScanning: string, stopMediaInfoScanning: string, startSubsScanning: string, stopSubsScanning: string}} RendererEvents
+ */
 
-    startMediaInfoScanning: 'renderer:startMediaInfoScanning',
-    stopMediaInfoScanning: 'renderer:stopMediaInfoScanning',
+module.exports.renderer = {
+  flagAddAnimeFolderStart: 'renderer:flagAddAnimeFolderStart',
+  flagAddAnimeFolderEnd: 'renderer:flagAddAnimeFolderEnd',
 
-    startSubsScanning: 'renderer:startSubsScanning',
-    stopSubsScanning: 'renderer:stopSubsScanning',
-  }
+  addAnimeFolder: 'renderer:addAnimeFolder',
+  addEpisodes: 'renderer:addEpisodes',
+  updateEpisodes: 'renderer:updateEpisodes',
+  updateEpisode: 'renderer:updateEpisode',
+  updateDubs: 'renderer:updateDubs',
+  updateSubs: 'renderer:updateSubs',
+  updateAnimeFolder: 'renderer:updateAnimeFolder',
+  setMediaInfo: 'renderer:setMediaInfo',
+
+  stopScanning: 'renderer:stopScanning',
+
+  startMediaInfoScanning: 'renderer:startMediaInfoScanning',
+  stopMediaInfoScanning: 'renderer:stopMediaInfoScanning',
+
+  startSubsScanning: 'renderer:startSubsScanning',
+  stopSubsScanning: 'renderer:stopSubsScanning'
 };

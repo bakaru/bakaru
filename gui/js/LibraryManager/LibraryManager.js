@@ -119,7 +119,6 @@ export default class LibraryManager {
     this.library = this._restoreCache();
 
     this._setupEventsHandlers();
-    this._setupIpcHandlers();
   }
 
   setStore (store) {
@@ -182,60 +181,6 @@ export default class LibraryManager {
       debug && console.log(`[LM] Stopping at ${time}`, entryId, episodeId);
 
       this.store.dispatch(actions.updateAnimeFolder(this.handleStoppedAt(entryId, episodeId, time)));
-    });
-  }
-
-  _setupIpcHandlers () {
-    ipcRenderer.on(renderer.addAnimeFolder, (event, data) => {
-      this.store.dispatch(actions.updateAnimeFolder(this.create(data)));
-    });
-
-    ipcRenderer.on(renderer.addEpisodes, (event, data) => {
-      this.store.dispatch(actions.updateAnimeFolder(this.addEpisodes(data)));
-    });
-
-    ipcRenderer.on(renderer.updateEpisode, (event, data) => {
-      this.store.dispatch(actions.updateAnimeFolder(this.updateEpisode(data)));
-    });
-
-    ipcRenderer.on(renderer.updateDubs, (event, data) => {
-      this.store.dispatch(actions.updateAnimeFolder(this.updateDubs(data)));
-    });
-
-    ipcRenderer.on(renderer.updateSubs, (event, data) => {
-      this.store.dispatch(actions.updateAnimeFolder(this.updateSubs(data)));
-    });
-
-    ipcRenderer.on(renderer.setMediaInfo, (event, data) => {
-      this.store.dispatch(actions.updateAnimeFolder(this.setMediaInfo(data)));
-    });
-
-    //ipcRenderer.on(renderer.startSubsScanning, (event, id) => {
-    //  this.store.dispatch(actions.updateAnimeFolder(this.startSubsScanning(id)));
-    //});
-
-    ipcRenderer.on(renderer.stopSubsScanning, (event, id) => {
-      this.store.dispatch(actions.updateAnimeFolder(this.stopSubsScanning(id)));
-    });
-
-    ipcRenderer.on(renderer.startMediaInfoScanning, (event, id) => {
-      this.store.dispatch(actions.updateAnimeFolder(this.startMediaInfoScanning(id)));
-    });
-
-    ipcRenderer.on(renderer.stopMediaInfoScanning, (event, id) => {
-      this.store.dispatch(actions.updateAnimeFolder(this.stopMediaInfoScanning(id)));
-    });
-
-    ipcRenderer.on(renderer.stopScanning, (event, id) => {
-      this.store.dispatch(actions.updateAnimeFolder(this.stopScanning(id)));
-    });
-
-    ipcRenderer.on(renderer.flagAddAnimeFolderStart, () => {
-      this.store.dispatch(actions.flagAddFolderStart());
-    });
-
-    ipcRenderer.on(renderer.flagAddAnimeFolderEnd, () => {
-      this.store.dispatch(actions.flagAddFolderEnd());
     });
   }
 
