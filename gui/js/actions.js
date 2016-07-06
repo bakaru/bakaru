@@ -2,6 +2,7 @@
 export const ADD_ANIME_FOLDER = 'ADD_ANIME_FOLDER';
 export const UPDATE_ANIME_FOLDER = 'UPDATE_ANIME_FOLDER';
 export const OPEN_ANIME_FOLDER = 'OPEN_ANIME_FOLDER';
+export const DELETE_ANIME_FOLDER = 'DELETE_ANIME_FOLDER';
 
 export function addAnimeFolder(animeFolder) {
   return {
@@ -20,6 +21,13 @@ export function updateAnimeFolder(animeFolder) {
 export function openAnimeFolder(id) {
   return {
     type: OPEN_ANIME_FOLDER,
+    id
+  }
+}
+
+export function deleteAnimeFolder(id) {
+  return {
+    type: DELETE_ANIME_FOLDER,
     id
   }
 }

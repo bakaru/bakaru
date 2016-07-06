@@ -1,2 +1,5 @@
 import MAL from './MAL';
-export default MAL;
+
+const mal = new MAL();
+
+export default mal;

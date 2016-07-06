@@ -38,7 +38,7 @@ const Gui = (props) => (renderStyle(props.settings), (
       actions={ props.actions }
       playerActive={ props.player.playlist.length > 0 }
     />
-    <Library { ...props } />
+    <Library { ...props }/>
     <Settings
       focus={ props.focus }
       actions={ props.actions }

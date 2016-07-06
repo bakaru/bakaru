@@ -1,8 +1,36 @@
 import React from 'react';
 import Item from './Item';
 import Entry from './Entry';
+import { remote } from 'electron';
+
+const { Menu, MenuItem } = remote;
+import LibraryEvents from 'utils/LibraryEvents';
 
 import classname from 'classnames';
+
+let contextEntryId = null;
+
+let contextMenu = new Menu();
+
+contextMenu.append(new MenuItem({
+  label: 'Play all',
+  click: () => {
+    console.log(`Playing all for id: ${contextEntryId}`);
+  }
+}));
+contextMenu.append(new MenuItem({type: 'separator'}));
+contextMenu.append(new MenuItem({
+  label: 'Delete from library',
+  click: () => {
+    LibraryEvents.removeEntry(contextEntryId);
+  }
+}));
+
+function openContextMenu (id) {
+  contextEntryId = id;
+
+  contextMenu.popup(remote.getCurrentWindow());
+}
 
 /**
  * @param folder
@@ -23,7 +51,6 @@ export default function Library(props) {
 
   const {
     actions,
-    player,
     focus
   } = props;
 
@@ -40,7 +67,7 @@ export default function Library(props) {
     const id = sortedEntries[index];
 
     entriesList[index] = (
-      <Item key={ id } id={ id } />
+      <Item key={ id } id={ id } onContextMenu={ () => openContextMenu(id) } />
     );
   }
 

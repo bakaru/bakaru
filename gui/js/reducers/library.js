@@ -1,6 +1,7 @@
 import {
   UPDATE_ANIME_FOLDER,
-  OPEN_ANIME_FOLDER
+  OPEN_ANIME_FOLDER,
+  DELETE_ANIME_FOLDER
 } from 'actions';
 
 /**
@@ -52,6 +53,23 @@ function updateAnimeFolder(state, animeFolder) {
 
 /**
  * @param {LibraryState} state
+ * @param {string} id
+ * @return {LibraryState}
+ */
+function deleteAnimeFolder(state, id) {
+  const entries = new Map(state.entries);
+  entries.delete(id);
+
+  console.log('DELETED', id, 'FROM STATE');
+
+  return {
+    ...state,
+    entries
+  }
+}
+
+/**
+ * @param {LibraryState} state
  * @param animeFolderId
  * @returns {LibraryState}
  */
@@ -83,6 +101,10 @@ export default function library (state = initialState, action) {
       break;
 
     case OPEN_ANIME_FOLDER: return openAnimeFolder(state, action.id);
+      break;
+
+    case DELETE_ANIME_FOLDER:
+      return deleteAnimeFolder(state, action.id);
       break;
 
     default:

@@ -93,6 +93,10 @@ class BrowserWindow {
   setTitle(title) {
     this.self().setTitle(title);
   }
+
+  setThumbarButtons(cfg) {
+    this.self().setThumbarButtons(cfg);
+  }
 }
 
 export default new BrowserWindow(require('electron').remote);

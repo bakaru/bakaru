@@ -7,7 +7,9 @@ import ReactDom from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import appReducers from './reducers';
+
 import LibraryManager from './LibraryManager';
+import MAL from './Link/MAL';
 
 import Gui from './containers/Gui';
 
@@ -15,6 +17,7 @@ const wcjs = window.require(getQueryVariable('wcjsPath'));
 const store = createStore(appReducers);
 
 LibraryManager.setStore(store);
+MAL.setStore(store);
 
 ReactDom.render(
   <Provider store={store}>

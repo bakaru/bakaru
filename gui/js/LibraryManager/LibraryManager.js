@@ -160,6 +160,16 @@ export default class LibraryManager {
     window.localStorage[entry.id] = ARSON.stringify(entry);
   }
 
+  removeFromCache (entryId) {
+    window.clearTimeout(this.cacheThrottler);
+
+    this.cacheThrottler = window.setTimeout(() => {
+      window.localStorage['library'] = JSON.stringify([...this.entriesIds]);
+    }, 200);
+
+    delete window.localStorage[entryId];
+  }
+
   openSelectFolderDialog () {
     return () => {
       ipcRenderer.send('main:openSelectFolderDialog');
@@ -182,8 +192,54 @@ export default class LibraryManager {
 
       this.store.dispatch(actions.updateAnimeFolder(this.handleStoppedAt(entryId, episodeId, time)));
     });
+
+    LibraryEvents.onUpdateMalLink(({ entryId, link }) => {
+      debug && console.log(`[LM] Updating mal link`, entryId, link);
+
+      this.store.dispatch(actions.updateAnimeFolder(this.updateLink(entryId, link)));
+    });
+
+    LibraryEvents.onRemoveEntry(({ entryId }) => {
+      console.log(`[LM] Removing entry`, entryId);
+
+      const id = this.remove(entryId);
+      const action = actions.deleteAnimeFolder(id);
+
+      this.store.dispatch(action);
+    });
   }
 
+  remove (id) {
+    this.library.delete(id);
+    this.entriesIds.delete(id);
+    this.removeFromCache(id);
+
+    return id;
+  }
+
+  /**
+   * Updates link
+   *
+   * @param id
+   * @param link
+   * @return {Anime}
+   */
+  updateLink (id, link) {
+    const anime = this.getAnime(id);
+
+    anime.links = Object.assign({}, anime.links, link);
+
+    return anime;
+  }
+
+  /**
+   * Handles new stopped at time for episode
+   *
+   * @param id
+   * @param episodeId
+   * @param time
+   * @return {Anime}
+   */
   handleStoppedAt (id, episodeId, time) {
     const anime = this.getAnime(id);
     const episodesMap = new Map(anime.episodes);
@@ -204,56 +260,6 @@ export default class LibraryManager {
     );
 
     anime.episodes = episodesMap;
-
-    return anime;
-  }
-
-  stopScanning (id) {
-    debug && console.log('LM:stopScanning', id);
-
-    const anime = this.getAnime(id);
-
-    anime.state.scanning = false;
-
-    return anime;
-  }
-
-  startSubsScanning (id) {
-    debug && console.log('LM:startSubsScanning', id);
-
-    const anime = this.getAnime(id);
-
-    anime.state.subScanning = true;
-
-    return anime;
-  }
-
-  stopSubsScanning (id) {
-    debug && console.log('LM:stopSubsScanning', id);
-
-    const anime = this.getAnime(id);
-
-    anime.state.subScanning = false;
-
-    return anime;
-  }
-
-  startMediaInfoScanning (id) {
-    debug && console.log('LM:startMediaInfoScanning', id);
-
-    const anime = this.getAnime(id);
-
-    anime.state.mediainfoScanning = true;
-
-    return anime;
-  }
-
-  stopMediaInfoScanning (id) {
-    debug && console.log('LM:stopMediaInfoScanning', id);
-
-    const anime = this.getAnime(id);
-
-    anime.state.mediainfoScanning = false;
 
     return anime;
   }
@@ -411,6 +417,56 @@ export default class LibraryManager {
    */
   getAnime (id) {
     return this.library.get(id);
+  }
+
+  stopScanning (id) {
+    debug && console.log('LM:stopScanning', id);
+
+    const anime = this.getAnime(id);
+
+    anime.state.scanning = false;
+
+    return anime;
+  }
+
+  startSubsScanning (id) {
+    debug && console.log('LM:startSubsScanning', id);
+
+    const anime = this.getAnime(id);
+
+    anime.state.subScanning = true;
+
+    return anime;
+  }
+
+  stopSubsScanning (id) {
+    debug && console.log('LM:stopSubsScanning', id);
+
+    const anime = this.getAnime(id);
+
+    anime.state.subScanning = false;
+
+    return anime;
+  }
+
+  startMediaInfoScanning (id) {
+    debug && console.log('LM:startMediaInfoScanning', id);
+
+    const anime = this.getAnime(id);
+
+    anime.state.mediainfoScanning = true;
+
+    return anime;
+  }
+
+  stopMediaInfoScanning (id) {
+    debug && console.log('LM:stopMediaInfoScanning', id);
+
+    const anime = this.getAnime(id);
+
+    anime.state.mediainfoScanning = false;
+
+    return anime;
   }
 }
 

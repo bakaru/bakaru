@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classname from 'classnames';
 
-import { openAnimeFolder } from 'actions';
+import { openAnimeFolder, deleteAnimeFolder } from 'actions';
 
 class Item extends Component {
   render () {
@@ -12,6 +12,11 @@ class Item extends Component {
      * @type {Anime}
      */
     const folder = getAnimeFolder(id);
+
+    if (typeof folder === 'undefined') {
+      return (<none/>);
+    }
+
     const isOpened = selectedEntryId === id;
     const summary = [];
     
@@ -42,7 +47,7 @@ class Item extends Component {
     });
 
     return (
-      <item className={ itemClass } onClick={ () => selectEntry(id) }>
+      <item className={ itemClass } onClick={ () => selectEntry(id) } onContextMenu={ this.props.onContextMenu }>
         <title title={ folder.title }>
           { folder.title }
         </title>

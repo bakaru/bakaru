@@ -4,8 +4,6 @@ import PlayerControls from 'utils/PlayerControls';
 import MAL from '../../Link/MAL';
 import {shell} from 'electron';
 
-console.log(MAL);
-
 /**
  * @param {AnimeFolder} folder
  * @returns {XML}
@@ -88,9 +86,16 @@ export default class Entry extends Component {
           <path onClick={ ::this.handleEntryPathClick }>{ this.entry.path }</path>
         </summary>
 
+        <pre>
+          { JSON.stringify(this.entry.links, null, 2) }
+        </pre>
+
         <actions>
           <btn onClick={ ::this.handlePlayAllClick }>
             Play all
+          </btn>
+          <btn onClick={ ::this.testSearch }>
+            Search MAL
           </btn>
         </actions>
 
@@ -103,6 +108,10 @@ export default class Entry extends Component {
         </list>
       </entry>
     );
+  }
+
+  testSearch () {
+    MAL.search(this.entry.id, this.entry.title);
   }
 
   renderPlaceholder() {

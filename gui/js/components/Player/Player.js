@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import deepEqual from 'deep-equal';
+import { join as pathJoin } from 'path';
 import Mousetrap from 'mousetrap';
 import classname from 'classnames';
 
@@ -8,6 +8,8 @@ import PlayerController from './PlayerController';
 import PlayerControls from 'utils/PlayerControls';
 import BrowserWindow from 'utils/BrowserWindow';
 import LibraryEvents from 'utils/LibraryEvents';
+
+const playIcon = pathJoin(__dirname, 'img/play.png');
 
 export default class Player extends Component {
 
@@ -56,6 +58,15 @@ export default class Player extends Component {
     this.uiHideTimer = null;
 
     this.componentWillReceiveProps(props);
+
+    BrowserWindow.setThumbarButtons([{
+      icon: playIcon,
+      click: () => {
+        if (this.isFocused) {
+          this.togglePause();
+        }
+      }
+    }]);
   }
 
   /**

@@ -1,9 +1,29 @@
-import 'whatwg-fetch';
-import Provider from '../Provider';
+'use strict';
 
-class MAL extends Provider {
+import LibraryEvents from 'utils/LibraryEvents';
+
+export default class MAL {
 
   searchUrl = 'http://myanimelist.net/api/anime/search.xml?q=';
+
+  listUrl = 'http://myanimelist.net/malappinfo.php?type=anime&u=';
+
+  constructor () {
+    this.store = null;
+  }
+
+  setStore (store) {
+    this.store = store;
+  }
+
+  _getCredentials () {
+    const state = this.store.getState();
+
+    const login = state.settings.mal_login;
+    const pass = state.settings.mal_pass;
+
+    return btoa(`${login}:${pass}`);
+  }
 
   /**
    * Search on MAL by title
@@ -11,21 +31,26 @@ class MAL extends Provider {
    * @param title
    * @return {{id: string, title: string, poster: string}[]}
    */
-  search(title) {
-    super.search(title);
-
+  search(entryId, title) {
     return fetch(this.searchUrl + encodeURIComponent(title), {
       headers: {
-        Authorization: `Basic ${btoa('lolno:123456')}`
+        Authorization: `Basic ${this._getCredentials()}`
       }
     }).then(response => response.text()).then(body => {
       const dom = parseXML(body);
-      const link = this.getLinkTemplate();
+      const link = {
+        id: '',
+        score: '',
+        poster: '',
+        episodesTotal: 0
+      };
 
       link.id = parseInt(dom.querySelector('entry>id').innerHTML);
-      link.score = dom.querySelector('entry>score').innerHTML;
+      link.score = parseFloat(dom.querySelector('entry>score').innerHTML);
       link.poster = dom.querySelector('entry>image').innerHTML;
       link.episodesTotal = parseInt(dom.querySelector('entry>episodes').innerHTML);
+
+      LibraryEvents.updateMalLink(entryId, link);
     });
   }
 
@@ -50,8 +75,6 @@ class MAL extends Provider {
     return super.setEpisodesSeen(id, episodesSeen)
   }
 }
-
-export default new MAL();
 
 /**
  * @param {string} xml

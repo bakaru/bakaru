@@ -12,7 +12,10 @@ const initialSettings = {
   interface_main_colour: 'hsl(335, 100%, 50%)',
   interface_main_colour_light: 'hsla(335, 100%, 50%, .4)',
   interface_main_colour_contrast: 'rgb(255, 255, 255)',
-  interface_bg_colour: '#fefefe'
+  interface_bg_colour: '#fefefe',
+
+  mal_login: 'ololo',
+  mal_pass: '123456'
 };
 // Default settings ====================================================================================================
 

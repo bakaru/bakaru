@@ -60,6 +60,10 @@ config.push({
   ],
   externals: {
     electron: 'commonjs electron'
+  },
+  node: {
+    __dirname: false,
+    __filename: false,
   }
 });
 
