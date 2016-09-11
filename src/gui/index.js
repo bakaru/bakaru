@@ -6,14 +6,33 @@ import socketIO from 'socket.io-client';
 
 const io = socketIO(`http://127.0.0.1:${getQueryVariable('port')}`);
 
-console.log(window.io = io);
-
-
-import React from 'react';
+import React, {PropTypes} from 'react';
 import ReactDom from 'react-dom';
 import { Provider } from 'react-redux';
 
 const wcjs = window.require(getQueryVariable('wcjsPath'));
+
+class Wrapper extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <wrapper>
+        <library>
+          library
+        </library>
+        <entry>
+          entry
+        </entry>
+        <player>
+          player
+        </player>
+      </wrapper>
+    );
+  }
+}
 
 // ReactDom.render(
 //   <Provider store={store}>
