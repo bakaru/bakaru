@@ -24,7 +24,7 @@ const initialSettings = {
  *
  * @param settings
  */
-function persist(settings) {
+function persist(settings: Object) {
   window.localStorage['settings'] = JSON.stringify(settings);
 }
 

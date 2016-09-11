@@ -1,6 +1,6 @@
 'use strict';
 
-const FolderReader = require('./FolderReader');
+const FolderReader = require('./../LibraryManager/FolderReader');
 
 /**
  * @param {App} app

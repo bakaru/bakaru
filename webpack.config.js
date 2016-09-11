@@ -7,15 +7,16 @@ var Clean = require('clean-webpack-plugin');
 
 var config = [];
 
-var GUI_BUILD = './gui/build/';
+var GUI_BUILD = './src/gui/build/';
 
 if (process.env.GUI_BUILD && process.env.GUI_BUILD.trim().length > 0) {
   GUI_BUILD = process.env.GUI_BUILD.trim();
 }
 
 config.push({
+  target: 'electron',
   entry: {
-    gui: './gui/js/main.js'
+    gui: './src/gui/index.js'
   },
   output: {
     path: GUI_BUILD,
@@ -24,11 +25,8 @@ config.push({
   resolve: {
     root: [path.join(__dirname, "bower_components")],
     alias: {
-      common: path.join(__dirname, 'common'),
-      utils: path.join(__dirname, 'gui/js/utils'),
-      'ipc-events': path.join(__dirname, "app/events.js"),
-      actions: path.join(__dirname, "gui/js/actions.js"),
-      components: path.join(__dirname, "gui/js/components")
+      app: path.join(__dirname, 'app'),
+      gui: path.join(__dirname, "src/gui")
     }
   },
   module: {
@@ -48,6 +46,10 @@ config.push({
       {
         test: /\.(otf|eot|svg|ttf|woff|png|woff2)/,
         loader: 'url-loader?limit=8096'
+      },
+      {
+        test: /\.json$/,
+        loader: 'json'
       }
     ]
   },

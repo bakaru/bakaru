@@ -3,8 +3,8 @@ import anime from './stubs/oneAnime';
 import { normalize } from 'path';
 import { readdirSync } from 'fs';
 
-import IC from '../../../app/FolderReader/ItemsClassificator';
-import RAFS from '../../../app/FolderReader/RecursiveAnimeFolderScanner';
+import IC from '../../../app/Server/LibraryManager/ItemsClassificator';
+import RAFS from '../../../app/Server/LibraryManager/RecursiveAnimeFolderScanner';
 
 import { should } from 'chai';
 should();
