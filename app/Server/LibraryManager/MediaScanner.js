@@ -1,7 +1,7 @@
 'use strict';
 
 const sha224 = require('js-sha256').sha224;
-const events = require('../Server/events').renderer;
+const events = require('../events').renderer;
 
 class MediaScanner {
 

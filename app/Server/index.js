@@ -1,12 +1,28 @@
-const path = require('path');
 const http = require('http').createServer;
 const app = require('express')();
 const ws = require('socket.io');
 
-const MediaInfo = require('./MediaInfo');
-const createFolderReader = require('./FolderReader');
-const PathDispatcher = require('./PathDispatcher');
+const Plugins = require('./Plugins');
 
+class CustomEventEmitter {
+  constructor(interceptor = () => {}) {
+    this.interceptor = interceptor;
+    this.events = new EventEmitter();
+  }
+
+  setEmitInterceptor(interceptor) {
+    this.interceptor = interceptor;
+  }
+
+  on(event, cb) {
+    this.events.on(event, cb);
+  }
+
+  emit(event, data) {
+    this.interceptor(event, data);
+    this.events.emit(event, data);
+  }
+}
 class Server {
 
   /**
@@ -14,23 +30,33 @@ class Server {
    * @param {App} rootApp
    */
   constructor(rootApp) {
-    this.paths = new PathDispatcher(rootApp);
-    this.mediaInfo = new MediaInfo(path.join(this.paths.thirdParty, 'MediaInfo', 'MediaInfo.exe'));
-    this.folderReader = createFolderReader(rootApp);
-
     this.port = 59180;
 
     this.http = http(app);
     this.app = app;
     this.ws = ws(this.http);
 
+    this.events = new CustomEventEmitter();
+    this.plugins = new Plugins(this);
+
+    this.onClientEvent = this.onClientEvent.bind(this);
+
+    this.events.setEmitInterceptor(this.onServerEvent.bind(this));
     this.ws.on('connection', this.onConnection.bind(this));
 
     this.http.listen(this.port);
   }
 
+  onServerEvent(event, data) {
+    this.ws.emit('_client_event', { event, data });
+  }
+
+  onClientEvent({ event, data }) {
+    this.events.emit(event, data);
+  }
+
   onConnection(socket) {
-    console.log('Yay connection');
+    socket.on('_client_event', this.onClientEvent);
   }
 }
 
