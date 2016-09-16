@@ -1,14 +1,14 @@
 class TestPlugin {
   /**
    * Ctor
-   * @param {Server} server
+   * @param {ServerContext} context
    */
-  constructor(server) {
+  constructor(context) {
     this.version = '0.0.1';
     this.name = 'test';
-    this.server = server;
+    this.context = context;
 
-    this.server.events.on('testEvent', () => {
+    this.context.events.on('testEvent', () => {
       console.log('TestPlugin:testEvent')
     });
   }
@@ -17,10 +17,10 @@ class TestPlugin {
 export default class Plugins {
   /**
    * Ctor
-   * @param {Server} server
+   * @param {ServerContext} context
    */
-  constructor(server) {
-    this.server = server;
+  constructor(context) {
+    this.context = context;
 
     this.plugins = new Map();
 
@@ -36,7 +36,7 @@ export default class Plugins {
    * @param {*} plugin
    */
   addPlugin(plugin) {
-    const pluginObject = new plugin(this.server);
+    const pluginObject = new plugin(this.context);
 
     this.plugins.set(pluginObject.name, pluginObject);
   }

@@ -1,6 +1,6 @@
-const http = require('http').createServer;
-const app = require('express')();
-const ws = require('socket.io');
+const createServer = require('http').createServer;
+const createExpress = require('express');
+const createSockets = require('socket.io');
 
 const Plugins = require('./Plugins');
 
@@ -23,6 +23,7 @@ class CustomEventEmitter {
     this.events.emit(event, data);
   }
 }
+
 class Server {
 
   /**
@@ -30,25 +31,31 @@ class Server {
    * @param {App} rootApp
    */
   constructor(rootApp) {
+    const app = createExpress();
+    const events = new CustomEventEmitter();
+    const httpServer = createServer(app);
+    const socketServer = createSockets(httpServer);
+
     this.port = 59180;
+    this.events = events;
+    this.sockets = socketServer;
 
-    this.http = http(app);
-    this.app = app;
-    this.ws = ws(this.http);
-
-    this.events = new CustomEventEmitter();
-    this.plugins = new Plugins(this);
+    this.plugins = new Plugins({
+      rootApp,
+      events,
+      app
+    });
 
     this.onClientEvent = this.onClientEvent.bind(this);
 
-    this.events.setEmitInterceptor(this.onServerEvent.bind(this));
-    this.ws.on('connection', this.onConnection.bind(this));
+    events.setEmitInterceptor(this.onServerEvent.bind(this));
+    socketServer.on('connection', this.onConnection.bind(this));
 
-    this.http.listen(this.port);
+    httpServer.listen(this.port);
   }
 
   onServerEvent(event, data) {
-    this.ws.emit('_client_event', { event, data });
+    this.sockets.emit('_client_event', { event, data });
   }
 
   onClientEvent({ event, data }) {
