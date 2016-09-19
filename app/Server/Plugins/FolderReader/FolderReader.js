@@ -16,7 +16,7 @@ const isSeries = require('./isSeries');
  * @param {ClassifiedFolderItems} classes
  */
 function makeSeriesEntry(seriesPath, classes) {
-
+  return coreObjectsCreators.entry(seriesPath);
 }
 
 function makeSeriesVoiceOver(voiceOverPath, items) {
