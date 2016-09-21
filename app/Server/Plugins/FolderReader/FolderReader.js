@@ -7,8 +7,6 @@ const fs = bluebird.promisifyAll(require('fs'));
 const classify = require('./classify');
 const isSeries = require('./isSeries');
 
-
-
 /**
  * Expands series folder
  *
@@ -79,17 +77,17 @@ class FolderReader {
    * @returns {Promise}
    */
   readFolder(folderPath) {
-    const that = this;
-
-    return fs.readdir(folderPath)
+    return fs.readdirAsync(folderPath)
       .then(items => items.map(item => path.join(folderPath, item)))
       .then(classify)
       .then(classes => {
         if (isSeries(classes)) {
-          that.processSeries(folderPath, classes);
+          this.processSeries(folderPath, classes);
         } else {
-          that.processNonSeries(classes);
+          this.processNonSeries(classes);
         }
+
+        return classes;
       });
   }
 

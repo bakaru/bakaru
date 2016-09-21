@@ -25,7 +25,7 @@ function makeClasses() {
  * @returns {Promise<{item: string, stats: fs.Stats}[]>}
  */
 function statItems(items) {
-  return Promise.all(items.map(item => fs.stat(item).then(stats => ({item, stats}))));
+  return Promise.all(items.map(item => fs.statAsync(item).then(stats => ({item, stats}))));
 }
 
 /**
