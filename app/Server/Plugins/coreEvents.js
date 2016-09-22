@@ -1,7 +1,7 @@
 module.exports = {
   folderAdded: 'core:folderAdded',
 
-  entryDiscovered: 'core:entryDiscovered',
+  entryRead: 'core:entryRead',
   subtitlesDiscovered: 'core:subtitlesDiscovered',
   voiceOverDiscovered: 'core:voiceOverDiscovered',
 

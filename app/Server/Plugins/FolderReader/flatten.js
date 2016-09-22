@@ -1,9 +1,6 @@
 const bluebird = require('bluebird');
 const path = require('path');
-const {
-  statAsync: stat,
-  readdirAsync: read
-} = bluebird.promisifyAll(require('fs'));
+const { readdirAsync: read } = bluebird.promisifyAll(require('fs'));
 
 const classify = require('./classify');
 
@@ -36,7 +33,7 @@ function readFolder(folderPath) {
  * @param {string} folderPath
  * @returns {Promise<Map<string, ClassifiedFolderItems>>}
  */
-function readFlatTree(folderPath) {
+function flatten(folderPath) {
   return bluebird.coroutine(function *() {
     const flatTree = new Map();
     const unreadFolders = new Set([folderPath]);
@@ -63,4 +60,4 @@ function readFlatTree(folderPath) {
   })();
 };
 
-module.exports = readFlatTree;
+module.exports = flatten;

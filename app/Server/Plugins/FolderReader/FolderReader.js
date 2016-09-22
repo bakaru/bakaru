@@ -2,28 +2,15 @@ const coreObjectsCreators = require('../coreObjectsCreators');
 const coreEvents = require('../coreEvents');
 const bluebird = require('bluebird');
 const path = require('path');
-const fs = bluebird.promisifyAll(require('fs'));
+const {
+  readdirAsync: read,
+  statAsync: stat
+} = bluebird.promisifyAll(require('fs'));
 
 const classify = require('./classify');
 const isSeries = require('./isSeries');
 
-/**
- * Expands series folder
- *
- * @param {string} seriesPath
- * @param {ClassifiedFolderItems} classes
- */
-function makeSeriesEntry(seriesPath, classes) {
-  return coreObjectsCreators.entry(seriesPath);
-}
-
-function makeSeriesVoiceOver(voiceOverPath, items) {
-
-}
-
-function makeSeriesSubtitles(subtitlesPath, items) {
-
-}
+const makeSeriesEntry = require('./makers/seriesEntry');
 
 function makeSingleEntry(entryPath) {
 
@@ -59,7 +46,7 @@ class FolderReader {
   onFolderAdded(folderPath) {
     const normalizedPath = folderPath.normalize();
 
-    fs.stat(normalizedPath)
+    stat(normalizedPath)
       .then(normalizedPathStats => {
         if (!normalizedPathStats.isDirectory()) {
           return this.events.emit(coreEvents.errors.folderNotFolder, folderPath);
@@ -77,7 +64,7 @@ class FolderReader {
    * @returns {Promise}
    */
   readFolder(folderPath) {
-    return fs.readdirAsync(folderPath)
+    return read(folderPath)
       .then(items => items.map(item => path.join(folderPath, item)))
       .then(classify)
       .then(classes => {
@@ -98,10 +85,7 @@ class FolderReader {
    * @param {ClassifiedFolderItems} classes
    */
   processSeries(seriesPath, classes) {
-    this.events.emit(
-      coreEvents.entryDiscovered,
-      makeSeriesEntry(seriesPath, classes)
-    );
+    makeSeriesEntry(seriesPath, classes).then(entry => this.events.emit(coreEvents.entryRead, entry));
   }
 
   /**
@@ -118,7 +102,7 @@ class FolderReader {
     // Standalone videos, movies may be?
     if (classes.videos.length > 0) {
       classes.videos.map(video => this.events.emit(
-        coreEvents.entryDiscovered,
+        coreEvents.entryRead,
         makeSingleEntry(video)
       ));
     }

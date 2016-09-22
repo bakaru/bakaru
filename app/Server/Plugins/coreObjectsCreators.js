@@ -31,6 +31,25 @@ function extname(path) {
 }
 
 /**
+ * Converts items to map of itemId=>itemPath
+ *
+ * @param {string[]} items
+ * @return {Map<string, string>}
+ */
+function items2map(items) {
+  const map = new Map();
+
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    const itemBasename = p.basename(item, p.extname(item));
+
+    map.set(sha224(itemBasename), item);
+  }
+
+  return map;
+}
+
+/**
  * Makes new entry object
  *
  * @param {string} path
@@ -97,17 +116,19 @@ function chapter(title, time) {
  *
  * @param {string} path
  * @param {string[]} items
+ * @param {boolean} embedded
  * @return {Subtitles}
  */
-function subtitles(path, items) {
+function subtitles(path, items, embedded = false) {
   const basename = p.basename(path);
 
   return {
     id: sha224(basename),
     path,
-    items,
+    items: items2map(items),
     title: basename2title(basename),
-    format: extname(items[0])
+    format: extname(items[0]),
+    embedded
   };
 }
 
@@ -116,17 +137,19 @@ function subtitles(path, items) {
  *
  * @param {string} path
  * @param {string[]} items
+ * @param {boolean} embedded
  * @return {Subtitles}
  */
-function voiceOver(path, items) {
+function voiceOver(path, items, embedded = false) {
   const basename = p.basename(path);
 
   return {
     id: sha224(basename),
     path,
-    items,
+    items: items2map(items),
     title: basename2title(basename),
-    format: extname(items[0])
+    format: extname(items[0]),
+    embedded
   };
 }
 

@@ -8,11 +8,11 @@ afterEach(fakefs.restore);
 describe('readFlatTree()', () => {
   it('should be accessible', () => {
     expect(() => {
-      require('../../../../../app/Server/Plugins/FolderReader/readFlatTree');
+      require('../../../../../app/Server/Plugins/FolderReader/flatten');
     }).not.throw(Error);
   });
 
-  const readFlatTree = require('../../../../../app/Server/Plugins/FolderReader/readFlatTree');
+  const readFlatTree = require('../../../../../app/Server/Plugins/FolderReader/flatten');
 
   it('should build flat tree', () => {
     return readFlatTree('onlySeries/s1').then(flatTree => {
