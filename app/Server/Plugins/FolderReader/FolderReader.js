@@ -11,18 +11,7 @@ const classify = require('./classify');
 const isSeries = require('./isSeries');
 
 const makeSeriesEntry = require('./makers/seriesEntry');
-
-function makeSingleEntry(entryPath) {
-
-}
-
-function makeSingleVoiceOver(audioPath) {
-
-}
-
-function makeSingleSubtitles(subtitlesPath) {
-
-}
+const makeStandAlone = require('./makers/standAlone');
 
 class FolderReader {
 
@@ -103,7 +92,7 @@ class FolderReader {
     if (classes.videos.length > 0) {
       classes.videos.map(video => this.events.emit(
         coreEvents.entryRead,
-        makeSingleEntry(video)
+        makeStandAlone.entry(video)
       ));
     }
 
@@ -111,7 +100,7 @@ class FolderReader {
     if (classes.audios.length > 0) {
       classes.audios.map(audio => this.events.emit(
         coreEvents.voiceOverDiscovered,
-        makeSingleVoiceOver(audio)
+        makeStandAlone.voiceOver(audio)
       ));
     }
 
@@ -119,7 +108,7 @@ class FolderReader {
     if (classes.subtitles.length > 0) {
       classes.subtitles.map(subtitles => this.events.emit(
         coreEvents.subtitlesDiscovered,
-        makeSingleSubtitles(subtitles)
+        makeStandAlone.subtitles(subtitles)
       ));
     }
   }

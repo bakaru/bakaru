@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Returns equal start and end parts of all strings
  *
@@ -8,7 +6,7 @@
  * @param {string[]} strings
  * @returns {[string, string]}
  */
-module.exports = function findSameParts(strings) {
+function findSameParts(strings) {
   const stringsLength = strings.length;
 
   if (stringsLength === 1) {
@@ -57,4 +55,6 @@ module.exports = function findSameParts(strings) {
   }
 
   return [start.join(''), end.reverse().join('')];
-};
+}
+
+module.exports = findSameParts;

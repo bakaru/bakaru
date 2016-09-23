@@ -14,7 +14,7 @@ class TestPlugin {
   }
 }
 
-export default class Plugins {
+class Plugins {
   /**
    * Ctor
    * @param {ServerContext} context
@@ -41,3 +41,5 @@ export default class Plugins {
     this.plugins.set(pluginObject.name, pluginObject);
   }
 }
+
+module.exports = Plugins;

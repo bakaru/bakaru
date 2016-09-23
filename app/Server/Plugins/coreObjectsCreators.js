@@ -138,7 +138,7 @@ function subtitles(path, items, embedded = false) {
  * @param {string} path
  * @param {string[]} items
  * @param {boolean} embedded
- * @return {Subtitles}
+ * @return {VoiceOver}
  */
 function voiceOver(path, items, embedded = false) {
   const basename = p.basename(path);
