@@ -2,8 +2,16 @@ module.exports = {
   folderAdded: 'core:folderAdded',
 
   entryRead: 'core:entryRead',
-  subtitlesDiscovered: 'core:subtitlesDiscovered',
-  voiceOverDiscovered: 'core:voiceOverDiscovered',
+  entryUpdate: 'core:entryUpdate',
+  entryDelete: 'core:entryDelete',
+
+  subtitlesRead: 'core:subtitlesRead',
+  subtitlesUpdate: 'core:subtitlesUpdate',
+  subtitlesDelete: 'core:subtitlesDelete',
+
+  voiceOverRead: 'core:voiceOverRead',
+  voiceOverUpdate: 'core:voiceOverUpdate',
+  voiceOverDelete: 'core:voiceOverDelete',
 
   errors: {
     folderNotExist: 'core:errors:folderNotExist',

@@ -18,7 +18,7 @@ class Syncer {
     this.libPath = path.join(rootPath, 'library.arson');
 
     this.lib = new Set();
-    this.libDebouncer = '__library__';
+    this.libDebouncer = 'index';
     this.debouncers = new Map();
   }
 

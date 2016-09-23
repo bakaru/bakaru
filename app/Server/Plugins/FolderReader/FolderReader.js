@@ -99,7 +99,7 @@ class FolderReader {
     // Standalone voice-overs
     if (classes.audios.length > 0) {
       classes.audios.map(audio => this.events.emit(
-        coreEvents.voiceOverDiscovered,
+        coreEvents.voiceOverRead,
         makeStandAlone.voiceOver(audio)
       ));
     }
@@ -107,7 +107,7 @@ class FolderReader {
     // Standalone subtitles
     if (classes.subtitles.length > 0) {
       classes.subtitles.map(subtitles => this.events.emit(
-        coreEvents.subtitlesDiscovered,
+        coreEvents.subtitlesRead,
         makeStandAlone.subtitles(subtitles)
       ));
     }
