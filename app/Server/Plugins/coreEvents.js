@@ -13,6 +13,8 @@ module.exports = {
   voiceOverUpdate: 'core:voiceOverUpdate',
   voiceOverDelete: 'core:voiceOverDelete',
 
+  mediaRead: 'core:mediaRead',
+
   errors: {
     folderNotExist: 'core:errors:folderNotExist',
     folderNotFolder: 'core:errors:folderNotFolder'
