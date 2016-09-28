@@ -67,7 +67,8 @@ class App {
       }
     });
 
-    const wcjsPath = encodeURIComponent(this.server.paths.wcjs);
+    // const wcjsPath = encodeURIComponent(this.server.paths.wcjs);
+    const wcjsPath = null;
 
     this.mainWindow.loadURL(`${this.mainWindowUrl}?port=${this.server.port}&wcjsPath=${wcjsPath}`);
 
