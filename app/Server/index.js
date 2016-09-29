@@ -1,3 +1,4 @@
+const EventEmitter = require('events').EventEmitter;
 const createServer = require('http').createServer;
 const createExpress = require('express');
 const createSockets = require('socket.io');

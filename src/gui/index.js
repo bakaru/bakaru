@@ -7,10 +7,11 @@ import socketIO from 'socket.io-client';
 const io = socketIO(`http://127.0.0.1:${getQueryVariable('port')}`);
 
 import React, {PropTypes} from 'react';
+import useSheet from 'react-jss';
 import ReactDom from 'react-dom';
 import { Provider } from 'react-redux';
 
-const wcjs = window.require(getQueryVariable('wcjsPath'));
+// const wcjs = window.require(getQueryVariable('wcjsPath'));
 
 class Wrapper extends React.Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class Wrapper extends React.Component {
 
   render() {
     return (
-      <wrapper>
+      <wrapper className={this.props.sheet.classes.wrapper}>
         <library>
           library
         </library>
@@ -34,14 +35,18 @@ class Wrapper extends React.Component {
   }
 }
 
-// ReactDom.render(
-//   <Provider store={store}>
-//     <div>
-//       OLOLO
-//     </div>
-//   </Provider>,
-//   document.getElementById('gui-mount')
-// );
+const styles = {
+  wrapper: {
+    background: 'red'
+  }
+};
+
+const WrappedInStyles = useSheet(Wrapper, styles);
+
+ReactDom.render(
+  <WrappedInStyles/>,
+  document.getElementById('gui-mount')
+);
 
 function getQueryVariable(variable: string) {
   var query = window.location.search.substring(1);
