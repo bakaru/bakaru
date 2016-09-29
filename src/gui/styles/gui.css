@@ -1,0 +1,94 @@
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI";
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+#player,
+#bg-image,
+#bg-gradient,
+wrapper,
+library,
+gui {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#player {
+  z-index: 1;
+}
+
+#bg-image {
+  z-index: 2;
+  background-image: var(--bg-image);
+  background-size: cover;
+}
+
+#bg-gradient {
+  background-color: var(--bg-gradient-color);
+  z-index: 3;
+}
+
+wrapper {
+  z-index: 4;
+}
+
+gui {
+  z-index: 5;
+}
+
+library {
+  z-index: 6;
+  overflow-y: scroll;
+}
+  category {
+    display: block;
+    color: rgba(255, 255, 255, .3);
+    font-size: 30px;
+    text-transform: uppercase;
+    height: 1px;
+    width: calc(45vw + 50px);
+    overflow-y: visible;
+    margin: 0 auto;
+    line-height: 40px;
+  }
+  entry {
+    -webkit-app-region: drag;
+    display: block;
+    width: 45vw;
+    height: 60px;
+    margin: 10px auto;
+    background: rgba(255, 255, 255, .85);
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(60, 60, 60, .5);
+
+    transition: all .2s ease;
+  }
+    entry:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 10px rgba(60, 60, 60, .5);
+    }
+    header {
+      display: block;
+      padding: 10px 16px 0px 16px;
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1;
+    }
+    info {
+      display: block;
+      padding: 0px 16px 10px 16px;
+      font-size: 12px;
+    }
