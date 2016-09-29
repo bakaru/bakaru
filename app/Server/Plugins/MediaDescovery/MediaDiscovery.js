@@ -8,6 +8,7 @@ const coreEvents = require('../coreEvents');
 
 // FIXME: Fix this executable motherfucker...
 const executablePath = path.join(RootApp.getPath('userData'), 'ffmpeg/ffprobe.exe');
+const ffprobeArgs = ['-show_chapters'];
 
 /**
  * Priority queue comparator
@@ -77,13 +78,25 @@ class MediaDiscovery {
    * @returns {Promise<{}[]>}
    */
   processFiles(paths) {
-    return Promise.all(paths.map(filePath => {
-      return new Promise(resolve => {
-        this.ffmpeg.ffprobe(filePath, ['-show_chapters'], (err, info) => {
-          resolve(info);
-        });
+    return Promise.all(paths.map(this.processFile.bind(this)));
+  }
+
+  /**
+   * FFProbe file
+   *
+   * @param filePath
+   * @returns {Promise}
+   */
+  processFile(filePath) {
+    return new Promise((resolve, reject) => {
+      this.ffmpeg.ffprobe(filePath, ffprobeArgs, (err, info) => {
+        if (err) {
+          reject(err);
+        }
+
+        resolve(info);
       });
-    }));
+    });
   }
 }
 
