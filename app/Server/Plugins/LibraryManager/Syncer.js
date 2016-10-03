@@ -43,8 +43,13 @@ class Syncer {
    * @returns {Promise<Set<string>>}
    */
   resurrect() {
+    // Reading library file
     return read(this.libPath)
+      // Parsing library from ARSON
       .then(arson.parse)
+      // Oops no library (fresh install) faking that its empty
+      .catch(() => new Set())
+      // Assigning
       .then(lib => this.lib = lib);
   }
 

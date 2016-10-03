@@ -101,12 +101,14 @@ function episode(path) {
  * Makes new chapter object
  *
  * @param {string} title
- * @param {number} time
+ * @param {number} start
+ * @param {number} end
  * @return {Chapter}
  */
-function chapter(title, time) {
+function chapter(title, start, end) {
   return {
-    time,
+    end,
+    start,
     title
   }
 }
