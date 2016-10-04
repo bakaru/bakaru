@@ -8,8 +8,6 @@ import { Router } from 'express';
 import './fastpriorityqueue';
 
 declare global {
-  type ElectronAll = Electron.ElectronMainAndRenderer
-
   interface CustomEventEmitter {
     on(event: string, data: any): void
   }

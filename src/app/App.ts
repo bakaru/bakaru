@@ -1,8 +1,6 @@
 import events = require('./Server/events');
 import Server = require('./Server');
-import BrowserWindowOptions = Electron.BrowserWindowOptions
-
-const icon  = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuOWwzfk4AAALRSURBVGhD3djPi41RHMfxr2KnbBT5B6z8XFmxUxbKjyKx8CO3+z2P0EiSGGFDUcOCFFmxEsrKilAs/R72oixYKDZ6fO/cufece3tf58y9ZxbH4lXPfJ7Pmed7mjvPM89IXdf/BQxLhGGJMCwRhiXCsEQYlgjDEmFYIgyzkGpZLe5bF3UywjCL9kbsaErJG2kuDTbyCTsZYZhF70beYScjDLPo3ch77GSEYRa9G/mAnYwwTCJufi2NhYM11wQbmeTOAOF1EmGYRNzlYNCM9AleLwLDJLO2EfcQrxeBYRLR7fasONXLjbfpaXMtGO6NOcnU1jXv2fF0V+/g9SIwzEJ0UzDcJex0iO4JutexE4FhFqKH/HDuKHY6ejdyBTsRGGYh1YVguAZ2OsTtDrr//ukNgGEW4m764dw27HSI2xF0z2MnAsMsxD3ww9kfkOG5flJt9V09i50IDLMQ93x6sD/21RzsdIjb6Tdid7LwXCIMRyaNBcFgr7ATEt3n+3oMOxEYjkya4UflBnZCos73q8PYicBwZOKu+sHsYxOeI6Jjvm+bCs8lwnBkrRcpv5HF2AmJnvB93YWdCAxHIm6lH8p+4cNzg4g759foRuxEYDgS0ft+KLcfO/2keTFYsxY7ERgOTXRLMNCPWsbnYq+f6C2/TpdjJwLDoYm+DgY6jh0i+syvq5ZgJwLDoYg74odxj7EziOhXv7YxDzsRGM6YNFfZMD/9MNVq7JHWXa27Tr9jJwGGMyK63ob4FQyT/pFqkWqzX+vuYicBhsla93w/hNFH2BukdYcS/Rh8j73YS4BhkvarrR11N3Ebex2iE+aFdV+aSTv+0rf+dy0HF+HaBBhGia7rGyL+Vtf7oAQHNuC6RBgmab0sTQ1QjeF5IvrZ1tjzRd+ap8YennrGNrEC+zOAYbIh/5k2GzAsEYYlwrBEGJYIwxJhWCIMS4RhiTAsTy1/AcGnKih5Fy/9AAAAAElFTkSuQmCC`;
+import icon from './icon';
 
 export default class App {
   public runningDevMode: boolean;
@@ -11,12 +9,12 @@ export default class App {
   protected app: Electron.App;
   protected name: string;
   protected rootDir: string;
-  protected electron: ElectronAll;
+  protected electron: Electron.ElectronMainAndRenderer;
   protected mainWindowUrl: string;
   protected mainWindow: Electron.BrowserWindow;
   protected mainWindowOptions: Electron.BrowserWindowOptions;
 
-  constructor(electron: ElectronAll) {
+  constructor(electron: Electron.ElectronMainAndRenderer) {
     this.name = 'Bakaru';
 
     this.electron = electron;
@@ -60,7 +58,7 @@ export default class App {
    */
   makeSingleInstance() {
     return this.app.makeSingleInstance(() => {
-      if (this.mainWindow !== null) {
+      if (this.mainWindow) {
         if (this.mainWindow.isMinimized()) {
           this.mainWindow.restore();
         }
