@@ -2,7 +2,7 @@ import events = require('./Server/events');
 import Server = require('./Server');
 import icon from './icon';
 
-export default class App {
+export default class WindowController {
   public runningDevMode: boolean;
   public server: Server;
 
