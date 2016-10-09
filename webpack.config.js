@@ -33,7 +33,8 @@ config.push({
     loaders: [
       {
         test: /\.js$/,
-        loaders: ["babel"]
+        loaders: ["babel"],
+        exclude: /(node_modules|bower_components)/
       },
       {
         test: /\.(css)$/,
