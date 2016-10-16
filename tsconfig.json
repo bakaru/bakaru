@@ -13,6 +13,6 @@
     "./src/**/*"
   ],
   "files": [
-    "./typings/globals"
+    "./typings/globals.d.ts"
   ]
 }
