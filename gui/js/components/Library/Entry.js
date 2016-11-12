@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import PlayerControls from 'utils/PlayerControls';
-import MAL from '../../Link/MAL';
 import {shell} from 'electron';
+import LibraryEvents from 'utils/LibraryEvents';
 
 /**
  * @param {AnimeFolder} folder
@@ -10,6 +10,14 @@ import {shell} from 'electron';
  * @constructor
  */
 export default class Entry extends Component {
+
+  static propTypes = {
+    entry: PropTypes.object
+  }
+
+  static defaultProps = {
+    entry: false
+  }
 
   /**
    * Ctor
@@ -20,8 +28,6 @@ export default class Entry extends Component {
     super(props);
 
     this.state = {
-      dub: false,
-      sub: false,
       eps: []
     };
 
@@ -56,10 +62,6 @@ export default class Entry extends Component {
 
     if (this.entry !== false && this.mounted) {
       this.setState({
-        dub: this.entry.dubs.size
-          ? [...this.entry.dubs.keys()][0]
-          : false,
-        sub: false, // LETS NOT, OK?!
         eps: []
       });
     }
@@ -86,16 +88,12 @@ export default class Entry extends Component {
           <path onClick={ ::this.handleEntryPathClick }>{ this.entry.path }</path>
         </summary>
 
-        <pre>
-          { JSON.stringify(this.entry.links, null, 2) }
-        </pre>
-
         <actions>
-          <btn onClick={ ::this.handlePlayAllClick }>
+          <btn onClick={::this.handlePlayAllClick}>
             Play all
           </btn>
-          <btn onClick={ ::this.testSearch }>
-            Search MAL
+          <btn onClick={::this.handlePlayContinueClick}>
+            Continue
           </btn>
         </actions>
 
@@ -110,10 +108,6 @@ export default class Entry extends Component {
     );
   }
 
-  testSearch () {
-    MAL.search(this.entry.id, this.entry.title);
-  }
-
   renderPlaceholder() {
     return (
       <entry>
@@ -122,6 +116,23 @@ export default class Entry extends Component {
         </greeting>
       </entry>
     );
+  }
+
+  handlePlayContinueClick() {
+    const playlist = [...this.entry.episodes.entries()]
+      .filter(ep => !ep[1].watched)
+      .map(ep => {
+        return {
+          entryId: this.entry.id,
+          episodeId: ep[0],
+          dubId: this.entry.selections.dubs,
+          subId: this.entry.selections.subs
+        };
+      });
+
+    PlayerControls.playlist(playlist, true);
+
+    this.actions.focusOnPlayer();
   }
 
   /**
@@ -134,8 +145,8 @@ export default class Entry extends Component {
       playlist.push({
         entryId: this.entry.id,
         episodeId: episodeId,
-        dubId: this.state.dub,
-        subId: this.state.sub
+        dubId: this.entry.selections.dubs,
+        subId: this.entry.selections.subs
       });
     });
 
@@ -150,7 +161,7 @@ export default class Entry extends Component {
    * @param {string} dub
    */
   handleDubSelect(dub) {
-    this.setState({dub});
+    LibraryEvents.selectDub(this.entry.id, dub);
   }
 
   /**
@@ -159,11 +170,11 @@ export default class Entry extends Component {
    * @param {string|boolean} sub
    */
   handleSubSelect(sub) {
-    if (sub === this.state.sub) {
-      sub = false;
+    if (this.entry.selections.subs === sub) {
+      LibraryEvents.selectSub(this.entry.id, false);
+    } else {
+      LibraryEvents.selectSub(this.entry.id, sub);
     }
-
-    this.setState({sub});
   }
 
   /**
@@ -188,7 +199,7 @@ export default class Entry extends Component {
 
     subs.forEach(sub => {
       const subClass = classNames({
-        selected: this.state.sub === sub.id,
+        selected: this.entry.selections.subs === sub.id,
         embedded: sub.embedded
       });
 
@@ -230,7 +241,7 @@ export default class Entry extends Component {
 
     dubs.forEach(dub => {
       const dubClass = classNames({
-        selected: this.state.dub === dub.id,
+        selected: this.entry.selections.dubs === dub.id,
         embedded: dub.embedded
       });
 

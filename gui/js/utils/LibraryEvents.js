@@ -36,6 +36,22 @@ class LibraryEvents {
   onRemoveEntry(cb) {
     this.e.on('remove_entry', cb);
   }
+
+  onSelectSub(cb) {
+    this.e.on('select_sub', cb);
+  }
+
+  selectSub(entryId, subId) {
+    this.e.emit('select_sub', { entryId, subId });
+  }
+
+  onSelectDub(cb) {
+    this.e.on('select_dub', cb);
+  }
+
+  selectDub(entryId, dubId) {
+    this.e.emit('select_dub', { entryId, dubId });
+  }
 }
 
 export default new LibraryEvents(new EventEmitter());

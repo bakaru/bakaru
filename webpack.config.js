@@ -27,7 +27,7 @@ config.push({
       common: path.join(__dirname, 'common'),
       utils: path.join(__dirname, 'gui/js/utils'),
       'ipc-events': path.join(__dirname, "app/events.js"),
-      actions: path.join(__dirname, "gui/js/actions.js"),
+      actions: path.join(__dirname, "gui/js/actions"),
       components: path.join(__dirname, "gui/js/components")
     }
   },
@@ -35,7 +35,8 @@ config.push({
     loaders: [
       {
         test: /\.js$/,
-        loaders: ["babel"]
+        loaders: ["babel"],
+        exclude: /(node_modules|bower_components)/
       },
       {
         test: /\.(css)$/,

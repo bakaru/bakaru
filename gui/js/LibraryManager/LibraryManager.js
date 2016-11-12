@@ -4,7 +4,7 @@ import { renderer } from 'ipc-events';
 import LibraryEvents from 'utils/LibraryEvents';
 import ARSON from 'arson';
 
-const debug = false;
+const debug = true;
 
 /**
  * @typedef {{
@@ -53,6 +53,10 @@ function getAnimeTemplate () {
       scanning: true,
       subScanning: true,
       mediainfoScanning: true
+    },
+    selections: {
+      subs: false,
+      dubs: false
     }
   };
 }
@@ -138,7 +142,7 @@ export default class LibraryManager {
       this.entriesIds = new Set(JSON.parse(window.localStorage['library']));
 
       for (let entryId of this.entriesIds) {
-        entries.set(entryId, ARSON.parse(window.localStorage[entryId]));
+        entries.set(entryId, Object.assign({}, getAnimeTemplate(), ARSON.parse(window.localStorage[entryId])));
       }
     }
 
@@ -207,6 +211,18 @@ export default class LibraryManager {
 
       this.store.dispatch(action);
     });
+
+    LibraryEvents.onSelectSub(({ entryId, subId }) => {
+      debug && console.log(`[LM] Selecting subs`, entryId, subId);
+
+      this.store.dispatch(actions.updateAnimeFolder(this.handleSelectSub(entryId, subId)));
+    });
+
+    LibraryEvents.onSelectDub(({ entryId, dubId }) => {
+      debug && console.log(`[LM] Selecting dubs`, entryId, dubId);
+
+      this.store.dispatch(actions.updateAnimeFolder(this.handleSelectDub(entryId, dubId)));
+    });
   }
 
   remove (id) {
@@ -260,6 +276,20 @@ export default class LibraryManager {
     );
 
     anime.episodes = episodesMap;
+
+    return anime;
+  }
+
+  handleSelectSub(id, subId) {
+    const anime = this.getAnime(id);
+    anime.selections.subs = subId;
+
+    return anime;
+  }
+
+  handleSelectDub(id, dubId) {
+    const anime = this.getAnime(id);
+    anime.selections.dubs = dubId;
 
     return anime;
   }

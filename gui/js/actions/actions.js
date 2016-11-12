@@ -4,6 +4,35 @@ export const UPDATE_ANIME_FOLDER = 'UPDATE_ANIME_FOLDER';
 export const OPEN_ANIME_FOLDER = 'OPEN_ANIME_FOLDER';
 export const DELETE_ANIME_FOLDER = 'DELETE_ANIME_FOLDER';
 
+export const SELECT_DUB = 'SELECT_DUB';
+export function selectDub(entryId, dubId) {
+  return {
+    type: SELECT_DUB,
+    entryId,
+    dubId
+  }
+}
+
+export const SELECT_SUB = 'SELECT_SUB';
+export function selectSub(entryId, subId) {
+  return {
+    type: SELECT_SUB,
+    entryId,
+    subId
+  }
+}
+
+export const SET_EPISODE_STOPPED_AT = 'SET_EPISODE_STOPPED_AT';
+export function setEpisodeStoppedAt(entryId, episodeId, time) {
+  return {
+    type: SET_EPISODE_STOPPED_AT,
+    entryId,
+    episodeId,
+    time
+  }
+}
+
+
 export function addAnimeFolder(animeFolder) {
   return {
     type: ADD_ANIME_FOLDER,
