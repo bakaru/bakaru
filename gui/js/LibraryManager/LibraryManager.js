@@ -4,7 +4,7 @@ import { renderer } from 'ipc-events';
 import LibraryEvents from 'utils/LibraryEvents';
 import ARSON from 'arson';
 
-const debug = true;
+const debug = false;
 
 /**
  * @typedef {{

@@ -59,14 +59,14 @@ export default class Player extends Component {
 
     this.componentWillReceiveProps(props);
 
-    BrowserWindow.setThumbarButtons([{
-      icon: playIcon,
-      click: () => {
-        if (this.isFocused) {
-          this.togglePause();
-        }
-      }
-    }]);
+    // BrowserWindow.setThumbarButtons([{
+    //   icon: playIcon,
+    //   click: () => {
+    //     if (this.isFocused) {
+    //       this.togglePause();
+    //     }
+    //   }
+    // }]);
   }
 
   /**
