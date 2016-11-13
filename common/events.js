@@ -15,7 +15,8 @@
 module.exports = {
   main: {
     minimizeMainWindow: 'main:minimizeMainWindow',
-    openSelectFolderDialog: 'main:openSelectFolderDialog'
+    openSelectFolderDialog: 'main:openSelectFolderDialog',
+    rescanFolder: 'main:rescanFolder'
   },
 
   renderer: {

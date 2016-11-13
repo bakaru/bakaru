@@ -12,6 +12,16 @@ function createFolderReader (app) {
    */
   const folderReader = new FolderReader(app);
 
+  app.ipc.on(app.events.main.rescanFolder, (event, itemPath) => {
+    folderReader.findAnime(itemPath)
+      .catch(err => {
+        app.dialog.showErrorBox('No anime found :c', `${err}`);
+      })
+      .finally(() => {
+        event.sender.send(app.events.renderer.flagAddAnimeFolderEnd);
+      });
+  });
+
   app.ipc.on(app.events.main.openSelectFolderDialog, event => {
     event.sender.send(app.events.renderer.flagAddAnimeFolderStart);
 
