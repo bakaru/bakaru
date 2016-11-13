@@ -235,12 +235,6 @@ export default class PlayerController {
     const gl = this.renderContext.gl;
 
     this.video.onFrameReady = frame => {
-      if (this.canvasWasResized) {
-        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-
-        this.canvasWasResized = false;
-      }
-
       gl.y.fill(frame.width, frame.height, frame.subarray(0, frame.uOffset));
       gl.u.fill(frame.width >> 1, frame.height >> 1, frame.subarray(frame.uOffset, frame.vOffset));
       gl.v.fill(frame.width >> 1, frame.height >> 1, frame.subarray(frame.vOffset, frame.length));
@@ -257,6 +251,7 @@ export default class PlayerController {
    * @private
    */
   _resizeCanvas() {
+    const gl = this.renderContext.gl;
     const windowRatio = window.outerWidth / window.outerHeight;
     const frameRatio = this.videoFrameSize[0] / this.videoFrameSize[1];
 
@@ -274,6 +269,6 @@ export default class PlayerController {
     this.canvas.width = canvasWidth;
     this.canvas.height = canvasHeight;
 
-    this.canvasWasResized = true
+    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
   }
 }
