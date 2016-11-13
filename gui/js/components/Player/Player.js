@@ -173,7 +173,11 @@ export default class Player extends Component {
       if (media.subId) {
         entry.subs.forEach(sub => {
           subs.push(
-            <item className={ this.state.subId === sub.id ? 'current' : '' } onClick={ () => this.selectSub(sub.id) } key={ entry.id + sub.id }>
+            <item
+              className={ this.state.subId === sub.id ? 'current' : '' }
+              onClick={ () => this.selectSub(sub.id) }
+              key={ entry.id + sub.id }
+            >
               { sub.title }
             </item>
           );
@@ -182,7 +186,11 @@ export default class Player extends Component {
 
       entry.dubs.forEach(dub => {
         dubs.push(
-          <item className={ this.state.dubId === dub.id ? 'current' : '' } onClick={ () => this.selectDub(dub.id) } key={ entry.id + dub.id }>
+          <item
+            className={ this.state.dubId === dub.id ? 'current' : '' }
+            onClick={ () => this.selectDub(dub.id) }
+            key={ entry.id + dub.id }
+          >
             { dub.title }
           </item>
         );
@@ -192,7 +200,7 @@ export default class Player extends Component {
     return (
       <player className={ playerClass } onMouseMove={ ::this.showUi } ref="player">
         <canvas-wrapper onClick={ ::this.handleCanvasClick } onDoubleClick={ ::this.handleCanvasDoubleClick }>
-          <canvas ref="canvas" className="canvas"></canvas>
+          <canvas ref="canvas" className="canvas" />
         </canvas-wrapper>
         <title>
           { this.state.title }
