@@ -8,3 +8,4 @@ build
 /test.js
 gui_old
 dist
+yarn-error.log

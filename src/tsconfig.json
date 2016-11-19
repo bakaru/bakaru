@@ -1,0 +1,16 @@
+{
+  "version": "2.0.10",
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "../dist/app",
+    "sourceMap": false,
+    "removeComments": false,
+    "experimentalDecorators": true
+  },
+  "include": [
+    "./typings/index.d.ts",
+    "./app/**/*.ts"
+  ]
+}

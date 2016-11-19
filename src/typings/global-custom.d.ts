@@ -1,29 +1,22 @@
-///<reference types="node"/>
-///<reference types="react"/>
-///<reference types="express"/>
-///<reference types="bluebird"/>
-///<reference types="electron"/>
-
 import { Router } from 'express';
-import './fastpriorityqueue';
 
 declare global {
-  interface CustomEventEmitter {
+  export interface CustomEventEmitter {
     on(event: string, data: any): void
   }
 
-  interface ServerContext {
+  export interface ServerContext {
     events: CustomEventEmitter,
     app: Router
   }
 
-  type Chapter = {
+  export type Chapter = {
     title: string
     start: number
     end: number
   }
 
-  type Episode = {
+  export type Episode = {
     id: string,
     path: string,
     title: string,
@@ -35,7 +28,7 @@ declare global {
     stoppedAt: number
   }
 
-  type Subtitles = {
+  export type Subtitles = {
     id: string,
     path: string,
     title: string,
@@ -43,7 +36,7 @@ declare global {
     embedded: boolean
   }
 
-  type VoiceOver = {
+  export type VoiceOver = {
     id: string,
     path: string,
     title: string,
@@ -51,7 +44,7 @@ declare global {
     embedded: boolean
   }
 
-  type Entry = {
+  export type Entry = {
     id: string,
     path: string,
     title: string,
@@ -65,7 +58,7 @@ declare global {
     defaultVoiceOver: string
   }
 
-  type ClassifiedFolderItems = {
+  export type ClassifiedFolderItems = {
     audios: string[],
     videos: string[],
     series: string[],
@@ -73,7 +66,7 @@ declare global {
     subtitles: string[]
   }
 
-  type MediaProperties = {
+  export type MediaProperties = {
     width: number
     height: number
     bitDepth: number,
