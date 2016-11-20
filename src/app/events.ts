@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   _addFolders: 'addFolders',
 
   preferences: 'preferences',

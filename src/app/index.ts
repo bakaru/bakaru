@@ -1,29 +1,36 @@
-// We need this for Electron to accept this as correct application
-import { app, BrowserWindow } from 'electron';
-
-const windows = new WeakSet<Electron.BrowserWindow>();
-
-const t = {
-  t1: 123,
-  t2: 321
+// Setup globals
+global['bakaru'] = {
+  debug: false,
+  paths: {},
+  addresses: []
 };
 
-app.on('ready', () => {
-  console.log('ready', Object.assign({}, t, { t2: 34 }));
+// Setup debug info
+if (process.argv.filter(arg => arg.trim() === 'debug').length) {
+  // Instruct debug logger
+  process.env['DEBUG'] = 'bakaru*';
+  global.bakaru.debug = true;
+}
 
-  windows.add(new BrowserWindow());
+// Main components
+import setupPaths from './setupPaths';
+import bootServer from './server';
+import WindowController from './Window';
+
+let wnd: WindowController;
+
+// Main boot sequence
+(async () => {
+  await setupPaths();
+
+  bootServer();
+
+  wnd = new WindowController();
+})();
+
+// Error handler
+process.on('uncaughtException', e => {
+  console.error(e);
+
+  process.exit(1);
 });
-
-// import Window from './Window';
-// import Server from './Server';
-//
-// process.argv;
-//
-// global.window = new Window();
-// global.server = new Server();
-//
-// process.on('uncaughtException', e => {
-//   console.error(e);
-//
-//   process.exit(1);
-// });

@@ -60,11 +60,16 @@
     "webpack": "^1.13.3"
   },
   "dependencies": {
+    "@types/debug": "0.0.29",
+    "@types/socket.io": "^1.4.27",
+    "@types/socket.io-client": "^1.4.28",
     "arson": "0.2.3",
     "bluebird": "^3.4.6",
     "classnames": "2.2.5",
     "color": "0.11.1",
+    "debug": "^2.3.3",
     "double-ended-queue": "2.1.0-0",
+    "express": "^4.14.0",
     "fast-levenshtein": "1.1.0",
     "fs-extra": "^1.0.0",
     "javascript-natural-sort": "0.7.1",
@@ -76,6 +81,9 @@
     "react-dom": "^15.4.0",
     "react-redux": "^4.4.6",
     "redux": "^3.6.0",
+    "rxjs": "^5.0.0-rc.4",
+    "socket.io": "^1.6.0",
+    "socket.io-client": "^1.6.0",
     "webgl-video-renderer": "0.2.0"
   }
 }

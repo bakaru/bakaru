@@ -1,10 +1,8 @@
 declare module 'fastpriorityqueue' {
-  class FastPriorityQueue<T> {
+  export = class FastPriorityQueue<T>{
     constructor(comparator?: (a: T, b: T) => number | boolean);
-    add(item: T);
+    add(item: T): void;
     poll(): T;
     isEmpty(): boolean;
   }
-
-  export = FastPriorityQueue;
 }

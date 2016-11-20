@@ -1,25 +1,45 @@
-const bluebird = require('bluebird');
-const arson = require('arson');
-const path = require('path');
-const {
-  readFileAsync: read,
-  writeFileAsync: write
-} = bluebird.promisifyAll(require('fs'));
+import * as arson from 'arson';
+import * as path from 'path';
+import * as fs from 'fs';
 
-class Syncer {
+function read(filename: string): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    fs.readFile(filename, (error, content) => {
+      if (error) {
+        return reject(error);
+      }
+
+      return resolve(content.toString());
+    });
+  });
+}
+
+function write(filename: string, content: string): Promise<void> {
+  return new Promise<string>((resolve, reject) => {
+    fs.writeFile(filename, content, error => {
+      if (error) {
+        return reject(error);
+      }
+
+      return resolve();
+    });
+  });
+}
+
+export default class FileSystem {
+
+  protected libPath: string;
+  protected lib = new Set<string>();
+  protected libDebouncer = 'index';
+  protected debouncers = new Map<string, number>();
 
   /**
    * Ctor
    *
    * @param {string} rootPath a path to folder where all cache will live
    */
-  constructor(rootPath) {
-    this.rootPath = rootPath;
+  constructor(protected rootPath: string) {
     this.libPath = path.join(rootPath, 'library.arson');
-
-    this.lib = new Set();
-    this.libDebouncer = 'index';
-    this.debouncers = new Map();
   }
 
   /**
@@ -42,13 +62,13 @@ class Syncer {
    *
    * @returns {Promise<Set<string>>}
    */
-  resurrect() {
+  resurrect(): Promise<Set<string>> {
     // Reading library file
     return read(this.libPath)
       // Parsing library from ARSON
-      .then(arson.parse)
+      .then(value => arson.parse<Set<string>>(value))
       // Oops no library (fresh install) faking that its empty
-      .catch(() => new Set())
+      .catch(() => new Set<string>())
       // Assigning
       .then(lib => this.lib = lib);
   }
@@ -56,7 +76,7 @@ class Syncer {
   /**
    * Syncs library file on disk
    */
-  writeLib() {
+  writeLib(): void {
     this.debounce(this.libDebouncer, () => write(this.libPath, arson.stringify(this.lib)));
   }
 
@@ -66,7 +86,7 @@ class Syncer {
    * @param {string} id
    * @param {Entry} content
    */
-  write(id, content) {
+  write(id: string, content: Entry): void {
     if (!this.lib.has(id)) {
       this.lib.add(id);
       this.writeLib();
@@ -81,9 +101,7 @@ class Syncer {
    * @param {string} id
    * @returns {Promise<Entry>}
    */
-  read(id) {
+  read(id: string): Promise<Entry> {
     return read(path.join(this.rootPath, `${id}.arson`)).then(arson.parse);
   }
 }
-
-module.exports = Syncer;

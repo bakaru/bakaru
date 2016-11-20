@@ -1,12 +1,8 @@
 import { Router } from 'express';
 
 declare global {
-  export interface CustomEventEmitter {
-    on(event: string, data: any): void
-  }
 
   export interface ServerContext {
-    events: CustomEventEmitter,
     app: Router
   }
 

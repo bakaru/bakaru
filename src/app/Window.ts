@@ -1,10 +1,8 @@
-import events = require('./Server/events');
-import Server = require('./Server');
+import * as electron from 'electron';
 import icon from './icon';
 
 export default class WindowController {
   public runningDevMode: boolean;
-  public server: Server;
 
   protected app: Electron.App;
   protected name: string;
@@ -14,7 +12,7 @@ export default class WindowController {
   protected mainWindow: Electron.BrowserWindow;
   protected mainWindowOptions: Electron.BrowserWindowOptions;
 
-  constructor(electron: Electron.ElectronMainAndRenderer) {
+  constructor() {
     this.name = 'Bakaru';
 
     this.electron = electron;
@@ -24,16 +22,6 @@ export default class WindowController {
     this._singleInstance();
 
     this.rootDir = __dirname;
-
-    this.runningDevMode = process.argv[2] === 'debug';
-
-    console.log(this.runningDevMode, process.argv);
-
-    if (this.runningDevMode) {
-      console.log('Dev mode!');
-    }
-
-    this.server = new Server(this);
 
     this.mainWindowUrl = `file://${this.rootDir}/../src/gui/index.html`;
     this.mainWindow = null;
@@ -78,7 +66,7 @@ export default class WindowController {
     // const wcjsPath = encodeURIComponent(this.server.paths.wcjs);
     const wcjsPath = null;
 
-    this.mainWindow.loadURL(`${this.mainWindowUrl}?port=${this.server.port}&wcjsPath=${wcjsPath}`);
+    this.mainWindow.loadURL(`${global.bakaru.paths.mainWindowUrl}&wcjsPath=${wcjsPath}`);
 
     if (this.runningDevMode) {
       this.mainWindow.webContents.openDevTools({

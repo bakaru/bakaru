@@ -1,5 +1,4 @@
 import * as path from 'path';
-import { app as RootApp } from 'electron';
 import * as Bluebird from 'bluebird';
 import { execFile } from 'child_process';
 import FastPriorityQueue = require('fastpriorityqueue');
@@ -10,8 +9,8 @@ type QueueItem = Array<any>;
 const execFileAsync = Bluebird.promisify<string, string, string[]>(execFile);
 
 const ffProbePath = path.join(
-  RootApp.getPath('userData'),
-  `ffmpeg/ffprobe${process.platform === 'win32' ? '.exe' : ''}`
+  global.bakaru.paths.ffmpeg,
+  `ffprobe${process.platform === 'win32' ? '.exe' : ''}`
 );
 const ffProbeArgs = [
   '-of json', // output format - JSON
@@ -45,19 +44,16 @@ function processFile(filePath: string): FuckingPromise<MediaProperties> {
     .then(mediaPropertiesExtractor);
 }
 
-export const LowPriority: number = 1;
-export const HighPriority: number = 2;
+export enum Priority {
+  LowPriority = 1,
+  HighPriority = 2
+}
 
 export default class MediaDiscovery {
-  protected queue: FastPriorityQueue<QueueItem>;
-  protected queueing: boolean;
+  protected queue = new FastPriorityQueue(FPQComparator);
+  protected queueing = false;
 
-  public constructor() {
-    this.queue = new FastPriorityQueue(FPQComparator);
-    this.queueing = false;
-  }
-
-  public enqueue(paths: string[], priority: number = LowPriority): Promise<any> {
+  public enqueue(paths: string[], priority: number = Priority.LowPriority): Promise<any> {
     return new Promise((resolve, reject) => {
       this.queue.add([
         priority,
