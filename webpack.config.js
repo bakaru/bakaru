@@ -1,48 +1,35 @@
-var webpack = require('webpack');
-var path = require('path');
-var fs = require('fs');
+const webpack = require('webpack');
+const path = require('path');
+const fs = require('fs');
 
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var Clean = require('clean-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var config = [];
-
-var GUI_BUILD = './src/gui/build/';
-
-if (process.env.GUI_BUILD && process.env.GUI_BUILD.trim().length > 0) {
-  GUI_BUILD = process.env.GUI_BUILD.trim();
-}
-
-config.push({
+module.exports = {
   target: 'electron',
   entry: {
-    gui: './src/gui/index.js'
+    gui: './src/gui/index.tsx'
   },
   output: {
-    path: GUI_BUILD,
+    path: path.join(__dirname, 'dist/gui'),
     filename: 'gui.js'
   },
   resolve: {
-    root: [path.join(__dirname, "bower_components")],
     alias: {
-      app: path.join(__dirname, 'app'),
+      app: path.join(__dirname, 'src/app'),
       gui: path.join(__dirname, "src/gui")
     }
   },
   module: {
     loaders: [
       {
-        test: /\.js$/,
-        loaders: ["babel"],
+        test: /\.(ts|tsx)$/,
+        loader: 'ts-loader',
         exclude: /(node_modules|bower_components)/
       },
       {
         test: /\.(css)$/,
         loader: ExtractTextPlugin.extract("style", "css", "resolve-url")
-      },
-      {
-        test: /\.(scss)$/,
-        loader: ExtractTextPlugin.extract("style", "css!sass?sourceMap", "resolve-url")
       },
       {
         test: /\.(otf|eot|svg|ttf|woff|png|woff2)/,
@@ -55,11 +42,13 @@ config.push({
     ]
   },
   plugins: [
-    new webpack.ResolverPlugin(
-      new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])
-    ),
+    new HtmlWebpackPlugin({
+      inject: true,
+      chunks: ['gui'],
+      filename: 'index.html',
+      template: path.join(__dirname, 'src/gui/index.html')
+    }),
     new ExtractTextPlugin("[name].css"),
-    new Clean([GUI_BUILD])
   ],
   externals: {
     electron: 'commonjs electron'
@@ -68,6 +57,4 @@ config.push({
     __dirname: false,
     __filename: false,
   }
-});
-
-module.exports = config;
+};

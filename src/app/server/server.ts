@@ -1,3 +1,4 @@
+import * as path from 'path';
 import * as debug from 'debug';
 import * as express from 'express';
 import * as socketIo from 'socket.io';
@@ -17,6 +18,11 @@ export default function bootServer(port: number = 44888): void {
   const http = createServer(app);
   const io = socketIo(http);
 
+  app.use(express.static(path.join(__dirname, '../../gui')));
+  app.get('/main', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../gui/index.html'));
+  });
+
   http.listen(port);
-  log(`Server up and running at http://localhost:${port}`);
+  log(`Server up and running at http://127.0.0.1:${port}`);
 }

@@ -1,5 +1,8 @@
+import * as debug from 'debug';
 import * as electron from 'electron';
 import icon from './icon';
+
+const log = debug('bakaru:window');
 
 export default class WindowController {
   public runningDevMode: boolean;
@@ -23,7 +26,6 @@ export default class WindowController {
 
     this.rootDir = __dirname;
 
-    this.mainWindowUrl = `file://${this.rootDir}/../src/gui/index.html`;
     this.mainWindow = null;
     this.mainWindowOptions = {
       width: 1280,
@@ -36,6 +38,8 @@ export default class WindowController {
         blinkFeatures: 'CSSBackdropFilter'
       }
     };
+
+    log('Constructing WindowController');
 
     this._setupAppEventListeners();
   }
@@ -61,14 +65,16 @@ export default class WindowController {
    * @private
    */
   createMainWindow() {
+    log('Creating main window');
+
     this.mainWindow = new this.electron.BrowserWindow();
 
     // const wcjsPath = encodeURIComponent(this.server.paths.wcjs);
     const wcjsPath = null;
 
-    this.mainWindow.loadURL(`${global.bakaru.paths.mainWindowUrl}&wcjsPath=${wcjsPath}`);
+    this.mainWindow.loadURL(`${global.bakaru.paths.mainWindowUrl}?wcjsPath=${wcjsPath}`);
 
-    if (this.runningDevMode) {
+    if (global.bakaru.debug) {
       this.mainWindow.webContents.openDevTools({
         mode: "detach"
       });
@@ -98,17 +104,19 @@ export default class WindowController {
    * @private
    */
   _setupAppEventListeners() {
-    this.app.on('ready', () => {
+    if (electron.app.isReady()) {
       this.createMainWindow();
-    });
+    } else {
+      electron.app.on('ready', this.createMainWindow.bind(this));
+    }
 
-    this.app.on('window-all-closed', () => {
+    electron.app.on('window-all-closed', () => {
       if (process.platform !== 'darwin') {
         this.app.quit();
       }
     });
 
-    this.app.on('activate', () => {
+    electron.app.on('activate', () => {
       if (this.mainWindow === null) {
         this.createMainWindow();
       }
