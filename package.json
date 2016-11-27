@@ -6,7 +6,7 @@
   "main": "app/main.js",
   "scripts": {
     "start": "electron dist/app debug",
-    "watch:main": "tsc -p src -w",
+    "watch:main": "tsc -p src/app -w",
     "watch": "webpack -d -w",
     "build": "node packaging/packager",
     "vendor": "node scripts/download-vendor",
@@ -87,7 +87,7 @@
     "serve-static": "^1.11.1",
     "socket.io": "^1.6.0",
     "socket.io-client": "^1.6.0",
-    "styled-components": "^1.1.1",
+    "styled-components": "^1.1.2",
     "webgl-video-renderer": "0.2.0"
   }
 }

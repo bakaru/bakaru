@@ -6,19 +6,12 @@ const io = socketIO();
 
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
+import { AppWindow } from './containers/AppWindow';
 
 // const wcjs = window.require(getQueryVariable('wcjsPath'));
 
-function App() {
-  return (
-    <div>
-      Yay! <i className="fa fa-play"/>
-    </div>
-  );
-}
-
 ReactDom.render(
-  <App/>,
+  <AppWindow/>,
   document.getElementById('gui-mount')
 );
 

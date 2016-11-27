@@ -15,6 +15,7 @@ module.exports = {
     filename: 'gui.js'
   },
   resolve: {
+    extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
     alias: {
       app: path.join(__dirname, 'src/app'),
       gui: path.join(__dirname, "src/gui")
@@ -24,8 +25,7 @@ module.exports = {
     loaders: [
       {
         test: /\.(ts|tsx)$/,
-        loader: 'ts-loader',
-        exclude: /(node_modules|bower_components)/
+        loader: 'ts-loader'
       },
       {
         test: /\.(css)$/,

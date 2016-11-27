@@ -1,15 +1,17 @@
 {
+  "version": "2.0.10",
   "compilerOptions": {
     "outDir": "../../dist/gui_out",
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "commonjs",
-    "target": "es6",
+    "moduleResolution": "node",
+    "target": "es2015",
     "jsx": "react"
   },
   "include": [
     "../typings/index.d.ts",
-    "./**/.ts",
+    "./**/*.ts",
     "./**/*.tsx"
   ]
 }
