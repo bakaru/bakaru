@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { PlayerContainer } from 'gui/components/common';
+import { PlayerContainer } from 'gui/components/basic/main';
 
 interface PlayerProps {
   focused?: boolean

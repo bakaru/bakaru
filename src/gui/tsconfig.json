@@ -1,5 +1,5 @@
 {
-  "version": "2.0.10",
+  "version": "2.1.4",
   "compilerOptions": {
     "outDir": "../../dist/gui_out",
     "sourceMap": true,

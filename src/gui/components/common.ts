@@ -23,8 +23,8 @@ export const PlayerContainer = styled.div`
   height: 100vh;
   z-index: 0;
   
-  background-color: ${(p:i)=>p.theme.mainFgColor};
-  color: ${(p:i)=>p.theme.mainFgColor}
+  background-color: ${(p:i)=>p.theme.mainBgColor};
+  color: ${(p:i)=>p.theme.mainBgColor}
 `;
 
 export const LibraryContainer = styled('div')`

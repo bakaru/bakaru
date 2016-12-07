@@ -6,12 +6,19 @@ const io = socketIO();
 
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
+import { Provider } from 'react-redux';
 import AppWindow from './containers/AppWindow';
+
+import createStore from './store';
+
+const store = createStore();
 
 // const wcjs = window.require(getQueryVariable('wcjsPath'));
 
 ReactDom.render(
-  <AppWindow/>,
+  <Provider store={store}>
+    <AppWindow/>
+  </Provider>,
   document.getElementById('gui-mount')
 );
 
