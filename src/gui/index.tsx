@@ -6,7 +6,7 @@ const io = socketIO();
 
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { AppWindow } from './containers/AppWindow';
+import AppWindow from './containers/AppWindow';
 
 // const wcjs = window.require(getQueryVariable('wcjsPath'));
 

@@ -7,7 +7,13 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "es2015",
-    "jsx": "react"
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "baseUrl": "../../",
+    "paths": {
+      "gui/*": ["src/gui/*"],
+      "app/*": ["src/app/*"]
+    }
   },
   "include": [
     "../typings/index.d.ts",

@@ -1,16 +1,29 @@
 import * as React from 'react';
-import styled from 'styled-components';
+import { ThemeProvider } from 'styled-components';
+import Library from 'gui/components/Library';
+import Player from 'gui/components/Player';
 
-const AppContainer = styled.h1`
-  color: red
-`;
+const mainTheme = {
+  mainBgColor: '#333',
+  mainFgColor: '#ddd',
+  contrastColor: 'hsl(345, 100%, 50%)'
+};
 
-export class AppWindow extends React.Component<any, any> {
+export default class AppWindow extends React.Component<any, any> {
+  public state = {
+    focus: 'player'
+  };
+
   render() {
+    const { focus } = this.state;
+
     return (
-      <AppContainer>
-        Yay!!!
-      </AppContainer>
+      <ThemeProvider theme={mainTheme}>
+        <div>
+          <Player focused={focus === 'player'}/>
+          <Library focused={focus === 'library'}/>
+        </div>
+      </ThemeProvider>
     );
   }
 }

@@ -17,4 +17,4 @@ import './node-custom';
 import './global-custom';
 import './fastpriorityqueue';
 import './arson';
-import './styled-componenets';
+import './styled-components';
