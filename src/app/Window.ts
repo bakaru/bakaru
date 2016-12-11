@@ -28,7 +28,7 @@ export default class WindowController {
 
     this.mainWindow = null;
     this.mainWindowOptions = {
-      width: 1280,
+      width: 1000,
       height: 720,
       title: this.name,
       frame: false,
@@ -67,7 +67,9 @@ export default class WindowController {
   createMainWindow() {
     log('Creating main window');
 
-    this.mainWindow = new this.electron.BrowserWindow();
+    this.mainWindow = new this.electron.BrowserWindow(
+      this.mainWindowOptions
+    );
 
     // const wcjsPath = encodeURIComponent(this.server.paths.wcjs);
     const wcjsPath = null;

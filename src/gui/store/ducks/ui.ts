@@ -6,13 +6,13 @@ export interface State {
   shyLibrary: boolean
 }
 const initialState: State = {
-  library: true,
+  library: false,
   player: false,
-  shyLibrary: false
+  shyLibrary: true
 };
 
-const SWITCH_TO_LIBRARY = 'bakaru/ui/switch/library';
 type SwitchToLibraryAction = BaseAction & {};
+const SWITCH_TO_LIBRARY = 'bakaru/ui/switch/library';
 function doSwitchToLibrary(state: State): State {
   return {
     ...state,
@@ -22,8 +22,8 @@ function doSwitchToLibrary(state: State): State {
   };
 }
 
-const SWITCH_TO_PLAYER = 'bakaru/ui/switch/player';
 type SwitchToPlayerAction = BaseAction & {};
+const SWITCH_TO_PLAYER = 'bakaru/ui/switch/player';
 function doSwitchToPlayer(state: State): State {
   return {
     ...state,
@@ -33,8 +33,8 @@ function doSwitchToPlayer(state: State): State {
   };
 }
 
-const SWITCH_TO_SHY_LIBRARY = 'bakaru/ui/switch/shy-library';
 type SwitchToShyLibraryAction = BaseAction & {};
+const SWITCH_TO_SHY_LIBRARY = 'bakaru/ui/switch/shy-library';
 function doSwitchToShyLibrary(state: State): State {
   return {
     ...state,

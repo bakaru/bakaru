@@ -2,6 +2,16 @@ import { Router } from 'express';
 
 declare global {
 
+  export interface ThemeInterface {
+    mainBgColor: string;
+    mainFgColor: string;
+    contrastColor: string;
+  }
+
+  export interface StyledProps {
+    theme: ThemeInterface
+  }
+
   export interface ServerContext {
     app: Router
   }
