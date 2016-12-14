@@ -18,3 +18,4 @@ import './global-custom';
 import './fastpriorityqueue';
 import './arson';
 import './styled-components';
+import './react-svg-morph';
