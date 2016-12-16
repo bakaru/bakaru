@@ -15,21 +15,24 @@ module.exports = {
     filename: 'gui.js'
   },
   resolve: {
-    extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
+    extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
     alias: {
       app: path.join(__dirname, 'src/app'),
       gui: path.join(__dirname, "src/gui")
     }
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.(ts|tsx)$/,
         loader: 'ts-loader'
       },
       {
         test: /\.(css)$/,
-        loader: ExtractTextPlugin.extract("style", "css", "resolve-url")
+        loader: ExtractTextPlugin.extract({
+          fallbackLoader: "style-loader",
+          loader: "css-loader!resolve-url-loader"
+        })
       },
       {
         test: /\.(otf|eot|svg|ttf|woff|png|woff2)/,
@@ -37,7 +40,7 @@ module.exports = {
       },
       {
         test: /\.json$/,
-        loader: 'json'
+        loader: 'json-loader'
       }
     ]
   },
@@ -48,7 +51,9 @@ module.exports = {
       filename: 'index.html',
       template: path.join(__dirname, 'src/gui/index.html')
     }),
-    new ExtractTextPlugin("[name].css"),
+    new ExtractTextPlugin({
+      filename: "[name].css"
+    }),
   ],
   externals: {
     electron: 'commonjs electron'

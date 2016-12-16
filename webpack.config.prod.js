@@ -7,9 +7,7 @@ cfg.plugins.push(
     'process.env': {
       NODE_ENV: JSON.stringify('production')
     }
-  }),
-  new webpack.optimize.OccurrenceOrderPlugin(),
-  new webpack.optimize.DedupePlugin(),
+  })/*,
   new webpack.optimize.UglifyJsPlugin({
     compress: {
       screw_ie8: true,
@@ -22,7 +20,7 @@ cfg.plugins.push(
       comments: false,
       screw_ie8: true
     }
-  })
+  })*/
 );
 
 module.exports = cfg;
