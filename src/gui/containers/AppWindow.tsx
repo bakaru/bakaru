@@ -15,7 +15,9 @@ const mainTheme = {
 
 const AppContainer = styled.div`
   --padding: 10px 16.8px;
-  box-sizing: content-box;
+  box-sizing: border-box;
+  user-select: none;
+  cursor: default;
   
   ::-webkit-scrollbar {
     width: 4px;
@@ -54,9 +56,9 @@ const AppContainer = styled.div`
 
 interface AppWindowProps {
   ui: ui.State,
-  switchToLibrary: Function,
-  switchToPlayer: Function,
-  switchToShyLibrary: Function
+  switchToLibrary: (() => void),
+  switchToPlayer: (() => void),
+  switchToShyLibrary: (() => void)
 }
 
 const AppWindow = (props: AppWindowProps) => (

@@ -57,7 +57,7 @@ export const ShyLibrary = styled.div`
     letter-spacing: 15px;
   }
   
-  &::after {
+  /*&::after {
     display: block;
     content: '';
     position: fixed;
@@ -72,7 +72,7 @@ export const ShyLibrary = styled.div`
     pointer-events: none;
     
     z-index: 101;
-  }
+  }*/
 `;
 
 export const ControlsWrapper = styled.div`

@@ -3,13 +3,14 @@ import {
   LibraryContainer,
   PlayerLibraryOverlay,
   LibraryList,
-  LibraryEntryDetails
+  LibraryEntryDetails,
+  LibraryOpener
 } from './libraryElements';
 
 interface LibraryProps {
-  switchToShyLibrary: Function,
-  switchToLibrary: Function,
-  switchToPlayer: Function,
+  switchToShyLibrary: (() => void),
+  switchToLibrary: (() => void),
+  switchToPlayer: (() => void),
 
   focused?: boolean,
   shy?: boolean
@@ -31,13 +32,25 @@ export default class Library extends React.Component<LibraryProps, any> {
         <LibraryContainer
           shy={this.props.shy}
           focused={this.props.focused}
-          onClick={() => this.props.shy ? this.props.switchToLibrary() : this.props.switchToShyLibrary()}
         >
           <LibraryList>
             I am list
             <div style={{ height: '1000vh' }}/>
           </LibraryList>
           <LibraryEntryDetails>
+            <LibraryOpener
+              shy={this.props.shy}
+              onClick={this.props.switchToLibrary}
+            >
+              <i className="fa fa-long-arrow-left"/>
+              Back to library
+            </LibraryOpener>
+
+
+            <button onClick={this.props.switchToPlayer}>
+              Go to player
+            </button>
+
             I am details
             I am details
             I am details

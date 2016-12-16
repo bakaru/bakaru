@@ -16,15 +16,10 @@ const Dragger = styled.div`
   position: fixed;
   top: 0;
   right: 0;
-  left: 0;
-  height: ${buttonHeight}px;
+  left: ${(p:hp) => p.visible ? 0 : '40vw'};
+  height: ${(p:hp) => p.visible ? buttonHeight : 50}px;
   
-  padding: 0 0 ${(p:hp) => p.visible ? '0' : `${50 - buttonHeight}px`} 0;
-  
-  background-size: 100% ${(p:hp) => p.visible ? buttonHeight : 0}px;
-  background-image: linear-gradient(90deg, hsl(345, 100%, 50%), hsl(345, 100%, 40%));
-  background-repeat: no-repeat;
-  transition: all .2s ease;
+  box-shadow: 0 1px 0 ${(p:hp) => p.visible ? '#495057' : 'transparent'};
   
   &:hover>div {
     opacity: 1;
@@ -39,7 +34,7 @@ const Heading = styled.div`
   left: 0;
   height: ${buttonHeight}px;
   width: 150px;
-  color: ${(p:hp) => p.theme.mainFgColor}
+  color: ${(p:hp) => p.theme.contrastColor}
   padding-left: 5px;
   font-size: 20px;
   line-height: ${buttonHeight}px;
@@ -66,7 +61,7 @@ const Button = styled.button`
   height: ${buttonHeight}px;
   width: ${buttonWidth}px;
   background-color: transparent;
-  color: ${(p:wp) => p.theme.mainFgColor};
+  color: ${(p:wp) => p.visible ? p.theme.contrastColor : p.theme.mainFgColor};
   transition: all .2s ease;
   outline: none;
   
@@ -93,19 +88,19 @@ export default function WindowControls(props: WindowControlsProps) {
         カ
       </Heading>
       <Wrapper visible={props.visible}>
-        <Button>
+        <Button visible={props.visible}>
           <Icon x="0px" y="0px" viewBox="0 0 10.2 1">
             <rect width="10.2" height="2" />
           </Icon>
         </Button>
-        <Button>
+        <Button visible={props.visible}>
           <Icon x="0px" y="0px" viewBox="0 0 10.2 10.1">
             <path
               d={iconMaximize}
             />
           </Icon>
         </Button>
-        <Button onClick={window.close}>
+        <Button onClick={window.close} visible={props.visible}>
           <Icon x="0px" y="0px" viewBox="0 0 10.2 10.2">
             <polygon
               points="10.2,0.7 9.5,0 5.1,4.4 0.7,0 0,0.7 4.4,5.1 0,9.5 0.7,10.2 5.1,5.8 9.5,10.2 10.2,9.5 5.8,5.1 "
