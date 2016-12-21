@@ -1,5 +1,3 @@
-const RootApp = require('electron').app;
-const mkdirp = require('mkdirp').sync;
 const path = require('path');
 
 const MediaDiscovery = require('./MediaDiscovery');
@@ -12,11 +10,7 @@ const Syncer = require('./Syncer');
  * @returns {Syncer}
  */
 function bootSyncer() {
-  const libraryPath = path.join(RootApp.getPath('userData'), 'BakaruLibrary');
-
-  mkdirp(libraryPath);
-
-  return new Syncer(libraryPath);
+  return new Syncer(global.bakaru.paths.library);
 }
 
 class LibraryManager {

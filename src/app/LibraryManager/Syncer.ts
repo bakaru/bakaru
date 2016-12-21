@@ -2,21 +2,21 @@ import * as arson from 'arson';
 import * as path from 'path';
 import * as fs from 'fs';
 
-function read(filename: string): Promise<string> {
-  return new Promise<string>((resolve, reject) => {
+function read<T>(filename: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
     fs.readFile(filename, (error, content) => {
       if (error) {
         return reject(error);
       }
 
-      return resolve(content.toString());
+      return resolve(<T>arson.parse(content.toString()));
     });
   });
 }
 
-function write(filename: string, content: string): Promise<void> {
-  return new Promise<string>((resolve, reject) => {
-    fs.writeFile(filename, content, error => {
+function write(filename: string, content: any): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    fs.writeFile(filename, arson.stringify(content), error => {
       if (error) {
         return reject(error);
       }
@@ -28,7 +28,8 @@ function write(filename: string, content: string): Promise<void> {
 
 export default class FileSystem {
 
-  protected libPath: string;
+  public libPath: string;
+
   protected lib = new Set<string>();
   protected libDebouncer = 'index';
   protected debouncers = new Map<string, number>();
@@ -64,9 +65,7 @@ export default class FileSystem {
    */
   resurrect(): Promise<Set<string>> {
     // Reading library file
-    return read(this.libPath)
-      // Parsing library from ARSON
-      .then(value => arson.parse<Set<string>>(value))
+    return read<Set<string>>(this.libPath)
       // Oops no library (fresh install) faking that its empty
       .catch(() => new Set<string>())
       // Assigning
@@ -77,7 +76,7 @@ export default class FileSystem {
    * Syncs library file on disk
    */
   writeLib(): void {
-    this.debounce(this.libDebouncer, () => write(this.libPath, arson.stringify(this.lib)));
+    this.debounce(this.libDebouncer, () => write(this.libPath, this.lib));
   }
 
   /**
@@ -92,7 +91,7 @@ export default class FileSystem {
       this.writeLib();
     }
 
-    this.debounce(id, () => write(path.join(this.rootPath, `${id}.arson`), arson.stringify(content)));
+    this.debounce(id, () => write(path.join(this.rootPath, `${id}.arson`), content));
   }
 
   /**
@@ -102,6 +101,6 @@ export default class FileSystem {
    * @returns {Promise<Entry>}
    */
   read(id: string): Promise<Entry> {
-    return read(path.join(this.rootPath, `${id}.arson`)).then(arson.parse);
+    return read<Entry>(path.join(this.rootPath, `${id}.arson`));
   }
 }
