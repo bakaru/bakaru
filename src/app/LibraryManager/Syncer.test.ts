@@ -42,7 +42,7 @@ describe('Syncer', () => {
     expect(lib.size).equal(0);
   });
 
-  it('should resurrect with empty lib', async () => {
+  it('should resurrect with filled lib', async () => {
     mock({
       root: {
         'library.arson': '[["Set",1],"test"]'
@@ -53,5 +53,18 @@ describe('Syncer', () => {
     const lib = await syncer.resurrect();
 
     expect([...lib]).include.members(['test']);
+  });
+
+  it('should read entry', async () => {
+    mock({
+      root: {
+        'test.arson': '[{"id":1},"test"]'
+      }
+    });
+
+    const syncer = new Syncer('root');
+    const entry = await syncer.read('test');
+
+    expect(entry.id).equal('test');
   });
 });
