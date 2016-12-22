@@ -6,11 +6,11 @@
  * @param {string[]} strings
  * @returns {[string, string]}
  */
-function findSameParts(strings) {
+export default function findSameStringParts(strings: string[]): [string, string] {
   const stringsLength = strings.length;
 
   if (stringsLength === 1) {
-    return ['', ''];
+    return ['', ''] as [string, string];
   }
 
   const firstStringLength = strings[0].length;
@@ -54,7 +54,5 @@ function findSameParts(strings) {
     }
   }
 
-  return [start.join(''), end.reverse().join('')];
+  return [start.join(''), end.reverse().join('')] as [string, string];
 }
-
-module.exports = findSameParts;

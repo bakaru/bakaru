@@ -12,5 +12,8 @@
   "include": [
     "../typings/index.d.ts",
     "./**/*.ts"
+  ],
+  "exclude": [
+    "./**/*.test.ts"
   ]
 }

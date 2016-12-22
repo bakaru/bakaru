@@ -1,5 +1,7 @@
-import { Router } from 'express';
 import { WebChimera as WebChimeraInterface } from './webchimera';
+// WTF TS?!
+// Without this it will lose all the declarations...
+import 'express';
 
 declare global {
   export const WebChimera: WebChimeraInterface;
@@ -39,10 +41,6 @@ declare global {
 
   export interface StyledProps {
     theme: ThemeInterface
-  }
-
-  export interface ServerContext {
-    app: Router
   }
 
   export type Chapter = {
