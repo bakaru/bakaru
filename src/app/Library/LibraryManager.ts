@@ -13,7 +13,7 @@ function bootSyncer() {
   return new Syncer(global.bakaru.paths.library);
 }
 
-class LibraryManager {
+class Library {
 
   /**
    * Ctor
@@ -21,7 +21,6 @@ class LibraryManager {
    * @param {ServerContext} context
    */
   constructor(context) {
-    this.name = 'LibraryManager';
     this.events = context.events;
 
     this.mediaDiscovery = new MediaDiscovery(context);

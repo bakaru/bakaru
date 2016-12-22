@@ -4,8 +4,14 @@ import * as express from 'express';
 import * as socketIo from 'socket.io';
 import { createServer } from 'http';
 import './lookupHostAddress';
+import PluginManager from './PluginManager';
 
 const log = debug('bakaru:server');
+
+export interface ServerContext {
+  library: any
+  videoInfo: any
+}
 
 export default function bootServer(port: number = 44888): void {
   // Set urls
@@ -22,6 +28,13 @@ export default function bootServer(port: number = 44888): void {
   app.get('/main', (req, res) => {
     res.sendFile(path.join(__dirname, '../../gui/index.html'));
   });
+
+  const serverContext: ServerContext = {
+    library: {},
+    videoInfo: {}
+  };
+
+  const pm = new PluginManager(serverContext);
 
   http.listen(port);
   log(`Server up and running at http://127.0.0.1:${port}`);

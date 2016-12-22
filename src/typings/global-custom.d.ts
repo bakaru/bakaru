@@ -1,4 +1,6 @@
-import { Router } from 'express';
+// WTF TS?!
+// Without this it will lose all the declarations...
+import 'express';
 
 declare global {
 
@@ -10,10 +12,6 @@ declare global {
 
   export interface StyledProps {
     theme: ThemeInterface
-  }
-
-  export interface ServerContext {
-    app: Router
   }
 
   export type Chapter = {

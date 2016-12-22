@@ -29,8 +29,8 @@ function write(filename: string, content: any): Promise<void> {
 export default class FileSystem {
 
   public libPath: string;
+  public lib = new Set<string>();
 
-  protected lib = new Set<string>();
   protected libDebouncer = 'index';
   protected debouncers = new Map<string, number>();
 
