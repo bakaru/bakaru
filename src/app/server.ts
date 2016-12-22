@@ -5,12 +5,16 @@ import * as socketIo from 'socket.io';
 import { createServer } from 'http';
 import './lookupHostAddress';
 import PluginManager from './PluginManager';
+import VideoInfo, { VideoInfoInterface } from './VideoInfo';
+import Library, { LibraryInterface } from './Library';
 
 const log = debug('bakaru:server');
 
 export interface ServerContext {
-  library: any
-  videoInfo: any
+  library: LibraryInterface
+  videoInfo: VideoInfoInterface
+  socket?: SocketIO.Server
+  http?: express.Router
 }
 
 export default function bootServer(port: number = 44888): void {
@@ -22,7 +26,7 @@ export default function bootServer(port: number = 44888): void {
 
   const app = express();
   const http = createServer(app);
-  const io = socketIo(http);
+  const io: SocketIO.Server = socketIo(http);
 
   app.use(express.static(path.join(__dirname, '../../gui')));
   app.get('/main', (req, res) => {
@@ -30,8 +34,8 @@ export default function bootServer(port: number = 44888): void {
   });
 
   const serverContext: ServerContext = {
-    library: {},
-    videoInfo: {}
+    library: new Library(),
+    videoInfo: new VideoInfo()
   };
 
   const pm = new PluginManager(serverContext);

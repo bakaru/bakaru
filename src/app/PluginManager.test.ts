@@ -10,9 +10,7 @@ const ctx: ServerContext = {
 };
 
 class TestPlugin implements Plugin {
-  constructor(serverContext: ServerContext) {
-    // ...
-  }
+  constructor(serverContext: ServerContext) {}
 
   public getId(): string {
     return 'test-plugin';

@@ -44,12 +44,16 @@ function processFile(filePath: string): FuckingPromise<MediaProperties> {
     .then(mediaPropertiesExtractor);
 }
 
+export interface VideoInfoInterface {
+  get?(paths: string[], priority?: number): Promise<any>
+}
+
 export enum Priority {
   LowPriority = 1,
   HighPriority = 2
 }
 
-export default class VideoInfo {
+export default class VideoInfo implements VideoInfoInterface {
   protected queue = new FastPriorityQueue(FPQComparator);
   protected queueing = false;
 
