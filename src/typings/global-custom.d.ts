@@ -1,11 +1,40 @@
 import { Router } from 'express';
+import { WebChimera as WebChimeraInterface } from './webchimera';
 
 declare global {
+  export const WebChimera: WebChimeraInterface;
+
+  export interface WebGLTexture {
+    constructor(gl: WebGLRenderingContext): void
+    fill(width: number, height: number, data: number[]): void
+  }
+
+  export interface WebGLRenderingContext {
+    y: WebGLTexture,
+    u: WebGLTexture,
+    v: WebGLTexture
+  }
 
   export interface ThemeInterface {
-    mainBgColor: string;
-    mainFgColor: string;
-    contrastColor: string;
+    mainBgColor: string
+    mainFgColor: string
+    mainBorderColor: string
+    contrastColor: string
+    highlightColor: string
+
+    clr0: string
+    clr1: string
+    clr2: string
+    clr3: string
+    clr4: string
+    clr5: string
+    clr6: string
+    clr7: string
+    clr8: string
+    clr9: string
+
+    libraryListWidth: string
+    libraryDetailsWidth: string
   }
 
   export interface StyledProps {

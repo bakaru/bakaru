@@ -1,37 +1,23 @@
 import styled from 'styled-components';
 
-export interface ThemeInterface {
-  mainBgColor: string;
-  mainFgColor: string;
-  contrastColor: string;
-}
+interface i extends StyledProps {}
 
-type i = {
-  theme: ThemeInterface,
-  [key: string]: any
-}
-
-export const test = styled('test')`
-  yay: true
-`;
-
-export const PlayerContainer = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
+export const Btn = styled.button`
+  background-color: transparent;
+  border-radius: 3px;
+  border: none;
+  color: ${(p:i) => p.theme.contrastColor};
+  box-shadow: 0 0 0 1px ${(p:i) => p.theme.contrastColor};
+  padding: 10 16.8px;
+  line-height: 1;
+  outline: none;
   
-  background-color: ${(p:i)=>p.theme.mainBgColor};
-  color: ${(p:i)=>p.theme.mainBgColor}
-`;
-
-export const LibraryContainer = styled('div')`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
+  &:hover {
+    background-color: ${(p:i) => p.theme.contrastColor};
+    color: ${(p:i) => p.theme.mainFgColor};
+  }
+  
+  & svg {
+    fill: currentColor;
+  }
 `;

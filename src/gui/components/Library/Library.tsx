@@ -1,13 +1,18 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import { State as LibraryState, selectEntry as selectEntryAction } from 'gui/store/ducks/library';
+import { State as StoreState } from 'gui/store/ducks';
 import {
   LibraryContainer,
   PlayerLibraryOverlay,
-  LibraryList,
   LibraryEntryDetails,
   LibraryOpener
 } from './libraryElements';
+import { Btn } from 'gui/components/common';
 
-interface LibraryProps {
+import LibraryList from './List';
+
+interface LibraryOwnProps {
   switchToShyLibrary: (() => void),
   switchToLibrary: (() => void),
   switchToPlayer: (() => void),
@@ -16,7 +21,15 @@ interface LibraryProps {
   shy?: boolean
 }
 
-export default class Library extends React.Component<LibraryProps, any> {
+interface LibraryMapStateProps {
+  library: LibraryState
+}
+
+interface LibraryMapDispatchProps {
+  selectEntry: (entryId: string) => void
+}
+
+class Library extends React.Component<LibraryOwnProps & LibraryMapStateProps & LibraryMapDispatchProps, {}> {
   public defaultProps = {
     focused: true,
     shy: false
@@ -33,23 +46,20 @@ export default class Library extends React.Component<LibraryProps, any> {
           shy={this.props.shy}
           focused={this.props.focused}
         >
-          <LibraryList>
-            I am list
-            <div style={{ height: '1000vh' }}/>
-          </LibraryList>
+          <LibraryList/>
           <LibraryEntryDetails>
             <LibraryOpener
               shy={this.props.shy}
               onClick={this.props.switchToLibrary}
             >
-              <i className="fa fa-long-arrow-left"/>
+              <i className="fa fa-chevron-left"/>
               Back to library
             </LibraryOpener>
 
 
-            <button onClick={this.props.switchToPlayer}>
+            <Btn onClick={this.props.switchToPlayer}>
               Go to player
-            </button>
+            </Btn>
 
             I am details
             I am details
@@ -71,3 +81,12 @@ export default class Library extends React.Component<LibraryProps, any> {
     );
   }
 }
+
+export default connect<LibraryMapStateProps, LibraryMapDispatchProps, LibraryOwnProps>(
+  (state: StoreState) => ({
+    library: state.library
+  }),
+  dispatch => ({
+    selectEntry: (entryId: string) => dispatch(selectEntryAction(entryId))
+  })
+)(Library);

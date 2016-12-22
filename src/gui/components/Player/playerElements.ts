@@ -44,7 +44,7 @@ export const ShyLibrary = styled.div`
   z-index: 101;
   
   &:hover {
-    color: ${(p:pc) => p.theme.mainFgColor};
+    color: #e9ecef;
     background-color: rgba(0, 0, 0, .5);
     
     &::after {

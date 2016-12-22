@@ -16,10 +16,11 @@ const Dragger = styled.div`
   position: fixed;
   top: 0;
   right: 0;
-  left: ${(p:hp) => p.visible ? 0 : '40vw'};
+  left: ${(p:hp) => p.visible ? 0 : p.theme.libraryDetailsWidth};
   height: ${(p:hp) => p.visible ? buttonHeight : 50}px;
   
-  box-shadow: 0 1px 0 ${(p:hp) => p.visible ? '#495057' : 'transparent'};
+  box-shadow: 0 1px 0 ${(p:hp) => p.visible ? p.theme.mainBorderColor : 'transparent'};
+  background-color: ${(p:hp) => p.visible ? p.theme.mainBgColor : 'transparent'};
   
   &:hover>div {
     opacity: 1;

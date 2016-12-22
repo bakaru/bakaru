@@ -33,7 +33,7 @@
     "@types/node": "^6.0.48",
     "@types/react": "^0.14.49",
     "@types/react-dom": "^0.14.18",
-    "@types/react-redux": "^4.4.32",
+    "@types/react-redux": "^4.4.35",
     "@types/redux": "^3.6.31",
     "@types/redux-thunk": "^2.1.32",
     "@types/rimraf": "^0.0.28",

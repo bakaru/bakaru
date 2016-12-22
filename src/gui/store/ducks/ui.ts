@@ -6,9 +6,9 @@ export interface State {
   shyLibrary: boolean
 }
 const initialState: State = {
-  library: false,
+  library: true,
   player: false,
-  shyLibrary: true
+  shyLibrary: false
 };
 
 type SwitchToLibraryAction = BaseAction & {};

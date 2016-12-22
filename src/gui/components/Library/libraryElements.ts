@@ -40,21 +40,27 @@ export const LibraryContainer = styled.div`
 `;
 
 export const LibraryList = styled.div`
-  width: 60vw;
+  width: ${(p:lc) => p.theme.libraryListWidth};
   height: 100vh;
   margin-top: 32px;
   overflow-y: scroll;
 `;
 
 export const LibraryEntryDetails = styled.div`
-  width: 40vw;
+  position: relative;
+  width: ${(p:lc) => p.theme.libraryDetailsWidth};
   height: 100vh;
   overflow-y: scroll;
+  padding: 42px 16.8px 10 16.8px;
 `;
 
 export const LibraryOpener = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 32px;
-  box-shadow: 0 1px 0 #495057;
+  box-shadow: 0 1px 0 ${(p:lc) => p.theme.mainBorderColor};
   background-color: transparent;
   padding: 3px 16.8px;
   color: ${(p:lc) => p.theme.contrastColor};
@@ -67,6 +73,6 @@ export const LibraryOpener = styled.div`
   }
   
   &:hover {
-    background-color: #495057;
+    background-color: ${(p:lc) => p.theme.mainBorderColor};
   }
 `;
