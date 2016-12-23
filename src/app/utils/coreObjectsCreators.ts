@@ -1,5 +1,5 @@
 const sha224 = require('js-sha256').sha224;
-const p = require('path');
+import * as p from 'path';
 
 /**
  * Normalizes entry title as possible
@@ -7,7 +7,7 @@ const p = require('path');
  * @param {string} title
  * @returns {string}
  */
-function basename2title(title) {
+function basename2title(title: string): string {
   let name = title;
 
   // Get rid of [720p] and similar shit
@@ -26,7 +26,7 @@ function basename2title(title) {
  * @param {string} path
  * @returns {string}
  */
-function extname(path) {
+function extname(path: string): string {
   return p.extname(path).slice(1).toLowerCase();
 }
 
@@ -36,8 +36,8 @@ function extname(path) {
  * @param {string[]} items
  * @return {Map<string, string>}
  */
-function items2map(items) {
-  const map = new Map();
+function items2map(items: string[]): Map<string, string> {
+  const map = new Map<string, string>();
 
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
@@ -55,7 +55,7 @@ function items2map(items) {
  * @param {string} path
  * @return {Entry}
  */
-function entry(path) {
+export function entry(path: string): Entry {
   const basename = p.basename(path);
 
   return {
@@ -79,7 +79,7 @@ function entry(path) {
  * @param {string} path
  * @return {Episode}
  */
-function episode(path) {
+export function episode(path: string): Episode {
   const extension = p.extname(path);
   const format = extension.slice(1).toLowerCase();
   const basename = p.basename(path, extension);
@@ -105,12 +105,12 @@ function episode(path) {
  * @param {number} end
  * @return {Chapter}
  */
-function chapter(title, start, end) {
+export function chapter(title: string, start: number, end: number): Chapter {
   return {
     end,
     start,
     title
-  }
+  };
 }
 
 /**
@@ -121,7 +121,7 @@ function chapter(title, start, end) {
  * @param {boolean} embedded
  * @return {Subtitles}
  */
-function subtitles(path, items, embedded = false) {
+export function subtitles(path: string, items: string[], embedded: boolean = false): Subtitles {
   const basename = p.basename(path);
 
   return {
@@ -142,7 +142,7 @@ function subtitles(path, items, embedded = false) {
  * @param {boolean} embedded
  * @return {VoiceOver}
  */
-function voiceOver(path, items, embedded = false) {
+export function voiceOver(path: string, items: string, embedded: boolean = false): VoiceOver {
   const basename = p.basename(path);
 
   return {
@@ -154,11 +154,3 @@ function voiceOver(path, items, embedded = false) {
     embedded
   };
 }
-
-module.exports = {
-  entry,
-  episode,
-  chapter,
-  voiceOver,
-  subtitles
-};
