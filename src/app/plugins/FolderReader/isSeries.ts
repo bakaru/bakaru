@@ -1,13 +1,13 @@
-const naturalSort = require('javascript-natural-sort');
-const levenshtein = require('fast-levenshtein').get;
+import naturalSort = require('javascript-natural-sort');
+import fastLeneshtein = require('fast-levenshtein');
 
 /**
  * Detects if given folder is a series
  *
- * @param {ClassifiedItems} classifiedItems
+ * @param {ClassifiedFolderItems} classifiedItems
  * @returns {boolean}
  */
-module.exports = function isSeries(classifiedItems) {
+export default function isSeries(classifiedItems: ClassifiedFolderItems) {
   const videos = classifiedItems.videos.slice().sort(naturalSort);
   const videosLength = videos.length;
 
@@ -29,11 +29,11 @@ module.exports = function isSeries(classifiedItems) {
         pairs[pairs.length] = compositeKey;
       }
 
-      distances[distances.length] = levenshtein(videos[i], videos[j]);
+      distances[distances.length] = fastLeneshtein.get(videos[i], videos[j]);
     }
   }
 
-  distances.sort((a, b) => a > b);
+  distances.sort((a, b) => a > b ? 1 : (a < b ? -1 : 0));
   const index = Math.round(distances.length * percentile) + 1;
   const mean = distances.slice(0, index).reduce((acc, n) => acc + n, 0) / index;
 

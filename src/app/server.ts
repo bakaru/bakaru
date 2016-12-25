@@ -3,7 +3,8 @@ import * as debug from 'debug';
 import * as express from 'express';
 import * as socketIo from 'socket.io';
 import { createServer } from 'http';
-import './lookupHostAddress';
+import { EventEmitter } from 'events';
+import './bootstrap/lookupHostAddress';
 import PluginManager from './PluginManager';
 import VideoInfo, { VideoInfoInterface } from './VideoInfo';
 import Library, { LibraryInterface } from './Library';
@@ -14,6 +15,7 @@ export interface ServerContext {
   library: LibraryInterface
   videoInfo: VideoInfoInterface
   socket?: SocketIO.Server
+  events?: EventEmitter
   http?: express.Router
 }
 
@@ -34,6 +36,7 @@ export default function bootServer(port: number = 44888): void {
   });
 
   const serverContext: ServerContext = {
+    events: new EventEmitter(),
     library: new Library(),
     videoInfo: new VideoInfo()
   };

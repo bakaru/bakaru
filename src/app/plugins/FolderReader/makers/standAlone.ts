@@ -1,5 +1,5 @@
-const coreObjectsCreators = require('../../coreObjectsCreators');
-const path = require('path');
+import * as coreObjectsCreators from '../../../lib/coreObjectsCreators';
+import * as path from 'path';
 
 /**
  * Converts file path to fake folder path by removing extension
@@ -17,7 +17,7 @@ function filePath2folderPath(filePath) {
  * @param {string} videoPath
  * @returns {Entry}
  */
-function entry(videoPath) {
+export function entry(videoPath: string): Entry {
   const entryPath = filePath2folderPath(videoPath);
 
   const entry = coreObjectsCreators.entry(entryPath);
@@ -34,7 +34,7 @@ function entry(videoPath) {
  * @param {string} audioPath
  * @returns {VoiceOver}
  */
-function voiceOver(audioPath) {
+export function voiceOver(audioPath: string): VoiceOver {
   return coreObjectsCreators.voiceOver(
     filePath2folderPath(audioPath),
     [audioPath]
@@ -47,15 +47,9 @@ function voiceOver(audioPath) {
  * @param {string} subtitlesPath
  * @returns {Subtitles}
  */
-function subtitles(subtitlesPath) {
+export function subtitles(subtitlesPath: string): Subtitles {
   return coreObjectsCreators.subtitles(
     filePath2folderPath(subtitlesPath),
     [subtitlesPath]
   );
 }
-
-module.exports = {
-  entry,
-  voiceOver,
-  subtitles
-};

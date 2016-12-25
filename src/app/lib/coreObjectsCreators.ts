@@ -64,7 +64,7 @@ export function entry(path: string): Entry {
     title: basename2title(basename),
     width: 0,
     height: 0,
-    bitDepth: 8,
+    bitDepth: '8',
     episodes: new Map(),
     subtitles: new Map(),
     voiceOvers: new Map(),
@@ -142,7 +142,7 @@ export function subtitles(path: string, items: string[], embedded: boolean = fal
  * @param {boolean} embedded
  * @return {VoiceOver}
  */
-export function voiceOver(path: string, items: string, embedded: boolean = false): VoiceOver {
+export function voiceOver(path: string, items: string[], embedded: boolean = false): VoiceOver {
   const basename = p.basename(path);
 
   return {

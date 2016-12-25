@@ -1,9 +1,9 @@
-import * as bluebird from 'bluebird';
-import * as path from 'path';
+import { join } from 'path';
 import { readdir } from 'fs';
-import classifyFSEntries from './classifyFSEntries';
+import { promisify } from 'bluebird';
+import classifyFSEntries from './FSEntriesClassifier';
 
-const read = bluebird.promisify(readdir);
+const read = promisify(readdir);
 
 /**
  * Transforms all items to absolute paths to those items
@@ -13,7 +13,7 @@ const read = bluebird.promisify(readdir);
  * @returns {string[]}
  */
 function normalizeItems(folderPath: string, items: string[]): string[] {
-  return items.map(item => path.join(folderPath, item));
+  return items.map(item => join(folderPath, item));
 }
 
 /**
@@ -43,7 +43,7 @@ export default async function flatten(folderPath: string): Promise<Map<string, C
     for (const subFolderPath of unreadFolders.values()) {
       unreadFolders.delete(subFolderPath);
 
-      const classes = yield readFolder(subFolderPath);
+      const classes = await readFolder(subFolderPath);
 
       if (classes.folders.length > 0) {
         classes.folders.map(addUnreadFolder);

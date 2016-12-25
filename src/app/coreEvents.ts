@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   folderAdded: 'core:folderAdded',
 
   entryRead: 'core:entryRead',

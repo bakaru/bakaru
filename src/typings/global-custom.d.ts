@@ -64,6 +64,7 @@ declare global {
   export type Subtitles = {
     id: string,
     path: string,
+    items: Map<string, string>,
     title: string,
     format: string,
     embedded: boolean
@@ -72,6 +73,7 @@ declare global {
   export type VoiceOver = {
     id: string,
     path: string,
+    items: Map<string, string>,
     title: string,
     format: string,
     embedded: boolean

@@ -13,7 +13,7 @@ if (process.argv.filter(arg => arg.trim() === 'debug').length) {
 }
 
 // Main components
-import setupPaths from './setupPaths';
+import setupPaths from './bootstrap/setupPaths';
 import bootServer from './server';
 import WindowController from './Window';
 

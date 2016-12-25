@@ -21,3 +21,5 @@ import './arson';
 import './styled-components';
 import './react-svg-morph';
 import './webgl-video-renderer';
+import './fast-levenshtein';
+import './javascript-natural-sort';

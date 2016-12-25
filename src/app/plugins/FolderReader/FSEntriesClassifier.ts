@@ -3,7 +3,7 @@ import * as bluebird from 'bluebird';
 import * as path from 'path';
 import * as originFs from 'fs';
 
-const fs = bluebird.promisifyAll(originFs);
+const statAsync = bluebird.promisify(originFs.stat);
 
 /**
  * Makes new classes object
@@ -20,14 +20,19 @@ function makeClasses(): ClassifiedFolderItems {
   };
 }
 
+interface ItemStats {
+  item: string
+  stats: originFs.Stats
+}
+
 /**
  * Stats all items
  *
  * @param {string[]} items
  * @returns {Promise<{item: string, stats: originFs.Stats}[]>}
  */
-function statItems(items: string): Promise<{item: string, stats: originFs.Stats}[]> {
-  return Promise.all(items.map(item => fs.statAsync(item).then(stats => ({item, stats}))));
+function statItems(items: string[]): Promise<ItemStats[]> {
+  return Promise.all<ItemStats>(items.map(item => statAsync(item).then(stats => ({item, stats}))));
 }
 
 /**
@@ -36,7 +41,7 @@ function statItems(items: string): Promise<{item: string, stats: originFs.Stats}
  * @param {string[]} items
  * @returns {Promise<ClassifiedFolderItems>}
  */
-export default async function classify(items: string): Promise<ClassifiedFolderItems> {
+export default async function classify(items: string[]): Promise<ClassifiedFolderItems> {
   const classes = makeClasses();
 
   const itemsStats = await statItems(items);

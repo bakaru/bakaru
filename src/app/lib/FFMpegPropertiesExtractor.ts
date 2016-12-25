@@ -1,5 +1,7 @@
+import { chapter } from './coreObjectsCreators';
+
 export function parseTime(time: string): number {
-  return parseInt(parseFloat(time) * 1000, 10);
+  return Math.round(parseFloat(time) * 1000);
 }
 
 export function parseVideoStream(video: any) {
@@ -16,7 +18,7 @@ export function parseAudioStream(audio: any) {
  * @param {{}[]} chapters
  * @returns {Chapter[]}
  */
-export function parseChapters(chapters: {}[]) {
+export function parseChapters(chapters: any[]) {
   if (chapters.length === 0) {
     return [];
   }
@@ -34,6 +36,6 @@ export function parseChapters(chapters: {}[]) {
     const start = parseTime(rawChapter.start_time);
     const end = parseTime(rawChapter.end_time);
 
-    return coreObjectsCreators.chapter(title, start, end);
+    return chapter(title, start, end);
   });
 }
