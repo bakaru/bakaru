@@ -1,4 +1,4 @@
-import Syncer from './utils/Syncer';
+import Syncer from './lib/Syncer';
 
 /**
  * Boots up Syncer
