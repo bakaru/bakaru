@@ -1,0 +1,219 @@
+{
+  "streams": [
+    {
+      "index": 0,
+      "codec_name": "h264",
+      "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+      "profile": "High",
+      "codec_type": "video",
+      "codec_time_base": "1001/120000",
+      "codec_tag_string": "[0][0][0][0]",
+      "codec_tag": "0x0000",
+      "width": 720,
+      "height": 480,
+      "coded_width": 720,
+      "coded_height": 480,
+      "has_b_frames": 2,
+      "sample_aspect_ratio": "1:1",
+      "display_aspect_ratio": "3:2",
+      "pix_fmt": "yuv420p",
+      "level": 41,
+      "chroma_location": "left",
+      "refs": 7,
+      "is_avc": "1",
+      "nal_length_size": "4",
+      "r_frame_rate": "19001/317",
+      "avg_frame_rate": "19001/317",
+      "time_base": "1/1000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "bits_per_raw_sample": "8",
+      "extradata": "\n00000000: 0164 0029 ffe1 0018 6764 0029 ac56 200b  .d.)....gd.).V .\n00000010: 43db 0110 0000 3e90 001d 4c08 f183 1898  C.....>...L.....\n00000020: 0100 0668 e88e 1b2c 8b                   ...h...,.\n",
+      "disposition": {
+        "default": 1,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0
+      }
+    },
+    {
+      "index": 1,
+      "codec_name": "ac3",
+      "codec_long_name": "ATSC A/52A (AC-3)",
+      "codec_type": "audio",
+      "codec_time_base": "1/48000",
+      "codec_tag_string": "[0][0][0][0]",
+      "codec_tag": "0x0000",
+      "sample_fmt": "fltp",
+      "sample_rate": "48000",
+      "channels": 2,
+      "channel_layout": "stereo",
+      "bits_per_sample": 0,
+      "dmix_mode": "-1",
+      "ltrt_cmixlev": "-1.000000",
+      "ltrt_surmixlev": "-1.000000",
+      "loro_cmixlev": "-1.000000",
+      "loro_surmixlev": "-1.000000",
+      "r_frame_rate": "0/0",
+      "avg_frame_rate": "0/0",
+      "time_base": "1/1000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "bit_rate": "224000",
+      "extradata": "\n",
+      "disposition": {
+        "default": 1,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0
+      },
+      "tags": {
+        "language": "eng"
+      }
+    },
+    {
+      "index": 2,
+      "codec_name": "dvdsub",
+      "codec_long_name": "DVD subtitles",
+      "codec_type": "subtitle",
+      "codec_time_base": "1/1000",
+      "codec_tag_string": "[0][0][0][0]",
+      "codec_tag": "0x0000",
+      "width": 720,
+      "height": 480,
+      "r_frame_rate": "0/0",
+      "avg_frame_rate": "0/0",
+      "time_base": "1/1000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "duration_ts": 1533098,
+      "duration": "1533.098000",
+      "extradata": "\n00000000: 7369 7a65 3a20 3732 3078 3438 300a 6f72  size: 720x480.or\n00000010: 673a 2030 2c20 300a 7363 616c 653a 2031  g: 0, 0.scale: 1\n00000020: 3030 252c 2031 3030 250a 616c 7068 613a  00%, 100%.alpha:\n00000030: 2031 3030 250a 736d 6f6f 7468 3a20 4f46   100%.smooth: OF\n00000040: 460a 6661 6465 696e 2f6f 7574 3a20 3530  F.fadein/out: 50\n00000050: 2c20 3530 0a61 6c69 676e 3a20 4f46 4620  , 50.align: OFF \n00000060: 6174 204c 4546 5420 544f 500a 7469 6d65  at LEFT TOP.time\n00000070: 206f 6666 7365 743a 2030 0a66 6f72 6365   offset: 0.force\n00000080: 6420 7375 6273 3a20 4f46 460a 7061 6c65  d subs: OFF.pale\n00000090: 7474 653a 2066 6666 6666 662c 2062 6562  tte: ffffff, beb\n000000a0: 6562 652c 2066 6166 6631 612c 2062 6562  ebe, faff1a, beb\n000000b0: 6562 652c 2065 3062 6464 372c 2062 3764  ebe, e0bdd7, b7d\n000000c0: 3264 642c 2062 3865 3062 632c 2066 6166  2dd, b8e0bc, faf\n000000d0: 6631 612c 2030 3030 3030 302c 2064 3961  f1a, 000000, d9a\n000000e0: 6230 652c 2038 3430 3063 662c 2030 6662  b0e, 8400cf, 0fb\n000000f0: 6338 352c 2030 3030 3037 302c 2039 3636  c85, 000070, 966\n00000100: 3861 302c 2039 3262 3036 642c 2037 3133  8a0, 92b06d, 713\n00000110: 3633 380a 6375 7374 6f6d 2063 6f6c 6f72  638.custom color\n00000120: 733a 204f 4646 2c20 7472 6964 783a 2030  s: OFF, tridx: 0\n00000130: 3030 302c 2063 6f6c 6f72 733a 2030 3030  000, colors: 000\n00000140: 3030 302c 2030 3030 3030 302c 2030 3030  000, 000000, 000\n00000150: 3030 302c 2030 3030 3030 300a 0a         000, 000000..\n",
+      "disposition": {
+        "default": 1,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0
+      },
+      "tags": {
+        "language": "eng"
+      }
+    }
+  ],
+  "chapters": [
+    {
+      "id": 652261804,
+      "time_base": "1/1000000000",
+      "start": 0,
+      "start_time": "0.000000",
+      "end": 95000000000,
+      "end_time": "95.000000",
+      "tags": {
+        "title": "Chapter 1"
+      }
+    },
+    {
+      "id": 1413365422,
+      "time_base": "1/1000000000",
+      "start": 95000000000,
+      "start_time": "95.000000",
+      "end": 184800000000,
+      "end_time": "184.800000",
+      "tags": {
+        "title": "Chapter 2"
+      }
+    },
+    {
+      "id": -1420513891,
+      "time_base": "1/1000000000",
+      "start": 184800000000,
+      "start_time": "184.800000",
+      "end": 785200000000,
+      "end_time": "785.200000",
+      "tags": {
+        "title": "Chapter 3"
+      }
+    },
+    {
+      "id": -1919663471,
+      "time_base": "1/1000000000",
+      "start": 785200000000,
+      "start_time": "785.200000",
+      "end": 1334700000000,
+      "end_time": "1334.700000",
+      "tags": {
+        "title": "Chapter 4"
+      }
+    },
+    {
+      "id": -1914380901,
+      "time_base": "1/1000000000",
+      "start": 1334700000000,
+      "start_time": "1334.700000",
+      "end": 1424600000000,
+      "end_time": "1424.600000",
+      "tags": {
+        "title": "Chapter 5"
+      }
+    },
+    {
+      "id": 512818605,
+      "time_base": "1/1000000000",
+      "start": 1424600000000,
+      "start_time": "1424.600000",
+      "end": 1441000000000,
+      "end_time": "1441.000000",
+      "tags": {
+        "title": "Chapter 6"
+      }
+    },
+    {
+      "id": -1295345222,
+      "time_base": "1/1000000000",
+      "start": 1441000000000,
+      "start_time": "1441.000000",
+      "end": 1533098000000,
+      "end_time": "1533.098000",
+      "tags": {
+        "title": "Chapter 7"
+      }
+    }
+  ],
+  "format": {
+    "filename": "Mkv Sample.mkv",
+    "nb_streams": 3,
+    "nb_programs": 0,
+    "format_name": "matroska,webm",
+    "format_long_name": "Matroska / WebM",
+    "start_time": "0.000000",
+    "duration": "1533.098000",
+    "size": "238225644",
+    "bit_rate": "1243107",
+    "probe_score": 100,
+    "tags": {
+      "encoder": "libebml v1.3.0 + libmatroska v1.4.1",
+      "creation_time": "2014-06-19 09:07:42"
+    }
+  }
+}
