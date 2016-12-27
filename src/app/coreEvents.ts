@@ -1,4 +1,6 @@
 export default {
+  openSystemFolder: 'core:openSystemFolder',
+
   folderAdded: 'core:folderAdded',
 
   entryRead: 'core:entryRead',

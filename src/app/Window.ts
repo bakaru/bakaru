@@ -4,15 +4,15 @@ import icon from './icon';
 
 const log = debug('bakaru:window');
 
-export default class WindowController {
+export default class Window {
   public runningDevMode: boolean;
+  public mainWindow: Electron.BrowserWindow;
 
   protected app: Electron.App;
   protected name: string;
   protected rootDir: string;
   protected electron: Electron.ElectronMainAndRenderer;
   protected mainWindowUrl: string;
-  protected mainWindow: Electron.BrowserWindow;
   protected mainWindowOptions: Electron.BrowserWindowOptions;
 
   constructor() {

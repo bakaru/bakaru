@@ -4,10 +4,6 @@ export interface Plugin {
   getId(): string
 }
 
-interface PluginClass {
-  new(serverContext: ServerContext): Plugin
-}
-
 type PluginsList = Map<string, Plugin>;
 
 export default class PluginManager {

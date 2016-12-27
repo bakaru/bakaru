@@ -5,8 +5,7 @@ import { ServerContext } from './server';
 import PluginManager, { Plugin } from './PluginManager';
 
 const ctx: ServerContext = {
-  library: {},
-  videoInfo: {}
+  library: {}
 };
 
 class TestPlugin implements Plugin {

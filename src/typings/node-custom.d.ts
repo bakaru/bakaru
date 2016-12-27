@@ -1,26 +1,29 @@
 declare module NodeJS {
   export interface Global {
     bakaru: {
-      debug: boolean,
+      debug: boolean
       paths: {
         // Vendors
-        wcjs?: string,
-        ffmpeg?: string,
+        wcjs?: string
+        ffmpeg?: string
 
         // UI
-        mainWindowUrl?: string,
-        remoteWindowUrls?: string[],
+        mainWindowUrl?: string
+        remoteWindowUrls?: string[]
 
         // FS paths
-        data?: string,
-        temp?: string,
-        library?: string,
-        preferences?: string,
+        data?: string
+        temp?: string
+        library?: string
+        preferences?: string
 
         // Others
         [key: string]: any
-      },
+      }
       addresses: string[]
+
+      // Plugin Manager
+      pm: any
     }
   }
 }

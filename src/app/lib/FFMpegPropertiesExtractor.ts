@@ -12,6 +12,7 @@ export interface MediaStream {
   start_time: string
   disposition: {
     'default': boolean
+    forced:  boolean
   }
   tags?: Tags
 }
@@ -72,10 +73,14 @@ export interface ParsedAudio {
   codec: string
   channels: number
   bitRate: number
+  'default': boolean
+  forced: boolean
 }
 
 export interface ParsedSubtitle {
   language: string
+  'default': boolean
+  forced: boolean
 }
 
 export interface ParsedStreams {
@@ -140,7 +145,9 @@ export function parseAudioStream(audio: AudioStream): ParsedAudio {
   return <ParsedAudio>{
     codec: audio.codec_name,
     channels: audio.channels,
-    bitRate: parseInt(audio.bit_rate, 10)
+    bitRate: parseInt(audio.bit_rate, 10),
+    'default': !!audio.disposition.default,
+    forced: !!audio.disposition.forced
   };
 }
 
@@ -158,7 +165,9 @@ export function parseSubtitleStream(subtitle: MediaStream): ParsedSubtitle {
   }
 
   return <ParsedSubtitle>{
-    language
+    language,
+    'default': !!subtitle.disposition.default,
+    forced: !!subtitle.disposition.forced
   };
 }
 

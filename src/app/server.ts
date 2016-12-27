@@ -6,17 +6,20 @@ import { createServer } from 'http';
 import { EventEmitter } from 'events';
 import './bootstrap/lookupHostAddress';
 import PluginManager from './PluginManager';
-import VideoInfo, { VideoInfoInterface } from './VideoInfo';
 import Library, { LibraryInterface } from './Library';
+import Window from './Window';
+
+// Core plugins
+import SystemFolderAdder from './plugins/SystemFolderAdder';
 
 const log = debug('bakaru:server');
 
 export interface ServerContext {
   library: LibraryInterface
-  videoInfo: VideoInfoInterface
   socket?: SocketIO.Server
   events?: EventEmitter
   http?: express.Router
+  window?: Window
 }
 
 export default function bootServer(port: number = 44888): void {
@@ -35,14 +38,18 @@ export default function bootServer(port: number = 44888): void {
     res.sendFile(path.join(__dirname, '../../gui/index.html'));
   });
 
-  const serverContext: ServerContext = {
-    events: new EventEmitter(),
-    library: new Library(),
-    videoInfo: new VideoInfo()
-  };
-
-  const pm = new PluginManager(serverContext);
-
   http.listen(port);
   log(`Server up and running at http://127.0.0.1:${port}`);
+
+  const serverContext: ServerContext = {
+    http: app,
+    socket: io,
+    events: new EventEmitter(),
+    window: new Window(),
+    library: new Library()
+  };
+
+  global.bakaru.pm = new PluginManager(serverContext, [
+    SystemFolderAdder
+  ]);
 }

@@ -20,7 +20,7 @@ const expectedParsedMkv = {
     startTime: 0,
     bitsPerPixel: '8'
   },
-  audios:    [{codec: 'ac3', channels: 2, bitRate: 224000}],
+  audios:    [{codec: 'ac3', channels: 2, bitRate: 224000, 'default': true, forced: false}],
   duration:  1533.098,
   chapters:  [
     {end: 95000, start: 0, title: 'Chapter 1'},
@@ -31,7 +31,7 @@ const expectedParsedMkv = {
     {end: 1441000, start: 1424600, title: 'Chapter 6'},
     {end: 1533098, start: 1441000, title: 'Chapter 7'}
   ],
-  subtitles: [{language: 'eng'}]
+  subtitles: [{language: 'eng', 'default': true, forced: false}]
 };
 const expectedParsedMp4 = {
   size:      1055736,
@@ -43,7 +43,7 @@ const expectedParsedMp4 = {
     bitsPerPixel: '8'
   },
   audios:    [
-    {codec: 'aac', channels: 6, bitRate: 384828}
+    {codec: 'aac', channels: 6, bitRate: 384828, 'default': true, forced: false}
   ],
   duration: 5.312,
   chapters: [],
