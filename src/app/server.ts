@@ -3,11 +3,11 @@ import * as debug from 'debug';
 import * as express from 'express';
 import * as socketIo from 'socket.io';
 import { createServer } from 'http';
-import { EventEmitter } from 'events';
 import './bootstrap/lookupHostAddress';
 import PluginManager from './PluginManager';
 import Library, { LibraryInterface } from './Library';
 import Window from './Window';
+import Events from './Events';
 
 // Core plugins
 import SystemFolderAdder from './plugins/SystemFolderAdder';
@@ -17,7 +17,7 @@ const log = debug('bakaru:server');
 export interface ServerContext {
   library: LibraryInterface
   socket?: SocketIO.Server
-  events?: EventEmitter
+  events?: Events
   http?: express.Router
   window?: Window
 }
@@ -44,7 +44,7 @@ export default function bootServer(port: number = 44888): void {
   const serverContext: ServerContext = {
     http: app,
     socket: io,
-    events: new EventEmitter(),
+    events: new Events(),
     window: new Window(),
     library: new Library()
   };

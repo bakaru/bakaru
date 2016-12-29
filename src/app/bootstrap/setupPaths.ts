@@ -5,8 +5,8 @@ import * as mkdirp from 'mkdirp';
 const makeDir = promisify(mkdirp);
 
 const vendors = global.bakaru.debug
-  ? join(__dirname, '..', '..', 'vendor')
-  : join(app.getAppPath(), '..', '..', 'vendor');
+  ? join(__dirname, '..', '..', '..', 'vendor')
+  : join(app.getAppPath(), '..', '..', '..', 'vendor');
 
 global.bakaru.paths.wcjs = join(vendors, 'wcjs');
 global.bakaru.paths.ffmpeg = join(vendors, 'ffmpeg');

@@ -1,12 +1,12 @@
-import Syncer from './lib/Syncer';
+import FS from './lib/FS';
 
 /**
  * Boots up Syncer
  *
- * @returns {Syncer}
+ * @returns {FS}
  */
-function bootSyncer(): Syncer {
-  return new Syncer(global.bakaru.paths.library);
+function bootSyncer(): FS {
+  return new FS(global.bakaru.paths.library);
 }
 
 export interface LibraryInterface {

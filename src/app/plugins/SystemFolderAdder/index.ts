@@ -1,4 +1,3 @@
-import events from '../../coreEvents';
 import { dialog } from 'electron';
 import { ServerContext } from '../../server';
 import { Plugin } from '../../PluginManager';
@@ -9,7 +8,10 @@ export default class SystemFolderAdder implements Plugin {
   }
 
   constructor(protected context: ServerContext) {
-    this.context.events.on(events.openSystemFolder, this.onOpenSystemFolder.bind(this));
+    this.context.events.on(
+      this.context.events.coreEvents.openSystemFolder,
+      this.onOpenSystemFolder.bind(this)
+    );
   }
 
   onOpenSystemFolder() {
@@ -20,7 +22,9 @@ export default class SystemFolderAdder implements Plugin {
       },
       itemsPaths => {
         if (itemsPaths) {
-          itemsPaths.forEach(itemPath => this.context.events.emit(events.folderAdded, itemPath));
+          itemsPaths.forEach(
+            itemPath => this.context.events.emit(this.context.events.coreEvents.folderAdded, itemPath)
+          );
         }
       }
     );

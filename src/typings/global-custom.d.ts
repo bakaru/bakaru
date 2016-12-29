@@ -1,7 +1,5 @@
 import { WebChimera as WebChimeraInterface } from './webchimera';
-// WTF TS?!
-// Without this it will lose all the declarations...
-import 'express';
+import events = require('events');
 
 declare global {
   export const WebChimera: WebChimeraInterface;
@@ -43,71 +41,102 @@ declare global {
     theme: ThemeInterface
   }
 
-  export type Chapter = {
+  export interface Chapter {
     title: string
     start: number
     end: number
   }
 
-  export type Episode = {
-    id: string,
-    path: string,
-    title: string,
-    format: string,
-    codec: string,
-    watched: boolean,
-    chapters: Chapter[],
-    duration: number,
+  export interface Episode {
+    id: string
+    path: string
+    title: string
+    format: string
+    codec: string
+    watched: boolean
+    chapters: Chapter[]
+    duration: number
     stoppedAt: number
   }
 
-  export type Subtitles = {
-    id: string,
-    path: string,
-    items: Map<string, string>,
-    title: string,
-    format: string,
+  export interface Subtitles {
+    id: string
+    path: string
+    items: Map<string, string>
+    title: string
+    format: string
     embedded: boolean
   }
 
-  export type VoiceOver = {
-    id: string,
-    path: string,
-    items: Map<string, string>,
-    title: string,
-    format: string,
+  export interface VoiceOver {
+    id: string
+    path: string
+    items: Map<string, string>
+    title: string
+    format: string
     embedded: boolean
   }
 
-  export type Entry = {
-    id: string,
-    path: string,
-    title: string,
-    width: number,
-    height: number,
-    bitDepth: '8'|'10',
-    episodes: Map<string, Episode>,
-    subtitles: Map<string, Subtitles>,
-    voiceOvers: Map<string, VoiceOver>,
-    defaultSubtitles: string,
+  export interface Entry {
+    id: string
+    path: string
+    title: string
+    width: number
+    height: number
+    bitDepth: '8'|'10'
+    episodes: Map<string, Episode>
+    subtitles: Map<string, Subtitles>
+    voiceOvers: Map<string, VoiceOver>
+    defaultSubtitles: string
     defaultVoiceOver: string
   }
 
-  export type ClassifiedFolderItems = {
-    audios: string[],
-    videos: string[],
-    series: string[],
-    folders: string[],
+  export interface ClassifiedFolderItems {
+    audios: string[]
+    videos: string[]
+    series: string[]
+    folders: string[]
     subtitles: string[]
   }
 
-  export type MediaProperties = {
+  export interface MediaProperties {
     width: number
     height: number
-    bitDepth: number,
+    bitDepth: number
     codec: string
     chapters: Chapter[]
     subtitles: string[]
     voiceOvers: string[]
+  }
+
+  export interface CoreEvents {
+    openSystemFolder: string
+    folderAdded: string
+
+    entryUpdate: string
+
+    mediaPropsRequest: string
+    mediaPropsResponse: string
+
+    preferences: string
+
+    playerSetMedia: string
+    playerVolume: string
+    playerMute: string
+    playerPlay: string
+    playerPause: string
+    playerPrev: string
+    playerNext: string
+    playerSeek: string
+    playerAudioOffset: string
+
+    errors: {
+      folderNotFolder: string // Yo dawg
+      folderNotExist: string
+    }
+  }
+
+  export interface Events extends events.EventEmitter {
+    coreEvents: CoreEvents
   }
 }

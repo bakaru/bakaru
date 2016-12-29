@@ -5,9 +5,9 @@ import * as bb from 'bluebird';
 
 afterEach(mock.restore);
 
-import Syncer from './Syncer';
+import FS from './FS';
 
-describe('Syncer', () => {
+describe('FS', () => {
   it('should construct with empty lib', () => {
     mock({
       root: {
@@ -15,7 +15,7 @@ describe('Syncer', () => {
       }
     });
 
-    const syncer = new Syncer('root');
+    const syncer = new FS('root');
 
     expect(syncer.libPath).equal('root/library.arson');
   });
@@ -25,7 +25,7 @@ describe('Syncer', () => {
       root: {}
     });
 
-    const syncer = new Syncer('root');
+    const syncer = new FS('root');
 
     expect(syncer.libPath).equal('root/library.arson');
   });
@@ -37,7 +37,7 @@ describe('Syncer', () => {
       }
     });
 
-    const syncer = new Syncer('root');
+    const syncer = new FS('root');
     const lib = await syncer.resurrect();
 
     expect(lib.size).equal(0);
@@ -50,7 +50,7 @@ describe('Syncer', () => {
       }
     });
 
-    const syncer = new Syncer('root');
+    const syncer = new FS('root');
     const lib = await syncer.resurrect();
 
     expect([...lib]).include.members(['test']);
@@ -63,7 +63,7 @@ describe('Syncer', () => {
       }
     });
 
-    const syncer = new Syncer('root');
+    const syncer = new FS('root');
     const entry = await syncer.read('test');
 
     expect(entry.id).equal('test');
@@ -90,7 +90,7 @@ describe('Syncer', () => {
       defaultVoiceOver: 'test'
     };
 
-    const syncer = new Syncer('root');
+    const syncer = new FS('root');
 
     syncer.write('test', entry);
     expect(syncer.lib.has('test')).equal(true);

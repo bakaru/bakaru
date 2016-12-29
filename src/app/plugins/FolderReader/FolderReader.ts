@@ -1,7 +1,6 @@
 import { Plugin } from '../../PluginManager';
 import { promisify } from 'bluebird';
 import { ServerContext } from "../../server";
-import coreEvents from '../../coreEvents';
 import classify from './FSEntriesClassifier';
 import isSeries from './isSeries';
 import makeSeriesEntry from './makers/seriesEntry';
@@ -15,18 +14,15 @@ const read = promisify(readdirOrigin);
 const stat = promisify(statOrigin);
 
 export default class FolderReader implements Plugin {
-
-  /**
-   * Ctor
-   *
-   * @param {ServerContext} context
-   */
-  constructor(protected context: ServerContext) {
-    context.events.on(coreEvents.folderAdded, this.onFolderAdded.bind(this));
-  }
-
   getId(): string {
     return 'folder-reader';
+  }
+
+  constructor(protected context: ServerContext) {
+    context.events.on(
+      this.context.events.coreEvents.folderAdded,
+      this.onFolderAdded.bind(this)
+    );
   }
 
   /**
@@ -41,12 +37,18 @@ export default class FolderReader implements Plugin {
       const normalizedPathStats = await stat(normalizedPath);
 
       if (!normalizedPathStats.isDirectory()) {
-        this.context.events.emit(coreEvents.errors.folderNotFolder, folderPath);
+        this.context.events.emit(
+          this.context.events.coreEvents.errors.folderNotFolder,
+          folderPath
+        );
       } else {
         this.readFolder(folderPath);
       }
     } catch(error) {
-      this.context.events.emit(coreEvents.errors.folderNotExist, folderPath);
+      this.context.events.emit(
+        this.context.events.coreEvents.errors.folderNotExist,
+        folderPath
+      );
     }
   }
 
@@ -63,7 +65,8 @@ export default class FolderReader implements Plugin {
     if (isSeries(classes)) {
       this.processSeries(folderPath, classes);
     } else {
-      this.processNonSeries(classes);
+      // TODO: DO IT, JUST DO IT!!!
+      // this.processNonSeries(classes);
     }
   }
 
@@ -76,7 +79,10 @@ export default class FolderReader implements Plugin {
   async processSeries(seriesPath: string, classes: ClassifiedFolderItems) {
     const entry = await makeSeriesEntry(seriesPath, classes);
 
-    this.context.events.emit(coreEvents.entryRead, entry);
+    this.context.events.emit(
+      this.context.events.coreEvents.entryUpdate,
+      entry
+    );
   }
 
   /**
@@ -84,34 +90,34 @@ export default class FolderReader implements Plugin {
    *
    * @param {ClassifiedFolderItems} classes
    */
-  processNonSeries(classes: ClassifiedFolderItems): void {
-    // Sub folders
-    if (classes.folders.length > 0) {
-      classes.folders.forEach(folder => this.readFolder(folder));
-    }
-
-    // Standalone videos, movies may be?
-    if (classes.videos.length > 0) {
-      classes.videos.forEach(video => this.context.events.emit(
-        coreEvents.entryRead,
-        makeStandAlone.entry(video)
-      ));
-    }
-
-    // Standalone voice-overs
-    if (classes.audios.length > 0) {
-      classes.audios.forEach(audio => this.context.events.emit(
-        coreEvents.voiceOverRead,
-        makeStandAlone.voiceOver(audio)
-      ));
-    }
-
-    // Standalone subtitles
-    if (classes.subtitles.length > 0) {
-      classes.subtitles.forEach(subtitles => this.context.events.emit(
-        coreEvents.subtitlesRead,
-        makeStandAlone.subtitles(subtitles)
-      ));
-    }
-  }
+  // processNonSeries(classes: ClassifiedFolderItems): void {
+  //   // Sub folders
+  //   if (classes.folders.length > 0) {
+  //     classes.folders.forEach(folder => this.readFolder(folder));
+  //   }
+  //
+  //   // Standalone videos, movies may be?
+  //   if (classes.videos.length > 0) {
+  //     classes.videos.forEach(video => this.context.events.emit(
+  //       coreEvents.entryRead,
+  //       makeStandAlone.entry(video)
+  //     ));
+  //   }
+  //
+  //   // Standalone voice-overs
+  //   if (classes.audios.length > 0) {
+  //     classes.audios.forEach(audio => this.context.events.emit(
+  //       coreEvents.voiceOverRead,
+  //       makeStandAlone.voiceOver(audio)
+  //     ));
+  //   }
+  //
+  //   // Standalone subtitles
+  //   if (classes.subtitles.length > 0) {
+  //     classes.subtitles.forEach(subtitles => this.context.events.emit(
+  //       coreEvents.subtitlesRead,
+  //       makeStandAlone.subtitles(subtitles)
+  //     ));
+  //   }
+  // }
 }
