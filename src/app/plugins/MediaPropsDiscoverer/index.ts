@@ -22,9 +22,10 @@ export default class MediaPropsDiscoverer implements Plugin {
     request: MediaPropsDiscoveryRequest,
     priority: number = Priority.LowPriority
   ): Promise<void> {
-    const media = await this.videoInfo.get(request.path, priority);
-
-    this.emitResponse(request, media);
+    this.emitResponse(
+      request,
+      await this.videoInfo.get(request.path, priority)
+    );
   }
 
   private emitResponse(request: MediaPropsDiscoveryRequest, media: ParsedMedia): void {
