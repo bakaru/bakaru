@@ -11,6 +11,7 @@ import Events from './Events';
 
 // Core plugins
 import SystemFolderAdder from './plugins/SystemFolderAdder';
+import MediaPropsDiscoverer from './plugins/MediaPropsDiscoverer';
 
 const log = debug('bakaru:server');
 
@@ -50,6 +51,7 @@ export default function bootServer(port: number = 44888): void {
   };
 
   global.bakaru.pm = new PluginManager(serverContext, [
-    SystemFolderAdder
+    SystemFolderAdder,
+    MediaPropsDiscoverer
   ]);
 }

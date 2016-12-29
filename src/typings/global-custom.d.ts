@@ -139,4 +139,58 @@ declare global {
   export interface Events extends events.EventEmitter {
     coreEvents: CoreEvents
   }
+
+  export interface ParsedVideo {
+    codec: string
+    width: number
+    height: number
+    startTime: number
+    bitsPerPixel: '8' | '10'
+  }
+
+  export interface ParsedAudio {
+    codec: string
+    channels: number
+    bitRate: number
+    'default': boolean
+    forced: boolean
+  }
+
+  export interface ParsedSubtitle {
+    language: string
+    'default': boolean
+    forced: boolean
+  }
+
+  export interface ParsedStreams {
+    video: ParsedVideo
+    audios: ParsedAudio[]
+    subtitles: ParsedSubtitle[]
+  }
+
+  export interface ParsedFormat {
+    duration: number
+    size: number
+  }
+
+  export interface ParsedMedia {
+    video: ParsedVideo
+    audios: ParsedAudio[]
+    chapters: Chapter[]
+    subtitles: ParsedSubtitle[]
+    duration: number
+    size: number
+  }
+
+  export interface MediaPropsDiscoveryRequest {
+    entryId: string
+    mediaId: string
+    path: string
+  }
+
+  export interface MediaPropsDiscoveryResponse {
+    entryId: string
+    mediaId: string
+    media: ParsedMedia
+  }
 }

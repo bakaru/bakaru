@@ -1,5 +1,3 @@
-import { chapter } from './coreObjectsCreators';
-
 interface Tags {
   [key: string]: string
 }
@@ -59,48 +57,6 @@ export interface Media {
   streams: CombinedMediaStream[],
   chapters: MediaChapter[],
   format: MediaFormat
-}
-
-export interface ParsedVideo {
-  codec: string
-  width: number
-  height: number
-  startTime: number
-  bitsPerPixel: '8' | '10'
-}
-
-export interface ParsedAudio {
-  codec: string
-  channels: number
-  bitRate: number
-  'default': boolean
-  forced: boolean
-}
-
-export interface ParsedSubtitle {
-  language: string
-  'default': boolean
-  forced: boolean
-}
-
-export interface ParsedStreams {
-  video: ParsedVideo
-  audios: ParsedAudio[]
-  subtitles: ParsedSubtitle[]
-}
-
-export interface ParsedFormat {
-  duration: number
-  size: number
-}
-
-export interface ParsedMedia {
-  video: ParsedVideo
-  audios: ParsedAudio[]
-  chapters: Chapter[]
-  subtitles: ParsedSubtitle[]
-  duration: number
-  size: number
 }
 
 /**
@@ -254,7 +210,11 @@ export function parseChapters(chapters: MediaChapter[]): Chapter[] {
     const start = parseTime(rawChapter.start_time);
     const end = parseTime(rawChapter.end_time);
 
-    return chapter(title, start, end);
+    return {
+      end,
+      start,
+      title
+    };
   });
 }
 

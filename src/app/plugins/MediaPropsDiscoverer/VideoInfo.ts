@@ -1,12 +1,21 @@
 import * as path from 'path';
-import * as Bluebird from 'bluebird';
 import { execFile } from 'child_process';
 import FastPriorityQueue = require('fastpriorityqueue');
+import extractProperties, { Media } from './FFMpegPropertiesExtractor';
 
-type FuckingPromise<T> = Promise<T> | Bluebird<T>;
 type QueueItem = Array<any>;
 
-const execFileAsync = Bluebird.promisify<string, string, string[]>(execFile);
+const execFileAsync = (fpath: string, args: string[]): Promise<string> => {
+  return new Promise<string>((resolve, reject) => {
+    execFile(fpath, args, (error: string|null|Error, content: string|Buffer) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(content.toString());
+      }
+    });
+  });
+};
 
 const ffProbePath = path.join(
   global.bakaru.paths.ffmpeg,
@@ -25,27 +34,13 @@ function FPQComparator(a: QueueItem, b: QueueItem): boolean {
   return a[0] < b[0];
 }
 
-function mediaPropertiesExtractor(raw: string): MediaProperties {
-  const props: MediaProperties = {
-    width: 0,
-    height: 0,
-    bitDepth: 0,
-    codec: '',
-    chapters: [],
-    subtitles: [],
-    voiceOvers: []
-  };
-
-  return props;
-}
-
-function processFile(filePath: string): FuckingPromise<MediaProperties> {
+function processFile(filePath: string): Promise<ParsedMedia> {
   return execFileAsync(ffProbePath, ffProbeArgs.concat([`-i ${filePath}`]))
-    .then(mediaPropertiesExtractor);
+    .then(rawProperties => extractProperties(<Media>JSON.parse(rawProperties)));
 }
 
 export interface VideoInfoInterface {
-  get?(paths: string[], priority?: number): Promise<any>
+  get?(filePath: string, priority?: number): Promise<ParsedMedia>
 }
 
 export enum Priority {
@@ -57,11 +52,11 @@ export default class VideoInfo implements VideoInfoInterface {
   protected queue = new FastPriorityQueue(FPQComparator);
   protected queueing = false;
 
-  public get(paths: string[], priority: number = Priority.LowPriority): Promise<any> {
-    return new Promise((resolve, reject) => {
+  public get(filePath: string, priority: number = Priority.LowPriority): Promise<ParsedMedia> {
+    return new Promise<ParsedMedia>((resolve, reject) => {
       this.queue.add([
         priority,
-        paths,
+        filePath,
         resolve,
         reject
       ]);
@@ -79,19 +74,15 @@ export default class VideoInfo implements VideoInfoInterface {
 
   protected async processQueue(): Promise<void> {
     while (!this.queue.isEmpty()) {
-      const [, paths, resolve, reject] = this.queue.poll();
+      const [, path, resolve, reject] = this.queue.poll();
 
       try {
-        resolve(await this.processFiles(paths));
+        resolve(await processFile(path));
       } catch(e) {
         reject(e);
       }
     }
 
     this.queueing = false;
-  }
-
-  protected async processFiles(paths: string[]): Promise<any> {
-    return Promise.all(paths.map(processFile));
   }
 }
