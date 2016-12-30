@@ -7,11 +7,11 @@ type QueueItem = Array<any>;
 
 const execFileAsync = (fpath: string, args: string[]): Promise<string> => {
   return new Promise<string>((resolve, reject) => {
-    execFile(fpath, args, (error: string|null|Error, content: string|Buffer) => {
+    execFile(fpath, args, (error: string|null|Error, stdout: string|Buffer) => {
       if (error) {
         reject(error);
       } else {
-        resolve(content.toString());
+        resolve(stdout.toString());
       }
     });
   });
@@ -30,12 +30,11 @@ const execAsync = (cmd: string): Promise<string> => {
 };
 
 const ffProbeArgs = [
-  '-of json', // output format - JSON
-  '-v quiet', // silence you bitch
+  '-of', 'json', // output format - JSON
+  '-v', 'quiet', // silence you bitch
   '-show_chapters',
   '-show_streams',
-  '-show_format',
-  '-show_data' // Wut? Why the fuck we need it?!
+  '-show_format'
 ];
 
 let ffprobe: ((filePath: string) => Promise<string>) = null;
@@ -45,14 +44,14 @@ switch (process.platform) {
     const ffProbePath = path.join(global.bakaru.paths.ffmpeg, 'ffprobe.exe');
 
     ffprobe = (filePath: string): Promise<string> => {
-      return execFileAsync(ffProbePath, ffProbeArgs.concat([`-i ${filePath}`]));
+      return execFileAsync(ffProbePath, ffProbeArgs.concat(['-i', filePath]));
     };
 
     break;
 
   default:
     ffprobe = (filePath: string): Promise<string> => {
-      return execAsync(`ffprobe ${ffProbeArgs.concat([`-i ${filePath}`]).join(' ')}`);
+      return execAsync(`ffprobe ${ffProbeArgs.concat(['-i', filePath]).join(' ')}`);
     };
     break;
 }

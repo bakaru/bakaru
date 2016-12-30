@@ -1,4 +1,5 @@
 import * as mock from 'mock-fs';
+import * as path from 'path';
 import { expect } from 'chai';
 import 'mocha';
 import * as bb from 'bluebird';
@@ -17,7 +18,7 @@ describe('FS', () => {
 
     const syncer = new FS('root');
 
-    expect(syncer.libPath).equal('root/library.arson');
+    expect(syncer.libPath).equal(path.join('root', 'library.arson'));
   });
 
   it('should construct without lib', () => {
@@ -27,10 +28,10 @@ describe('FS', () => {
 
     const syncer = new FS('root');
 
-    expect(syncer.libPath).equal('root/library.arson');
+    expect(syncer.libPath).equal(path.join('root', 'library.arson'));
   });
 
-  it('should resurrect with empty lib', async () => {
+  it('should resurrect with empty lib', async (): Promise<void> => {
     mock({
       root: {
         'library.arson': '[["Set"]]'
@@ -41,9 +42,11 @@ describe('FS', () => {
     const lib = await syncer.resurrect();
 
     expect(lib.size).equal(0);
+
+    return;
   });
 
-  it('should resurrect with filled lib', async () => {
+  it('should resurrect with filled lib', async (): Promise<void> => {
     mock({
       root: {
         'library.arson': '[["Set",1],"test"]'
@@ -56,7 +59,7 @@ describe('FS', () => {
     expect([...lib]).include.members(['test']);
   });
 
-  it('should read entry', async () => {
+  it('should read entry', async (): Promise<void> => {
     mock({
       root: {
         'test.arson': '[{"id":1},"test"]'
@@ -67,9 +70,11 @@ describe('FS', () => {
     const entry = await syncer.read('test');
 
     expect(entry.id).equal('test');
+
+    return;
   });
 
-  it('should write entry', async () => {
+  it('should write entry', async (): Promise<void> => {
     mock({
       root: {
         'test.arson': '[{"id":1},"test"]'
@@ -102,5 +107,7 @@ describe('FS', () => {
 
     expect(savedEntry.id).equal('test');
     expect(savedEntry.title).equal('test');
+
+    return;
   });
 });

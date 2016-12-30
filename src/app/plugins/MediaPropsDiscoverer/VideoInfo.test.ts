@@ -12,7 +12,7 @@ const expect = chai.expect;
 if (process.platform === 'win32') {
   // Setup globals
   global['bakaru'] = {
-    debug: false,
+    debug: true,
     paths: {},
     addresses: [],
     pm: null
@@ -22,7 +22,7 @@ if (process.platform === 'win32') {
   require('../../bootstrap/setupPaths');
 }
 
-const testFilePath = path.resolve(__dirname, '.', 'stubs', 'test.mkv');
+const testFilePath = path.resolve(__dirname, 'stubs', 'test.mkv');
 const testFileParsedMedia: ParsedMedia = {
   size: 1052413,
   video:     {
@@ -53,11 +53,12 @@ describe('VideoInfo', () => {
     }).to.not.throw(Error);
   });
 
-  it('should parse media', async () => {
+  it('should parse media', async (): Promise<void> => {
     const vi = new VideoInfo();
 
     const media = await vi.get(testFilePath).catch(console.error);
 
+    expect(media).to.not.be.undefined;
     expect(media).to.shallowDeepEqual(testFileParsedMedia);
 
     return;
