@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { execFile } from 'child_process';
+import { execFile, exec } from 'child_process';
 import FastPriorityQueue = require('fastpriorityqueue');
 import extractProperties, { Media } from './FFMpegPropertiesExtractor';
 
@@ -17,10 +17,18 @@ const execFileAsync = (fpath: string, args: string[]): Promise<string> => {
   });
 };
 
-const ffProbePath = path.join(
-  global.bakaru.paths.ffmpeg,
-  `ffprobe${process.platform === 'win32' ? '.exe' : ''}`
-);
+const execAsync = (cmd: string): Promise<string> => {
+  return new Promise<string>((resolve, reject) => {
+    exec(cmd, (error: string|null|Error, content: string|Buffer) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(content.toString());
+      }
+    });
+  });
+};
+
 const ffProbeArgs = [
   '-of json', // output format - JSON
   '-v quiet', // silence you bitch
@@ -30,13 +38,33 @@ const ffProbeArgs = [
   '-show_data' // Wut? Why the fuck we need it?!
 ];
 
+let ffprobe: ((filePath: string) => Promise<string>) = null;
+
+switch (process.platform) {
+  case 'win32':
+    const ffProbePath = path.join(global.bakaru.paths.ffmpeg, 'ffprobe.exe');
+
+    ffprobe = (filePath: string): Promise<string> => {
+      return execFileAsync(ffProbePath, ffProbeArgs.concat([`-i ${filePath}`]));
+    };
+
+    break;
+
+  default:
+    ffprobe = (filePath: string): Promise<string> => {
+      return execAsync(`ffprobe ${ffProbeArgs.concat([`-i ${filePath}`]).join(' ')}`);
+    };
+    break;
+}
+
 function FPQComparator(a: QueueItem, b: QueueItem): boolean {
   return a[0] < b[0];
 }
 
 function processFile(filePath: string): Promise<ParsedMedia> {
-  return execFileAsync(ffProbePath, ffProbeArgs.concat([`-i ${filePath}`]))
-    .then(rawProperties => extractProperties(<Media>JSON.parse(rawProperties)));
+  return ffprobe(filePath).then(
+    media => extractProperties(<Media>JSON.parse(media))
+  );
 }
 
 export interface VideoInfoInterface {

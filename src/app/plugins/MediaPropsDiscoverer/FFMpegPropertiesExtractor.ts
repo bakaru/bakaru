@@ -29,7 +29,8 @@ export interface VideoStream extends MediaStream {
 export interface AudioStream extends MediaStream {
   channels: number
   channel_layout: string
-  bit_rate: string
+  bit_rate?: string
+  bits_per_sample?: string
   sample_rate: string
 }
 
@@ -80,7 +81,7 @@ export function parseVideoStream(video: VideoStream): ParsedVideo {
     codec: video.codec_name.toString().trim(),
     width: video.width,
     height: video.height,
-    startTime: parseTime(video.start_time),
+    startTime: video.start_time ? parseTime(video.start_time) : 0.0,
     bitsPerPixel: '8'
   };
 
@@ -98,10 +99,26 @@ export function parseVideoStream(video: VideoStream): ParsedVideo {
  * @returns {ParsedAudio}
  */
 export function parseAudioStream(audio: AudioStream): ParsedAudio {
+  let bitRate: number;
+
+  switch (true) {
+    case !!audio.bit_rate:
+      bitRate = parseInt(audio.bit_rate, 10);
+      break;
+
+    case !!audio.bits_per_sample:
+      bitRate = parseInt(audio.bits_per_sample, 10);
+      break;
+
+    default:
+      bitRate = -1;
+      break;
+  }
+
   return <ParsedAudio>{
+    bitRate,
     codec: audio.codec_name,
     channels: audio.channels,
-    bitRate: parseInt(audio.bit_rate, 10),
     'default': !!audio.disposition.default,
     forced: !!audio.disposition.forced
   };
