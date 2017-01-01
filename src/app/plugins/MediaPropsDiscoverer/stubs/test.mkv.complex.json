@@ -1,0 +1,313 @@
+{
+  "streams": [
+    {
+      "index": 0,
+      "codec_name": "h264",
+      "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+      "profile": "High",
+      "codec_type": "video",
+      "codec_time_base": "1001/48000",
+      "codec_tag_string": "[0][0][0][0]",
+      "codec_tag": "0x0000",
+      "width": 1280,
+      "height": 720,
+      "coded_width": 1280,
+      "coded_height": 720,
+      "has_b_frames": 2,
+      "sample_aspect_ratio": "1:1",
+      "display_aspect_ratio": "16:9",
+      "pix_fmt": "yuv420p",
+      "level": 50,
+      "chroma_location": "left",
+      "field_order": "progressive",
+      "refs": 1,
+      "is_avc": "true",
+      "nal_length_size": "4",
+      "r_frame_rate": "24000/1001",
+      "avg_frame_rate": "24000/1001",
+      "time_base": "1/1000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "bits_per_raw_sample": "8",
+      "disposition": {
+        "default": 1,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0
+      },
+      "tags": {
+        "language": "jpn"
+      }
+    },
+    {
+      "index": 1,
+      "codec_name": "flac",
+      "codec_long_name": "FLAC (Free Lossless Audio Codec)",
+      "codec_type": "audio",
+      "codec_time_base": "1/48000",
+      "codec_tag_string": "[0][0][0][0]",
+      "codec_tag": "0x0000",
+      "sample_fmt": "s16",
+      "sample_rate": "48000",
+      "channels": 2,
+      "channel_layout": "stereo",
+      "bits_per_sample": 0,
+      "r_frame_rate": "0/0",
+      "avg_frame_rate": "0/0",
+      "time_base": "1/1000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "bits_per_raw_sample": "16",
+      "disposition": {
+        "default": 1,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0
+      },
+      "tags": {
+        "language": "jpn"
+      }
+    },
+    {
+      "index": 2,
+      "codec_name": "ass",
+      "codec_long_name": "ASS (Advanced SSA) subtitle",
+      "codec_type": "subtitle",
+      "codec_time_base": "0/1",
+      "codec_tag_string": "[0][0][0][0]",
+      "codec_tag": "0x0000",
+      "r_frame_rate": "0/0",
+      "avg_frame_rate": "0/0",
+      "time_base": "1/1000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "duration_ts": 1421141,
+      "duration": "1421.141000",
+      "disposition": {
+        "default": 1,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0
+      },
+      "tags": {
+        "language": "eng"
+      }
+    },
+    {
+      "index": 3,
+      "codec_type": "attachment",
+      "codec_tag_string": "[0][0][0][0]",
+      "codec_tag": "0x0000",
+      "r_frame_rate": "0/0",
+      "avg_frame_rate": "0/0",
+      "time_base": "1/90000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "duration_ts": 127902690,
+      "duration": "1421.141000",
+      "disposition": {
+        "default": 0,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0
+      },
+      "tags": {
+        "filename": "batang.ttc",
+        "mimetype": "application/octet-stream"
+      }
+    },
+    {
+      "index": 4,
+      "codec_name": "ttf",
+      "codec_long_name": "TrueType font",
+      "codec_type": "attachment",
+      "codec_tag_string": "[0][0][0][0]",
+      "codec_tag": "0x0000",
+      "r_frame_rate": "0/0",
+      "avg_frame_rate": "0/0",
+      "time_base": "1/90000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "duration_ts": 127902690,
+      "duration": "1421.141000",
+      "disposition": {
+        "default": 0,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0
+      },
+      "tags": {
+        "filename": "BAUHS93.TTF",
+        "mimetype": "application/x-truetype-font"
+      }
+    },
+    {
+      "index": 5,
+      "codec_name": "ttf",
+      "codec_long_name": "TrueType font",
+      "codec_type": "attachment",
+      "codec_tag_string": "[0][0][0][0]",
+      "codec_tag": "0x0000",
+      "r_frame_rate": "0/0",
+      "avg_frame_rate": "0/0",
+      "time_base": "1/90000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "duration_ts": 127902690,
+      "duration": "1421.141000",
+      "disposition": {
+        "default": 0,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0
+      },
+      "tags": {
+        "filename": "D3Streetism.TTF",
+        "mimetype": "application/x-truetype-font"
+      }
+    },
+    {
+      "index": 6,
+      "codec_name": "ttf",
+      "codec_long_name": "TrueType font",
+      "codec_type": "attachment",
+      "codec_tag_string": "[0][0][0][0]",
+      "codec_tag": "0x0000",
+      "r_frame_rate": "0/0",
+      "avg_frame_rate": "0/0",
+      "time_base": "1/90000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "duration_ts": 127902690,
+      "duration": "1421.141000",
+      "disposition": {
+        "default": 0,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0
+      },
+      "tags": {
+        "filename": "ArtificeSSK.ttf",
+        "mimetype": "application/x-truetype-font"
+      }
+    }
+  ],
+  "chapters": [
+    {
+      "id": 1115391164,
+      "time_base": "1/1000000000",
+      "start": 0,
+      "start_time": "0.000000",
+      "end": 31990000000,
+      "end_time": "31.990000",
+      "tags": {
+        "title": "OP"
+      }
+    },
+    {
+      "id": 1473801633,
+      "time_base": "1/1000000000",
+      "start": 31990000000,
+      "start_time": "31.990000",
+      "end": 729020000000,
+      "end_time": "729.020000",
+      "tags": {
+        "title": "Episode 1"
+      }
+    },
+    {
+      "id": -460213061,
+      "time_base": "1/1000000000",
+      "start": 729020000000,
+      "start_time": "729.020000",
+      "end": 1362460000000,
+      "end_time": "1362.460000",
+      "tags": {
+        "title": "Episode 2"
+      }
+    },
+    {
+      "id": -941386610,
+      "time_base": "1/1000000000",
+      "start": 1362460000000,
+      "start_time": "1362.460000",
+      "end": 1421141000000,
+      "end_time": "1421.141000",
+      "tags": {
+        "title": "ED"
+      }
+    }
+  ],
+  "format": {
+    "filename": "/root/complex.mkv",
+    "nb_streams": 7,
+    "nb_programs": 0,
+    "format_name": "matroska,webm",
+    "format_long_name": "Matroska / WebM",
+    "start_time": "0.000000",
+    "duration": "1421.141000",
+    "size": "604585930",
+    "bit_rate": "3403383",
+    "probe_score": 100,
+    "tags": {
+      "encoder": "libebml v1.0.0 + libmatroska v1.0.0",
+      "creation_time": "2011-01-05T20:12:36.000000Z"
+    }
+  }
+}

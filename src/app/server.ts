@@ -34,9 +34,9 @@ export default function bootServer(port: number = 44888): void {
   const http = createServer(app);
   const io: SocketIO.Server = socketIo(http);
 
-  app.use(express.static(path.join(__dirname, '../../gui')));
+  app.use(express.static(path.join(__dirname, '../gui')));
   app.get('/main', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../gui/index.html'));
+    res.sendFile(path.join(__dirname, '../gui/index.html'));
   });
 
   http.listen(port);

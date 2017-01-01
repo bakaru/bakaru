@@ -9,6 +9,7 @@ const expect = chai.expect;
 import parse from './FFMpegPropertiesExtractor';
 
 const mkvSimple = require('./stubs/test.mkv.json');
+const mkvComplex = require('./stubs/test.mkv.complex.json');
 const mp4Simple = require('./stubs/test.mp4.json');
 
 const expectedParsedMkv = {
@@ -49,10 +50,38 @@ const expectedParsedMp4 = {
   chapters: [],
   subtitles: []
 };
+const expectedParsedMkvComplex = {
+  size: 604585930,
+  duration: 1421.141,
+  video: {
+    codec: 'h264',
+    width: 1280,
+    height: 720,
+    startTime: 0,
+    bitsPerPixel: '8'
+  },
+  audios: [{
+    bitRate: -1,
+    codec: 'flac',
+    channels: 2,
+    'default': true,
+    forced: false
+  }],
+  chapters: [
+    {end: 31990, start: 0, title: 'OP'},
+    {end: 729020, start: 31990, title: 'Episode 1'},
+    {end: 1362460, start: 729020, title: 'Episode 2'},
+    {end: 1421141, start: 1362460, title: 'ED'}
+  ],
+  subtitles: [
+    {language: 'eng', 'default': true, forced: false}
+  ]
+};
 
 describe('FFMpegPropertiesExtractor', () => {
   it('should parse correctly', () => {
-    expect(parse(mkvSimple)).to.shallowDeepEqual(expectedParsedMkv);
-    expect(parse(mp4Simple)).to.shallowDeepEqual(expectedParsedMp4);
+    expect(parse(mkvSimple)).to.be.shallowDeepEqual(expectedParsedMkv);
+    expect(parse(mkvComplex)).to.be.shallowDeepEqual(expectedParsedMkvComplex);
+    expect(parse(mp4Simple)).to.be.shallowDeepEqual(expectedParsedMp4);
   });
 });
