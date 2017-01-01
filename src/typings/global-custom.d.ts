@@ -182,13 +182,13 @@ declare global {
     size: number
   }
 
-  export interface MediaPropsDiscoveryRequest {
+  export interface MediaPropsExplorerRequest {
     entryId: string
     mediaId: string
     path: string
   }
 
-  export interface MediaPropsDiscoveryResponse {
+  export interface MediaPropsExplorerResponse {
     entryId: string
     mediaId: string
     media: ParsedMedia

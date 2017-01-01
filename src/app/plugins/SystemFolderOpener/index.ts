@@ -2,9 +2,9 @@ import { dialog } from 'electron';
 import { ServerContext } from '../../server';
 import { Plugin } from '../../PluginManager';
 
-export default class SystemFolderAdder implements Plugin {
+export default class SystemFolderOpener implements Plugin {
   getId(): string {
-    return 'system-folder-adder';
+    return 'system-folder-opener';
   }
 
   constructor(protected context: ServerContext) {

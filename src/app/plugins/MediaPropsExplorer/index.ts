@@ -2,11 +2,11 @@ import { ServerContext } from '../../server';
 import { Plugin } from '../../PluginManager';
 import VideoInfo, { Priority } from './VideoInfo';
 
-export default class MediaPropsDiscoverer implements Plugin {
+export default class MediaPropsExplorer implements Plugin {
   private videoInfo: VideoInfo;
 
   getId(): string {
-    return 'media-props-discoverer';
+    return 'media-props-explorer';
   }
 
   constructor(protected context: ServerContext) {
@@ -19,7 +19,7 @@ export default class MediaPropsDiscoverer implements Plugin {
   }
 
   private async onRequest(
-    request: MediaPropsDiscoveryRequest,
+    request: MediaPropsExplorerRequest,
     priority: number = Priority.LowPriority
   ): Promise<void> {
     this.emitResponse(
@@ -28,8 +28,8 @@ export default class MediaPropsDiscoverer implements Plugin {
     );
   }
 
-  private emitResponse(request: MediaPropsDiscoveryRequest, media: ParsedMedia): void {
-    const response: MediaPropsDiscoveryResponse = {
+  private emitResponse(request: MediaPropsExplorerRequest, media: ParsedMedia): void {
+    const response: MediaPropsExplorerResponse = {
       entryId: request.entryId,
       mediaId: request.mediaId,
       media
