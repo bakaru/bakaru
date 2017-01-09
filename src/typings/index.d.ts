@@ -12,6 +12,7 @@
 ///<reference types="socket.io-client"/>
 ///<reference types="bluebird"/>
 ///<reference types="electron"/>
+///<reference path="../dev/index.d.ts"/>
 ///<reference path="./webchimera.d.ts"/>
 
 import './node-custom';

@@ -1,0 +1,13 @@
+{
+  "name": "bakaru-dev",
+  "version": "0.0.9",
+  "description": "Bakaru dev package",
+  "main": "",
+  "typings": "index.d.ts",
+  "author": "Alexander Kukhta <me@thers.io>",
+  "license": "MIT",
+  "files": [
+    "index.d.ts",
+    "README.md"
+  ]
+}

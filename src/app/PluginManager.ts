@@ -20,6 +20,8 @@ export default class PluginManager {
     for (let index in plugins) {
       this.register(plugins[index]);
     }
+
+    let test: Bakaru.TestingShit;
   }
 
   public register(pluginClass: any) {
