@@ -7,7 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   target: 'electron',
-  devtool: false, //'cheap-module-source-map',
+  devtool: 'cheap-module-source-map',
   entry: {
     gui: './src/gui/index.tsx'
   },
@@ -16,7 +16,7 @@ module.exports = {
     filename: 'gui.js'
   },
   resolve: {
-    extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
+    extensions: [".ts", ".tsx", ".js"],
     alias: {
       app: path.join(__dirname, 'src/app'),
       gui: path.join(__dirname, "src/gui")
@@ -28,11 +28,6 @@ module.exports = {
         test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
         loader: 'ts-loader'
-      },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader'
       },
       {
         test: /\.(css)$/,
@@ -49,7 +44,8 @@ module.exports = {
         test: /\.json$/,
         loader: 'json-loader'
       }
-    ]
+    ],
+    // noParse: /ws/
   },
   plugins: [
     new HtmlWebpackPlugin({

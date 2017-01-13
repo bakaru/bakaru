@@ -1,14 +1,14 @@
 const webpack = require('webpack');
-
 const cfg = require('./webpack.config');
 
-// cfg.devtool = 'source-map';
+cfg.devtool = false;
 cfg.plugins.push(
   new webpack.DefinePlugin({
     'process.env': {
       NODE_ENV: JSON.stringify('production')
     }
-  })/*,
+  })
+  /*,
   new webpack.optimize.UglifyJsPlugin({
     compress: {
       screw_ie8: true,
