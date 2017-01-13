@@ -1,5 +1,5 @@
 import classifyNestedFSEntries from '../nestedFSEntriesClassifier';
-import * as make from '../../../lib/coreObjectsCreators';
+import * as make from '../../lib/coreObjectsCreators';
 
 /**
  * Fills entry with episodes

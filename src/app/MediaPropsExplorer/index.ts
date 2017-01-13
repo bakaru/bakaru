@@ -1,5 +1,5 @@
-import { ServerContext } from '../../server';
-import { Plugin } from '../../PluginManager';
+import { ServerContext } from '../server';
+import { Plugin } from '../PluginManager';
 import VideoInfo, { Priority } from './VideoInfo';
 
 export default class MediaPropsExplorer implements Plugin {

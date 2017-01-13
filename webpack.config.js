@@ -7,6 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   target: 'electron',
+  devtool: false, //'cheap-module-source-map',
   entry: {
     gui: './src/gui/index.tsx'
   },
@@ -25,7 +26,13 @@ module.exports = {
     rules: [
       {
         test: /\.(ts|tsx)$/,
+        exclude: /node_modules/,
         loader: 'ts-loader'
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader'
       },
       {
         test: /\.(css)$/,

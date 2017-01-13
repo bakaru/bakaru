@@ -1,10 +1,10 @@
-import { Plugin } from '../../PluginManager';
+import { Plugin } from '../PluginManager';
 import { promisify } from 'bluebird';
-import { ServerContext } from "../../server";
+import { ServerContext } from "../server";
 import classify from './FSEntriesClassifier';
 import isSeries from './isSeries';
 import makeSeriesEntry from './makers/seriesEntry';
-import * as makeStandAlone from './makers/standAlone';
+// import * as makeStandAlone from './makers/standAlone';
 import {
   readdir as readdirOrigin,
   stat as statOrigin
@@ -13,7 +13,7 @@ import {
 const read = promisify(readdirOrigin);
 const stat = promisify(statOrigin);
 
-export default class FolderReader implements Plugin {
+export default class FolderExplorer implements Plugin {
   getId(): string {
     return 'folder-reader';
   }

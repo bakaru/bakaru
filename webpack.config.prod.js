@@ -2,6 +2,7 @@ const webpack = require('webpack');
 
 const cfg = require('./webpack.config');
 
+// cfg.devtool = 'source-map';
 cfg.plugins.push(
   new webpack.DefinePlugin({
     'process.env': {

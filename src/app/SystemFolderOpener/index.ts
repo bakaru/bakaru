@@ -1,6 +1,6 @@
 import { dialog } from 'electron';
-import { ServerContext } from '../../server';
-import { Plugin } from '../../PluginManager';
+import { ServerContext } from '../server';
+import { Plugin } from '../PluginManager';
 
 export default class SystemFolderOpener implements Plugin {
   getId(): string {

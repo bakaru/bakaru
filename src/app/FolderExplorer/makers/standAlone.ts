@@ -1,4 +1,4 @@
-import * as coreObjectsCreators from '../../../lib/coreObjectsCreators';
+import * as coreObjectsCreators from '../../lib/coreObjectsCreators';
 import * as path from 'path';
 
 /**

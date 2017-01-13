@@ -9,9 +9,9 @@ import Library, { LibraryInterface } from './Library';
 import Window from './Window';
 import Events from './Events';
 
-// Core plugins
-import SystemFolderOpener from './plugins/SystemFolderOpener';
-import MediaPropsExplorer from './plugins/MediaPropsExplorer';
+// Core modules
+import SystemFolderOpener from './SystemFolderOpener';
+import MediaPropsExplorer from './MediaPropsExplorer';
 
 const log = debug('bakaru:server');
 
