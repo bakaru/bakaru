@@ -3,7 +3,7 @@ import { promisify } from 'bluebird';
 import { ServerContext } from "../server";
 import classify from './FSEntriesClassifier';
 import isSeries from './isSeries';
-import makeSeriesEntry from './makers/seriesEntry';
+import makeSeriesEntry from './explorers/seriesEntry';
 // import * as makeStandAlone from './makers/standAlone';
 import {
   readdir as readdirOrigin,
@@ -15,12 +15,12 @@ const stat = promisify(statOrigin);
 
 export default class FolderExplorer implements Plugin {
   getId(): string {
-    return 'folder-reader';
+    return 'folder-explorer';
   }
 
   constructor(protected context: ServerContext) {
     context.events.on(
-      this.context.events.coreEvents.folderAdded,
+      this.context.events.core.folderAdded,
       this.onFolderAdded.bind(this)
     );
   }
@@ -38,7 +38,7 @@ export default class FolderExplorer implements Plugin {
 
       if (!normalizedPathStats.isDirectory()) {
         this.context.events.emit(
-          this.context.events.coreEvents.errors.folderNotFolder,
+          this.context.events.core.errors.folderNotFolder,
           folderPath
         );
       } else {
@@ -46,7 +46,7 @@ export default class FolderExplorer implements Plugin {
       }
     } catch(error) {
       this.context.events.emit(
-        this.context.events.coreEvents.errors.folderNotExist,
+        this.context.events.core.errors.folderNotExist,
         folderPath
       );
     }
@@ -63,7 +63,7 @@ export default class FolderExplorer implements Plugin {
     const classes = await classify(items);
 
     if (isSeries(classes)) {
-      this.processSeries(folderPath, classes);
+      this.exploredSeries(folderPath, classes);
     } else {
       // TODO: DO IT, JUST DO IT!!!
       // this.processNonSeries(classes);
@@ -76,11 +76,11 @@ export default class FolderExplorer implements Plugin {
    * @param {string} seriesPath
    * @param {ClassifiedFolderItems} classes
    */
-  async processSeries(seriesPath: string, classes: ClassifiedFolderItems) {
+  async exploredSeries(seriesPath: string, classes: ClassifiedFolderItems) {
     const entry = await makeSeriesEntry(seriesPath, classes);
 
     this.context.events.emit(
-      this.context.events.coreEvents.entryUpdate,
+      this.context.events.core.entryExplore,
       entry
     );
   }

@@ -13,7 +13,7 @@ export default class MediaPropsExplorer implements Plugin {
     this.videoInfo = new VideoInfo();
 
     this.context.events.on(
-      this.context.events.coreEvents.mediaPropsRequest,
+      this.context.events.core.mediaPropsRequest,
       this.onRequest.bind(this)
     );
   }
@@ -36,7 +36,7 @@ export default class MediaPropsExplorer implements Plugin {
     };
 
     this.context.events.emit(
-      this.context.events.coreEvents.mediaPropsResponse,
+      this.context.events.core.mediaPropsResponse,
       response
     );
   }

@@ -77,9 +77,15 @@ declare global {
     embedded: boolean
   }
 
+  export interface EntryState {
+    mediaPropsExplored: boolean
+    episodesMediaPropsExplored: boolean
+  }
+
   export interface Entry {
     id: string
     path: string
+    state: EntryState
     title: string
     width: number
     height: number
@@ -113,7 +119,16 @@ declare global {
     openSystemFolder: string
     folderAdded: string
 
+    entryExplore: string
+    entryExplored: string
     entryUpdate: string
+    entryUpdated: string
+    entryDelete: string
+    entryDeleted: string
+    entryStateUpdate: string
+    entryStateUpdated: string
+
+    libraryResurrected: string
 
     mediaPropsRequest: string
     mediaPropsResponse: string
@@ -137,7 +152,7 @@ declare global {
   }
 
   export interface Events extends events.EventEmitter {
-    coreEvents: CoreEvents
+    core: CoreEvents
   }
 
   export interface ParsedVideo {

@@ -82,16 +82,15 @@ export default class FileSystem {
   /**
    * Writes entry
    *
-   * @param {string} id
-   * @param {Entry} content
+   * @param {Entry} entry
    */
-  write(id: string, content: Entry): void {
-    if (!this.lib.has(id)) {
-      this.lib.add(id);
+  write(entry: Entry): void {
+    if (!this.lib.has(entry.id)) {
+      this.lib.add(entry.id);
       this.writeLib();
     }
 
-    this.debounce(id, () => write(path.join(this.rootPath, `${id}.arson`), content));
+    this.debounce(entry.id, () => write(path.join(this.rootPath, `${entry.id}.arson`), entry));
   }
 
   /**

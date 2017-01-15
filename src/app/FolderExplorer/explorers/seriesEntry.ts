@@ -1,5 +1,6 @@
 import classifyNestedFSEntries from '../nestedFSEntriesClassifier';
 import * as make from '../../lib/coreObjectsCreators';
+import extractSameParts from '../stringSamePartsExtractor';
 
 /**
  * Fills entry with episodes
@@ -8,10 +9,26 @@ import * as make from '../../lib/coreObjectsCreators';
  * @param {string[]} episodesPaths
  */
 function makeSeriesEntryEpisodes(entry: Entry, episodesPaths: string[]): void {
+  const episodesTitles = [];
+
   for (let index = 0; index < episodesPaths.length; index++) {
     const episode = make.episode(episodesPaths[index]);
 
     entry.episodes.set(episode.id, episode);
+    episodesTitles.push(episode.title);
+  }
+
+  // Removing same parts from episodes names
+  const [sameStart, sameEnd] = extractSameParts(episodesTitles);
+
+  if (sameStart.length === 0 && sameEnd.length === 0) {
+    return;
+  }
+
+  for (const episode of entry.episodes.values()) {
+    episode.title = episode.title
+      .replace(sameStart, '')
+      .replace(sameEnd, '');
   }
 }
 

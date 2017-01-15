@@ -1,11 +1,20 @@
 import {  EventEmitter } from 'events';
 
 export default class Events extends EventEmitter implements Events {
-  public coreEvents: CoreEvents = {
+  public core: CoreEvents = {
     openSystemFolder: 'core:openSystemFolder',
     folderAdded: 'core:folderAdded',
 
     entryUpdate: 'core:entryUpdate',
+    entryUpdated: 'core:entryUpdated',
+    entryExplore: 'core:entryExplore',
+    entryExplored: 'core:entryExplored',
+    entryDelete: 'core:entryDelete',
+    entryDeleted: 'core:entryDeleted',
+    entryStateUpdate: 'core:entryStateUpdate',
+    entryStateUpdated: 'core:entryStateUpdated',
+
+    libraryResurrected: 'core:libraryResurrected',
 
     mediaPropsRequest: 'core:mediaPropsRequest',
     mediaPropsResponse: 'core:mediaPropsResponse',

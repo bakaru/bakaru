@@ -49,6 +49,13 @@ function items2map(items: string[]): Map<string, string> {
   return map;
 }
 
+export function entryState(): EntryState {
+  return {
+    mediaPropsExplored: false,
+    episodesMediaPropsExplored: false,
+  } as EntryState;
+}
+
 /**
  * Makes new entry object
  *
@@ -61,6 +68,7 @@ export function entry(path: string): Entry {
   return {
     id: sha224(path),
     path,
+    state: entryState(),
     title: basename2title(basename),
     width: 0,
     height: 0,

@@ -9,7 +9,7 @@ export default class SystemFolderOpener implements Plugin {
 
   constructor(protected context: ServerContext) {
     this.context.events.on(
-      this.context.events.coreEvents.openSystemFolder,
+      this.context.events.core.openSystemFolder,
       this.onOpenSystemFolder.bind(this)
     );
   }
@@ -23,7 +23,7 @@ export default class SystemFolderOpener implements Plugin {
       itemsPaths => {
         if (itemsPaths) {
           itemsPaths.forEach(
-            itemPath => this.context.events.emit(this.context.events.coreEvents.folderAdded, itemPath)
+            itemPath => this.context.events.emit(this.context.events.core.folderAdded, itemPath)
           );
         }
       }
