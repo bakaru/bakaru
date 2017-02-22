@@ -5,7 +5,6 @@ import * as socketIo from 'socket.io';
 import { createServer } from 'http';
 import './bootstrap/lookupHostAddress';
 import PluginManager from './PluginManager';
-import Library, { LibraryInterface } from './Library';
 import Window from './Window';
 import Events from './Events';
 
@@ -16,7 +15,7 @@ import MediaPropsExplorer from './MediaPropsExplorer';
 const log = debug('bakaru:server');
 
 export interface ServerContext {
-  library: LibraryInterface
+  library: Map<string, Entry>
   socket?: SocketIO.Server
   events?: Events
   http?: express.Router
@@ -47,7 +46,7 @@ export default function bootServer(port: number = 44888): void {
     socket: io,
     events: new Events(),
     window: new Window(),
-    library: new Library()
+    library: new Map()
   };
 
   global.bakaru.pm = new PluginManager(serverContext, [

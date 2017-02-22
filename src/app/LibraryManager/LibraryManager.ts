@@ -4,7 +4,6 @@ import FS from '../lib/FS';
 
 export default class LibraryManager implements Plugin {
   protected fs: FS;
-  protected library: Map<string, Entry>;
 
   getId(): string {
     return 'library-manager';
@@ -18,7 +17,7 @@ export default class LibraryManager implements Plugin {
         const entry = await this.fs.read(entryId).catch(() => null);
 
         if (entry !== null) {
-          this.library.set(
+          this.context.library.set(
             entryId,
             entry
           );
@@ -27,7 +26,7 @@ export default class LibraryManager implements Plugin {
 
       this.context.events.emit(
         this.context.events.core.libraryResurrected,
-        this.library
+        this.context.library
       );
     });
 
@@ -75,20 +74,20 @@ export default class LibraryManager implements Plugin {
   }
 
   protected onEntryUpdate(entry: Entry) {
-    if (this.library.has(entry.id)) {
-      this.library.set(entry.id, entry);
+    if (this.context.library.has(entry.id)) {
+      this.context.library.set(entry.id, entry);
       this.fs.write(entry);
       this.emitUpdated(entry);
     }
   }
 
   protected onEntryStateUpdate(id: string, state: EntryState) {
-    const entry = this.library.get(id);
+    const entry = this.context.library.get(id);
 
     if (entry) {
       entry.state = state;
 
-      this.library.set(id, entry);
+      this.context.library.set(id, entry);
       this.fs.write(entry);
       this.emitStateUpdated(id, state);
     }
