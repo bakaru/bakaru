@@ -9,14 +9,17 @@ import Window from './Window';
 import Events from './Events';
 
 // Core modules
+import FolderExplorer from './FolderExplorer';
+import LibraryManager from './LibraryManager';
 import SystemFolderOpener from './SystemFolderOpener';
 import MediaPropsExplorer from './MediaPropsExplorer';
+import RemoteControllerRelay from './RemoteControllerRelay';
 
 const log = debug('bakaru:server');
 
 export interface ServerContext {
   library: Map<string, Entry>
-  socket?: SocketIO.Server
+  socket?: SocketIO.Namespace
   events?: Events
   http?: express.Router
   window?: Window
@@ -43,14 +46,17 @@ export default function bootServer(port: number = 44888): void {
 
   const serverContext: ServerContext = {
     http: app,
-    socket: io,
+    socket: io.sockets,
     events: new Events(),
     window: new Window(),
     library: new Map()
   };
 
   global.bakaru.pm = new PluginManager(serverContext, [
+    FolderExplorer,
+    LibraryManager,
     SystemFolderOpener,
-    MediaPropsExplorer
+    MediaPropsExplorer,
+    RemoteControllerRelay
   ]);
 }

@@ -10,17 +10,21 @@ const initialState: State = {
 };
 
 initialState.entries.set('123', {
-    id: '123',
-    path: 'D:\\anime',
-    title: 'Test entry yaya',
-    width: 1280,
-    height: 720,
-    bitDepth: '8',
-    episodes: new Map(),
-    subtitles: new Map(),
-    voiceOvers: new Map(),
-    defaultSubtitles: '',
-    defaultVoiceOver: ''
+  id: '123',
+  path: 'D:\\anime',
+  title: 'Test entry yaya',
+  width: 1280,
+  height: 720,
+  bitDepth: '8',
+  episodes: new Map(),
+  subtitles: new Map(),
+  voiceOvers: new Map(),
+  defaultSubtitles: '',
+  defaultVoiceOver: '',
+  state: {
+    mediaPropsExplored: false,
+    episodesMediaPropsExplored: false
+  }
 });
 
 type SelectEntryAction = BaseAction & { entryId: string };

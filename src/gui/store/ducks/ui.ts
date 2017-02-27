@@ -1,4 +1,5 @@
 import { Action as BaseAction } from 'redux';
+import * as BE from '../../backend';
 
 export interface State {
   library: boolean,
@@ -65,6 +66,8 @@ export default function ui(state: State = initialState, action: Action): State {
  * @returns {{type: string}}
  */
 export function switchToLibrary(): SwitchToLibraryAction {
+  BE.UI.SendSyncState(BE.UIState.Library);
+
   return {
     type: SWITCH_TO_LIBRARY
   };
@@ -76,6 +79,8 @@ export function switchToLibrary(): SwitchToLibraryAction {
  * @returns {{type: string}}
  */
 export function switchToPlayer(): SwitchToPlayerAction {
+  BE.UI.SendSyncState(BE.UIState.Player);
+
   return {
     type: SWITCH_TO_PLAYER
   };
@@ -87,6 +92,8 @@ export function switchToPlayer(): SwitchToPlayerAction {
  * @returns {{type: string}}
  */
 export function switchToShyLibrary(): SwitchToShyLibraryAction {
+  BE.UI.SendSyncState(BE.UIState.ShyLibrary);
+
   return {
     type: SWITCH_TO_SHY_LIBRARY
   };

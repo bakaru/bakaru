@@ -34,7 +34,7 @@ export const LibraryContainer = styled.div`
   box-shadow: 0 0 30px 5px rgba(0, 0, 0, ${(p:lc)=> p.shy ? '.8' : '0'});
   
   transform: translateX(${(p:lc)=> p.focused ? '0vw' : (p.shy ? '-60vw' : '-100vw')});
-  transition: all .2s ease;
+  transition: transform .2s ease;
   
   z-index: 200;
 `;
