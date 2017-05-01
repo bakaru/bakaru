@@ -4,6 +4,7 @@
     "babili"
   ],
   "plugins": [
+    "inferno",
     "remove-comments"
   ]
 }

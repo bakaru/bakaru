@@ -9,14 +9,13 @@ module.exports = {
   target: 'electron',
   devtool: 'cheap-module-source-map',
   entry: {
-    gui: './src/gui/index.tsx'
+    gui: './src/gui/index.js'
   },
   output: {
     path: path.join(__dirname, 'dist/gui'),
     filename: 'gui.js'
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js"],
     alias: {
       app: path.join(__dirname, 'src/app'),
       gui: path.join(__dirname, "src/gui")
@@ -25,20 +24,27 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(ts|tsx)$/,
+        test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'ts-loader'
+        loader: 'babel-loader'
       },
       {
-        test: /\.(css)$/,
-        loader: ExtractTextPlugin.extract({
-          fallbackLoader: "style-loader",
-          loader: "css-loader!resolve-url-loader"
-        })
+        test: /\.scss$/,
+        use: [
+          {
+            loader: "style-loader" // creates style nodes from JS strings
+          },
+          {
+            loader: "css-loader" // translates CSS into CommonJS
+          },
+          {
+            loader: "sass-loader" // compiles Sass to CSS
+          }
+        ]
       },
       {
         test: /\.(otf|eot|svg|ttf|woff|png|woff2)/,
-        loader: 'url-loader?limit=8096'
+        loader: 'file-loader?limit=8096'
       },
       {
         test: /\.json$/,

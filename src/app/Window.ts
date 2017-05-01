@@ -1,6 +1,7 @@
-import * as debug from 'debug';
-import * as electron from 'electron';
-import icon from './icon';
+import * as debug from 'debug'
+import * as electron from 'electron'
+import icon from './icon'
+import mpv = require('mpv.js')
 
 const log = debug('bakaru:window');
 
@@ -34,6 +35,7 @@ export default class Window {
       frame: false,
       icon: this.electron.nativeImage.createFromDataURL(icon),
       webPreferences: {
+        plugins: true,
         experimentalFeatures: true,
         blinkFeatures: 'CSSBackdropFilter'
       }
@@ -71,10 +73,7 @@ export default class Window {
       this.mainWindowOptions
     );
 
-    // const wcjsPath = encodeURIComponent(this.server.paths.wcjs);
-    const wcjsPath = null;
-
-    this.mainWindow.loadURL(`${global.bakaru.paths.mainWindowUrl}?wcjsPath=${wcjsPath}`);
+    this.mainWindow.loadURL(`${global.bakaru.paths.mainWindowUrl}`);
 
     if (global.bakaru.debug) {
       this.mainWindow.webContents.openDevTools({

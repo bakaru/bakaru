@@ -4,7 +4,7 @@ declare module NodeJS {
       debug: boolean
       paths: {
         // Vendors
-        wcjs?: string
+        mpv?: string
         ffmpeg?: string
 
         // UI

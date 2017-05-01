@@ -8,7 +8,8 @@ const vendors = global.bakaru.debug
   ? join(__dirname, '..', '..', '..', 'vendor')
   : join(app.getAppPath(), '..', '..', '..', 'vendor');
 
-global.bakaru.paths.wcjs = join(vendors, 'wcjs');
+global.bakaru.paths.mpv = join(vendors, 'mpv');
+process.env.path = `${global.bakaru.paths.mpv};${process.env.path}`;
 global.bakaru.paths.ffmpeg = join(vendors, 'ffmpeg');
 
 const data = global.bakaru.paths.data = join(app.getPath('userData'));

@@ -14,7 +14,7 @@ export default class RemoteControllerRelay implements Plugin {
   }
 
   constructor(protected context: ServerContext) {
-    console.log(context.socket);
+    //console.log(context.socket);
 
     context.socket.on(events.state, state => {
       if (state == 2) {

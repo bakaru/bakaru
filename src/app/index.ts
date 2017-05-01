@@ -15,6 +15,7 @@ if (process.argv.filter(arg => arg.trim() === 'debug').length) {
 
 // Main components
 import setupPaths from './bootstrap/setupPaths';
+import './bootstrap/setupMPV';
 import bootServer from './server';
 
 // Main boot sequence
