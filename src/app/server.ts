@@ -1,25 +1,27 @@
-import * as path from 'path';
-import * as debug from 'debug';
-import * as express from 'express';
-import * as socketIo from 'socket.io';
-import { createServer } from 'http';
-import './bootstrap/lookupHostAddress';
-import PluginManager from './PluginManager';
-import Window from './Window';
-import Events from './Events';
+import './bootstrap/lookupHostAddress'
+
+import * as path from 'path'
+import * as debug from 'debug'
+import * as express from 'express'
+import * as WebSocket from 'ws'
+import { createServer } from 'http'
+import PluginManager from './PluginManager'
+import SockRelay from './SockRelay'
+import Window from './Window'
+import Events from './Events'
 
 // Core modules
-import FolderExplorer from './FolderExplorer';
-import LibraryManager from './LibraryManager';
-import SystemFolderOpener from './SystemFolderOpener';
-import MediaPropsExplorer from './MediaPropsExplorer';
-import RemoteControllerRelay from './RemoteControllerRelay';
+import FolderExplorer from './FolderExplorer'
+import LibraryManager from './LibraryManager'
+import SystemFolderOpener from './SystemFolderOpener'
+import MediaPropsExplorer from './MediaPropsExplorer'
+import RemoteControllerRelay from './RemoteControllerRelay'
 
 const log = debug('bakaru:server');
 
 export interface ServerContext {
-  library: Map<string, Entry>
-  socket?: SocketIO.Namespace
+  library: Map<string, Bakaru.Entry>
+  socket?: SockRelay
   events?: Events
   http?: express.Router
   window?: Window
@@ -34,7 +36,7 @@ export default function bootServer(port: number = 44888): void {
 
   const app = express();
   const http = createServer(app);
-  const io: SocketIO.Server = socketIo(http);
+  const socket = new SockRelay(new WebSocket.Server({ server: http }));
 
   app.use(express.static(path.join(__dirname, '../gui')));
   app.get('/main', (req, res) => {
@@ -46,7 +48,7 @@ export default function bootServer(port: number = 44888): void {
 
   const serverContext: ServerContext = {
     http: app,
-    socket: io.sockets,
+    socket,
     events: new Events(),
     window: new Window(),
     library: new Map()

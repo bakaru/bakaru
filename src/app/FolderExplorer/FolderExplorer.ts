@@ -74,9 +74,9 @@ export default class FolderExplorer implements Plugin {
    * Process series
    *
    * @param {string} seriesPath
-   * @param {ClassifiedFolderItems} classes
+   * @param {Bakaru.ClassifiedFolderItems} classes
    */
-  async exploredSeries(seriesPath: string, classes: ClassifiedFolderItems) {
+  async exploredSeries(seriesPath: string, classes: Bakaru.ClassifiedFolderItems) {
     const entry = await makeSeriesEntry(seriesPath, classes);
 
     this.context.events.emit(
@@ -88,9 +88,9 @@ export default class FolderExplorer implements Plugin {
   /**
    * Processes non series folder items
    *
-   * @param {ClassifiedFolderItems} classes
+   * @param {Bakaru.ClassifiedFolderItems} classes
    */
-  // processNonSeries(classes: ClassifiedFolderItems): void {
+  // processNonSeries(classes: Bakaru.ClassifiedFolderItems): void {
   //   // Sub folders
   //   if (classes.folders.length > 0) {
   //     classes.folders.forEach(folder => this.readFolder(folder));

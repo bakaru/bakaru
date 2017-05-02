@@ -12,13 +12,15 @@ module.exports = {
     gui: './src/gui/index.js'
   },
   output: {
-    path: path.join(__dirname, 'dist/gui'),
-    filename: 'gui.js'
+    path: path.join(__dirname, 'dist'),
+    filename: '[name]/[name].js'
   },
   resolve: {
     alias: {
       app: path.join(__dirname, 'src/app'),
-      gui: path.join(__dirname, "src/gui")
+      gui: path.join(__dirname, "src/gui"),
+      shared: path.join(__dirname, "src/shared"),
+      remote: path.join(__dirname, "src/remote")
     }
   },
   module: {
@@ -31,15 +33,9 @@ module.exports = {
       {
         test: /\.scss$/,
         use: [
-          {
-            loader: "style-loader" // creates style nodes from JS strings
-          },
-          {
-            loader: "css-loader" // translates CSS into CommonJS
-          },
-          {
-            loader: "sass-loader" // compiles Sass to CSS
-          }
+          { loader: "style-loader" },
+          { loader: "css-loader" },
+          { loader: "sass-loader" }
         ]
       },
       {

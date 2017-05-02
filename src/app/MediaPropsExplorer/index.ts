@@ -19,7 +19,7 @@ export default class MediaPropsExplorer implements Plugin {
   }
 
   private async onRequest(
-    request: MediaPropsExplorerRequest,
+    request: Bakaru.MediaPropsExplorerRequest,
     priority: number = Priority.LowPriority
   ): Promise<void> {
     this.emitResponse(
@@ -28,8 +28,8 @@ export default class MediaPropsExplorer implements Plugin {
     );
   }
 
-  private emitResponse(request: MediaPropsExplorerRequest, media: ParsedMedia): void {
-    const response: MediaPropsExplorerResponse = {
+  private emitResponse(request: Bakaru.MediaPropsExplorerRequest, media: Bakaru.ParsedMedia): void {
+    const response: Bakaru.MediaPropsExplorerResponse = {
       entryId: request.entryId,
       mediaId: request.mediaId,
       media

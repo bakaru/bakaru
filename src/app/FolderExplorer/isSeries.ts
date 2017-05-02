@@ -4,10 +4,10 @@ import fastLeneshtein = require('fast-levenshtein');
 /**
  * Detects if given folder is a series
  *
- * @param {ClassifiedFolderItems} classifiedItems
+ * @param {Bakaru.ClassifiedFolderItems} classifiedItems
  * @returns {boolean}
  */
-export default function isSeries(classifiedItems: ClassifiedFolderItems) {
+export default function isSeries(classifiedItems: Bakaru.ClassifiedFolderItems) {
   const videos = classifiedItems.videos.slice().sort(naturalSort);
   const videosLength = videos.length;
 

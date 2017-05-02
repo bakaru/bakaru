@@ -82,9 +82,9 @@ export default class FileSystem {
   /**
    * Writes entry
    *
-   * @param {Entry} entry
+   * @param {Bakaru.Entry} entry
    */
-  write(entry: Entry): void {
+  write(entry: Bakaru.Entry): void {
     if (!this.lib.has(entry.id)) {
       this.lib.add(entry.id);
       this.writeLib();
@@ -97,9 +97,9 @@ export default class FileSystem {
    * Reads ARSON file contents
    *
    * @param {string} id
-   * @returns {Promise<Entry>}
+   * @returns {Promise<Bakaru.Entry>}
    */
-  read(id: string): Promise<Entry> {
-    return read<Entry>(path.join(this.rootPath, `${id}.arson`));
+  read(id: string): Promise<Bakaru.Entry> {
+    return read<Bakaru.Entry>(path.join(this.rootPath, `${id}.arson`));
   }
 }

@@ -15,9 +15,9 @@ function filePath2folderPath(filePath) {
  * Makes standalone entry
  *
  * @param {string} videoPath
- * @returns {Entry}
+ * @returns {Bakaru.Entry}
  */
-export function entry(videoPath: string): Entry {
+export function entry(videoPath: string): Bakaru.Entry {
   const entryPath = filePath2folderPath(videoPath);
 
   const entry = coreObjectsCreators.entry(entryPath);
@@ -32,9 +32,9 @@ export function entry(videoPath: string): Entry {
  * Makes standalone voice-over
  *
  * @param {string} audioPath
- * @returns {VoiceOver}
+ * @returns {Bakaru.VoiceOver}
  */
-export function voiceOver(audioPath: string): VoiceOver {
+export function voiceOver(audioPath: string): Bakaru.VoiceOver {
   return coreObjectsCreators.voiceOver(
     filePath2folderPath(audioPath),
     [audioPath]
@@ -45,9 +45,9 @@ export function voiceOver(audioPath: string): VoiceOver {
  * Makes standalone subtitles
  *
  * @param {string} subtitlesPath
- * @returns {Subtitles}
+ * @returns {Bakaru.Subtitles}
  */
-export function subtitles(subtitlesPath: string): Subtitles {
+export function subtitles(subtitlesPath: string): Bakaru.Subtitles {
   return coreObjectsCreators.subtitles(
     filePath2folderPath(subtitlesPath),
     [subtitlesPath]

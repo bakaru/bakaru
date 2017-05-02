@@ -74,10 +74,10 @@ export function parseTime(time: string): number {
  * Parses video stream
  *
  * @param video
- * @returns {ParsedVideo}
+ * @returns {Bakaru.ParsedVideo}
  */
-export function parseVideoStream(video: VideoStream): ParsedVideo {
-  const parsed: ParsedVideo = {
+export function parseVideoStream(video: VideoStream): Bakaru.ParsedVideo {
+  const parsed: Bakaru.ParsedVideo = {
     codec: video.codec_name.toString().trim(),
     width: video.width,
     height: video.height,
@@ -96,9 +96,9 @@ export function parseVideoStream(video: VideoStream): ParsedVideo {
  * Parses audio stream
  *
  * @param {AudioStream} audio
- * @returns {ParsedAudio}
+ * @returns {Bakaru.ParsedAudio}
  */
-export function parseAudioStream(audio: AudioStream): ParsedAudio {
+export function parseAudioStream(audio: AudioStream): Bakaru.ParsedAudio {
   let bitRate: number;
 
   switch (true) {
@@ -115,7 +115,7 @@ export function parseAudioStream(audio: AudioStream): ParsedAudio {
       break;
   }
 
-  return <ParsedAudio>{
+  return <Bakaru.ParsedAudio>{
     bitRate,
     codec: audio.codec_name,
     channels: audio.channels,
@@ -128,16 +128,16 @@ export function parseAudioStream(audio: AudioStream): ParsedAudio {
  * Parses subtitle stream
  *
  * @param {MediaStream} subtitle
- * @returns {ParsedSubtitle}
+ * @returns {Bakaru.ParsedSubtitle}
  */
-export function parseSubtitleStream(subtitle: MediaStream): ParsedSubtitle {
+export function parseSubtitleStream(subtitle: MediaStream): Bakaru.ParsedSubtitle {
   let language = '';
 
   if (subtitle.tags && subtitle.tags['language']) {
     language = subtitle.tags['language'].toString().trim();
   }
 
-  return <ParsedSubtitle>{
+  return <Bakaru.ParsedSubtitle>{
     language,
     'default': !!subtitle.disposition.default,
     forced: !!subtitle.disposition.forced
@@ -148,10 +148,10 @@ export function parseSubtitleStream(subtitle: MediaStream): ParsedSubtitle {
  * Parses streams output
  *
  * @param {CombinedMediaStream[]} streams
- * @returns {ParsedStreams}
+ * @returns {Bakaru.ParsedStreams}
  */
-export function parseStreams(streams: CombinedMediaStream[]): ParsedStreams {
-  const parsed: ParsedStreams = {
+export function parseStreams(streams: CombinedMediaStream[]): Bakaru.ParsedStreams {
+  const parsed: Bakaru.ParsedStreams = {
     video: null,
     audios: [],
     subtitles: []
@@ -184,10 +184,10 @@ export function parseStreams(streams: CombinedMediaStream[]): ParsedStreams {
  * Parses format output
  *
  * @param {MediaFormat} format
- * @returns {ParsedFormat}
+ * @returns {Bakaru.ParsedFormat}
  */
-export function parseFormat(format: MediaFormat): ParsedFormat {
-  const parsed: ParsedFormat = {
+export function parseFormat(format: MediaFormat): Bakaru.ParsedFormat {
+  const parsed: Bakaru.ParsedFormat = {
     duration: 0,
     size: 0
   };
@@ -207,9 +207,9 @@ export function parseFormat(format: MediaFormat): ParsedFormat {
  * Parses chapters to suitable objects
  *
  * @param {MediaChapter[]} chapters
- * @returns {Chapter[]}
+ * @returns {Bakaru.Chapter[]}
  */
-export function parseChapters(chapters: MediaChapter[]): Chapter[] {
+export function parseChapters(chapters: MediaChapter[]): Bakaru.Chapter[] {
   if (chapters.length === 0) {
     return [];
   }
@@ -239,9 +239,9 @@ export function parseChapters(chapters: MediaChapter[]): Chapter[] {
  * Parses output from ffprobe
  *
  * @param {Media} media
- * @returns {ParsedMedia}
+ * @returns {Bakaru.ParsedMedia}
  */
-export default function parse(media: Media): ParsedMedia {
+export default function parse(media: Media): Bakaru.ParsedMedia {
   const chapters = parseChapters(media.chapters);
   const { video, audios, subtitles } = parseStreams(media.streams);
   const { duration, size } = parseFormat(media.format);

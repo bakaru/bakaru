@@ -46,14 +46,14 @@ export default class LibraryManager implements Plugin {
     // FIXME: No media props explored events handlers
   }
 
-  protected onEntryExplore(entry: Entry) {
+  protected onEntryExplore(entry: Bakaru.Entry) {
     this.fs.write(entry);
     this.emitExplored(entry);
 
     this.processEpisodes(entry);
   }
 
-  protected processEpisodes(entry: Entry): void {
+  protected processEpisodes(entry: Bakaru.Entry): void {
     const episodes = [...entry.episodes.values()];
 
     episodes.forEach((episode, index) => {
@@ -73,7 +73,7 @@ export default class LibraryManager implements Plugin {
     });
   }
 
-  protected onEntryUpdate(entry: Entry) {
+  protected onEntryUpdate(entry: Bakaru.Entry) {
     if (this.context.library.has(entry.id)) {
       this.context.library.set(entry.id, entry);
       this.fs.write(entry);
@@ -81,7 +81,7 @@ export default class LibraryManager implements Plugin {
     }
   }
 
-  protected onEntryStateUpdate(id: string, state: EntryState) {
+  protected onEntryStateUpdate(id: string, state: Bakaru.EntryState) {
     const entry = this.context.library.get(id);
 
     if (entry) {
@@ -93,21 +93,21 @@ export default class LibraryManager implements Plugin {
     }
   }
 
-  protected emitExplored(entry: Entry) {
+  protected emitExplored(entry: Bakaru.Entry) {
     this.context.events.emit(
       this.context.events.core.entryExplored,
       entry
     );
   }
 
-  protected emitUpdated(entry: Entry) {
+  protected emitUpdated(entry: Bakaru.Entry) {
     this.context.events.emit(
       this.context.events.core.entryExplored,
       entry
     );
   }
 
-  protected emitStateUpdated(id: string, state: EntryState) {
+  protected emitStateUpdated(id: string, state: Bakaru.EntryState) {
     this.context.events.emit(
       this.context.events.core.entryExplored,
       { id, state }

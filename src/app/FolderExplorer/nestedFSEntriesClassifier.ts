@@ -20,9 +20,9 @@ function normalizeItems(folderPath: string, items: string[]): string[] {
  * Reads folder
  *
  * @param {string} folderPath
- * @returns {Promise<ClassifiedFolderItems>}
+ * @returns {Promise<Bakaru.ClassifiedFolderItems>}
  */
-async function readFolder(folderPath: string): Promise<ClassifiedFolderItems> {
+async function readFolder(folderPath: string): Promise<Bakaru.ClassifiedFolderItems> {
   const items = await read(folderPath);
 
   return await classifyFSEntries(normalizeItems(folderPath, items));
@@ -32,10 +32,10 @@ async function readFolder(folderPath: string): Promise<ClassifiedFolderItems> {
  * Builds flat tree of classified sub folders structure
  *
  * @param {string} folderPath
- * @returns {Promise<Map<string, ClassifiedFolderItems>>}
+ * @returns {Promise<Map<string, Bakaru.ClassifiedFolderItems>>}
  */
-export default async function flatten(folderPath: string): Promise<Map<string, ClassifiedFolderItems>> {
-  const flatTree = new Map<string, ClassifiedFolderItems>();
+export default async function flatten(folderPath: string): Promise<Map<string, Bakaru.ClassifiedFolderItems>> {
+  const flatTree = new Map<string, Bakaru.ClassifiedFolderItems>();
   const unreadFolders = new Set<string>([folderPath]);
   const addUnreadFolder = unreadFolders.add.bind(unreadFolders);
 

@@ -5,10 +5,10 @@ import extractSameParts from '../stringSamePartsExtractor';
 /**
  * Fills entry with episodes
  *
- * @param {Entry} entry
+ * @param {Bakaru.Entry} entry
  * @param {string[]} episodesPaths
  */
-function makeSeriesEntryEpisodes(entry: Entry, episodesPaths: string[]): void {
+function makeSeriesEntryEpisodes(entry: Bakaru.Entry, episodesPaths: string[]): void {
   const episodesTitles = [];
 
   for (let index = 0; index < episodesPaths.length; index++) {
@@ -35,10 +35,10 @@ function makeSeriesEntryEpisodes(entry: Entry, episodesPaths: string[]): void {
 /**
  * Fills entry with voice-overs
  *
- * @param {Entry} entry
+ * @param {Bakaru.Entry} entry
  * @param {Map<string, string[]>} voiceOvers
  */
-function makeSeriesVoiceOvers(entry: Entry, voiceOvers: Map<string, string[]>): void {
+function makeSeriesVoiceOvers(entry: Bakaru.Entry, voiceOvers: Map<string, string[]>): void {
   for (const [voiceOverPath, voiceOverItems] of voiceOvers.entries()) {
     const voiceOver = make.voiceOver(voiceOverPath, voiceOverItems);
 
@@ -49,10 +49,10 @@ function makeSeriesVoiceOvers(entry: Entry, voiceOvers: Map<string, string[]>): 
 /**
  * Fills entry with subtitles
  *
- * @param {Entry} entry
+ * @param {Bakaru.Entry} entry
  * @param {Map<string, string[]>} subtitles
  */
-function makeSeriesSubtitles(entry: Entry, subtitles: Map<string, string[]>): void {
+function makeSeriesSubtitles(entry: Bakaru.Entry, subtitles: Map<string, string[]>): void {
   for (const [subtitlePath, subtitleItems] of subtitles.entries()) {
     const subtitle = make.subtitles(subtitlePath, subtitleItems);
 
@@ -64,13 +64,13 @@ function makeSeriesSubtitles(entry: Entry, subtitles: Map<string, string[]>): vo
  * Expands series folder
  *
  * @param {string} seriesPath
- * @param {ClassifiedFolderItems} classes
- * @returns {Promise<Entry>}
+ * @param {Bakaru.ClassifiedFolderItems} classes
+ * @returns {Promise<Bakaru.Entry>}
  */
 export default async function makeSeriesEntry(
   seriesPath: string,
-  classes: ClassifiedFolderItems
-): Promise<Entry> {
+  classes: Bakaru.ClassifiedFolderItems
+): Promise<Bakaru.Entry> {
   const flatTree = await classifyNestedFSEntries(seriesPath);
 
   const entry = make.entry(seriesPath);

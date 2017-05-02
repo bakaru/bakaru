@@ -4,6 +4,7 @@ import className from 'classnames'
 import MPV from './MPV'
 
 const videoPath = 'D:\\anime\\Durarara!!x2 Shou [BD] [720p]\\[Winter] Durarara!!x2 Shou 02 [BDrip 1280x720 x264 Vorbis].mkv';
+const videoPath2 = 'D:\\anime\\Durarara!!x2 Shou [BD] [720p]\\[Winter] Durarara!!x2 Shou 03 [BDrip 1280x720 x264 Vorbis].mkv';
 
 export default class PlayerController extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ export default class PlayerController extends Component {
       chaptersCount: 0,
 
       muted: false,
-      volume: 100,
+      volume: 100.0,
 
       paused: true
     };
@@ -40,7 +41,8 @@ export default class PlayerController extends Component {
     this.mpv.observe('percent-pos');
     this.mpv.observe('time-remaining');
 
-
+    this.mpv.property('mute', false);
+    this.mpv.property('volume', 50.0);
     this.mpv.command("loadfile", videoPath);
 
     this.setState({ loading: false });
@@ -59,13 +61,23 @@ export default class PlayerController extends Component {
       case 'volume':
         this.setState({ volume: value });
         break;
+
+      case 'mute':
+        this.setState({ muted: value });
+        break;
     }
 
     console.log('PROP-CHANGE', JSON.stringify(this.state, null, 2));
   }
 
-  togglePause() {
-    this.mpv.property('pause', !this.state.paused);
+  togglePause(e) {
+    console.log(e);
+
+    if (e.ctrlKey) {
+      this.mpv.command('loadfile', videoPath2);
+    } else {
+      this.mpv.property('pause', !this.state.paused);
+    }
   }
 
   render() {

@@ -49,20 +49,20 @@ function items2map(items: string[]): Map<string, string> {
   return map;
 }
 
-export function entryState(): EntryState {
+export function entryState(): Bakaru.EntryState {
   return {
     mediaPropsExplored: false,
     episodesMediaPropsExplored: false,
-  } as EntryState;
+  } as Bakaru.EntryState;
 }
 
 /**
  * Makes new entry object
  *
  * @param {string} path
- * @return {Entry}
+ * @return {Bakaru.Entry}
  */
-export function entry(path: string): Entry {
+export function entry(path: string): Bakaru.Entry {
   const basename = p.basename(path);
 
   return {
@@ -85,9 +85,9 @@ export function entry(path: string): Entry {
  * Makes new episode object
  *
  * @param {string} path
- * @return {Episode}
+ * @return {Bakaru.Episode}
  */
-export function episode(path: string): Episode {
+export function episode(path: string): Bakaru.Episode {
   const extension = p.extname(path);
   const format = extension.slice(1).toLowerCase();
   const basename = p.basename(path, extension);
@@ -111,9 +111,9 @@ export function episode(path: string): Episode {
  * @param {string} title
  * @param {number} start
  * @param {number} end
- * @return {Chapter}
+ * @return {Bakaru.Chapter}
  */
-export function chapter(title: string, start: number, end: number): Chapter {
+export function chapter(title: string, start: number, end: number): Bakaru.Chapter {
   return {
     end,
     start,
@@ -127,9 +127,9 @@ export function chapter(title: string, start: number, end: number): Chapter {
  * @param {string} path
  * @param {string[]} items
  * @param {boolean} embedded
- * @return {Subtitles}
+ * @return {Bakaru.Subtitles}
  */
-export function subtitles(path: string, items: string[], embedded: boolean = false): Subtitles {
+export function subtitles(path: string, items: string[], embedded: boolean = false): Bakaru.Subtitles {
   const basename = p.basename(path);
 
   return {
@@ -148,9 +148,9 @@ export function subtitles(path: string, items: string[], embedded: boolean = fal
  * @param {string} path
  * @param {string[]} items
  * @param {boolean} embedded
- * @return {VoiceOver}
+ * @return {Bakaru.VoiceOver}
  */
-export function voiceOver(path: string, items: string[], embedded: boolean = false): VoiceOver {
+export function voiceOver(path: string, items: string[], embedded: boolean = false): Bakaru.VoiceOver {
   const basename = p.basename(path);
 
   return {

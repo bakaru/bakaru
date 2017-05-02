@@ -60,14 +60,14 @@ function FPQComparator(a: QueueItem, b: QueueItem): boolean {
   return a[0] < b[0];
 }
 
-function processFile(filePath: string): Promise<ParsedMedia> {
+function processFile(filePath: string): Promise<Bakaru.ParsedMedia> {
   return ffprobe(filePath).then(
     media => extractProperties(<Media>JSON.parse(media))
   );
 }
 
 export interface VideoInfoInterface {
-  get?(filePath: string, priority?: number): Promise<ParsedMedia>
+  get?(filePath: string, priority?: number): Promise<Bakaru.ParsedMedia>
 }
 
 export enum Priority {
@@ -79,8 +79,8 @@ export default class VideoInfo implements VideoInfoInterface {
   protected queue = new FastPriorityQueue(FPQComparator);
   protected queueing = false;
 
-  public get(filePath: string, priority: number = Priority.LowPriority): Promise<ParsedMedia> {
-    return new Promise<ParsedMedia>((resolve, reject) => {
+  public get(filePath: string, priority: number = Priority.LowPriority): Promise<Bakaru.ParsedMedia> {
+    return new Promise<Bakaru.ParsedMedia>((resolve, reject) => {
       this.queue.add([
         priority,
         filePath,

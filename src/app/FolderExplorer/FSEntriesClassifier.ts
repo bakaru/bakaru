@@ -8,9 +8,9 @@ const statAsync = bluebird.promisify(originFs.stat);
 /**
  * Makes new classes object
  *
- * @returns {ClassifiedFolderItems}
+ * @returns {Bakaru.ClassifiedFolderItems}
  */
-function makeClasses(): ClassifiedFolderItems {
+function makeClasses(): Bakaru.ClassifiedFolderItems {
   return {
     audios: [],
     videos: [],
@@ -39,9 +39,9 @@ function statItems(items: string[]): Promise<ItemStats[]> {
  * Classifies folder items
  *
  * @param {string[]} items
- * @returns {Promise<ClassifiedFolderItems>}
+ * @returns {Promise<Bakaru.ClassifiedFolderItems>}
  */
-export default async function classify(items: string[]): Promise<ClassifiedFolderItems> {
+export default async function classify(items: string[]): Promise<Bakaru.ClassifiedFolderItems> {
   const classes = makeClasses();
 
   const itemsStats = await statItems(items);
