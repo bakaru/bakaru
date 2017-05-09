@@ -13,8 +13,9 @@
     "compile:minify": "babel dist/gui/gui.js --out-file dist/gui/gui.js",
     "build": "node packaging/packager",
     "vendor": "node scripts/download-vendor",
-    "test:app": "TS_NODE_PROJECT=src/app/tsconfig.json mocha --compilers ts:ts-node/register,tsx:ts-node/register src/app/**/*.test.ts",
-    "test:gui": "TS_NODE_PROJECT=src/gui/tsconfig.json mocha --compilers ts:ts-node/register,tsx:ts-node/register src/gui/**/*.test.ts",
+    "test:app": "TS_NODE_PROJECT=src/app/tsconfig.json mocha --compilers ts:ts-node/register src/app/**/*.test.ts",
+    "test-win:app": "mocha --compilers ts:ts-node/register -p src/app/tsconfig.json src/app/**/*.test.ts",
+    "test:gui": "mocha src/gui/**/*.test.js",
     "test": "npm run test:app && npm run test:gui",
     "electron-rebuild": "electron-rebuild -w uws"
   },
@@ -77,6 +78,7 @@
     "rimraf": "^2.5.4",
     "sass-loader": "^6.0.3",
     "style-loader": "^0.13.1",
+    "ts-node": "^3.0.2",
     "typescript": "^2.1.4",
     "url-loader": "^0.5.7",
     "webpack": "^2.2.1"
@@ -93,6 +95,7 @@
     "fastpriorityqueue": "^0.1.0",
     "fs-extra": "^1.0.0",
     "inferno": "^1.3.1",
+    "inferno-compat": "^3.1.1",
     "inferno-component": "^3.1.0",
     "inferno-create-element": "^3.1.0",
     "inferno-redux": "^1.3.1",
@@ -102,6 +105,8 @@
     "mousetrap": "1.5.3",
     "mpv.js": "^0.2.0",
     "react-svg-morph": "^0.1.10",
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.2.0",
     "uws": "^0.14.5",
     "ws": "^2.3.1"
   }

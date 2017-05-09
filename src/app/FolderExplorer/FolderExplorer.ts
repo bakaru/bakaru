@@ -1,14 +1,15 @@
 import { Plugin } from '../PluginManager';
-import { promisify } from 'bluebird';
-import { ServerContext } from "../server";
-import classify from './FSEntriesClassifier';
-import isSeries from './isSeries';
-import makeSeriesEntry from './explorers/seriesEntry';
-// import * as makeStandAlone from './makers/standAlone';
+import { promisify } from 'bluebird'
+import { ServerContext } from "../server"
+import { Event } from '../Events'
+import classify from './FSEntriesClassifier'
+import isSeries from './isSeries'
+import makeSeriesEntry from './explorers/seriesEntry'
 import {
   readdir as readdirOrigin,
   stat as statOrigin
-} from 'fs';
+} from 'fs'
+import { join } from 'path'
 
 const read = promisify(readdirOrigin);
 const stat = promisify(statOrigin);
@@ -20,7 +21,7 @@ export default class FolderExplorer implements Plugin {
 
   constructor(protected context: ServerContext) {
     context.events.on(
-      this.context.events.core.folderAdded,
+      Event.FolderAdded,
       this.onFolderAdded.bind(this)
     );
   }
@@ -33,12 +34,14 @@ export default class FolderExplorer implements Plugin {
   async onFolderAdded(folderPath: string): Promise<void> {
     const normalizedPath = folderPath.normalize();
 
+    console.log('Folder added', folderPath);
+
     try {
       const normalizedPathStats = await stat(normalizedPath);
 
       if (!normalizedPathStats.isDirectory()) {
         this.context.events.emit(
-          this.context.events.core.errors.folderNotFolder,
+          Event.ErrorFolderNotFolder,
           folderPath
         );
       } else {
@@ -46,7 +49,7 @@ export default class FolderExplorer implements Plugin {
       }
     } catch(error) {
       this.context.events.emit(
-        this.context.events.core.errors.folderNotExist,
+        Event.ErrorFolderNotExist,
         folderPath
       );
     }
@@ -60,7 +63,7 @@ export default class FolderExplorer implements Plugin {
    */
   async readFolder(folderPath: string): Promise<void> {
     const items = await read(folderPath);
-    const classes = await classify(items);
+    const classes = await classify(items.map(item => join(folderPath, item)));
 
     if (isSeries(classes)) {
       this.exploredSeries(folderPath, classes);
@@ -80,7 +83,7 @@ export default class FolderExplorer implements Plugin {
     const entry = await makeSeriesEntry(seriesPath, classes);
 
     this.context.events.emit(
-      this.context.events.core.entryExplore,
+      Event.EntryExplore,
       entry
     );
   }

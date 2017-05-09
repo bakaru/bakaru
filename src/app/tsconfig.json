@@ -1,13 +1,15 @@
 {
   "version": "2.1.4",
   "compilerOptions": {
+    "allowJs": true,
     "target": "es2015",
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "../../dist/app",
     "sourceMap": false,
     "removeComments": false,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "preserveConstEnums": true
   },
   "include": [
     "../typings/index.d.ts",

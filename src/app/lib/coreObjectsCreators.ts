@@ -96,12 +96,10 @@ export function episode(path: string): Bakaru.Episode {
     id: sha224(basename),
     path,
     title: basename2title(basename),
-    format,
-    codec: 'x264',
     watched: false,
     chapters: [],
-    duration: 0,
-    stoppedAt: 0
+    stoppedAt: 0,
+    media: null
   };
 }
 

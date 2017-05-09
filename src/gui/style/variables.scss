@@ -1,0 +1,41 @@
+$colorContrast: hsl(345, 100%, 50%);
+$colorMainBackground: #343a40;
+$colorMainForeground: #e9ecef;
+$colorMainBorder: #495057;
+$highlightColor: #212529;
+
+$clr0: #f8f9fa;
+$clr1: #f1f3f5;
+$clr2: #e9ecef;
+$clr3: #dee2e6;
+$clr4: #ced4da;
+$clr5: #adb5bd;
+$clr6: #868e96;
+$clr7: #495057;
+$clr8: #343a40;
+$clr9: #212529;
+
+$padding: 10px;
+$multiplier: 1.68;
+
+$playerControlsHeight: 50px;
+
+$libraryListWidth: 40vw;
+$libraryDetailsWidth: 60vw;
+
+$windowControlsButtonHeight: 32px;
+$windowControlsButtonWidth: 46px;
+
+@mixin fixedPane() {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+@mixin truncate() {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

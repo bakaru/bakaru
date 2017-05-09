@@ -9,12 +9,10 @@ declare namespace Bakaru {
     id: string
     path: string
     title: string
-    format: string
-    codec: string
     watched: boolean
     chapters: Chapter[]
-    duration: number
     stoppedAt: number
+    media: ParsedMedia|null
   }
 
   export interface Subtitles {

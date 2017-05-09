@@ -25,6 +25,10 @@ class BrowserWindow {
     this.self().maximize();
   }
 
+  unmaximize() {
+    this.self().unmaximize();
+  }
+
   isMaximized() {
     return this.self().isMaximized();
   }

@@ -5,24 +5,24 @@ import * as debug from 'debug'
 import * as express from 'express'
 import * as WebSocket from 'ws'
 import { createServer } from 'http'
+import EventEmitter from './events'
 import PluginManager from './PluginManager'
 import SockRelay from './SockRelay'
 import Window from './Window'
-import Events from './Events'
 
 // Core modules
 import FolderExplorer from './FolderExplorer'
 import LibraryManager from './LibraryManager'
 import SystemFolderOpener from './SystemFolderOpener'
 import MediaPropsExplorer from './MediaPropsExplorer'
-import RemoteControllerRelay from './RemoteControllerRelay'
+import CommonGUIRelay from './CommonGUIRelay'
 
 const log = debug('bakaru:server');
 
 export interface ServerContext {
   library: Map<string, Bakaru.Entry>
   socket?: SockRelay
-  events?: Events
+  events?: EventEmitter
   http?: express.Router
   window?: Window
 }
@@ -36,7 +36,11 @@ export default function bootServer(port: number = 44888): void {
 
   const app = express();
   const http = createServer(app);
-  const socket = new SockRelay(new WebSocket.Server({ server: http }));
+  const events = new EventEmitter();
+  const socket = new SockRelay(
+    new WebSocket.Server({ server: http }),
+    events
+  );
 
   app.use(express.static(path.join(__dirname, '../gui')));
   app.get('/main', (req, res) => {
@@ -49,7 +53,7 @@ export default function bootServer(port: number = 44888): void {
   const serverContext: ServerContext = {
     http: app,
     socket,
-    events: new Events(),
+    events,
     window: new Window(),
     library: new Map()
   };
@@ -59,6 +63,6 @@ export default function bootServer(port: number = 44888): void {
     LibraryManager,
     SystemFolderOpener,
     MediaPropsExplorer,
-    RemoteControllerRelay
+    CommonGUIRelay
   ]);
 }

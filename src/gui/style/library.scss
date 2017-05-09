@@ -1,0 +1,158 @@
+@import "variables";
+
+.library {
+  z-index: 200;
+
+  .player-library-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(52, 58, 64, .5);
+
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .2s ease;
+
+    z-index: 199;
+
+    &.mod-shy {
+      pointer-events: inherit;
+      opacity: 1;
+    }
+  }
+
+  .library-container {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: $colorMainBackground;
+    color: $colorMainForeground;
+    box-shadow: 0 0 30px 5px rgba(0, 0, 0, 0);
+
+    transform: translateX(-($libraryDetailsWidth + $libraryListWidth));
+    transition: transform .2s ease;
+
+    z-index: 200;
+
+    &.mod-shy {
+      transform: translateX(-$libraryDetailsWidth);
+      box-shadow: 0 0 30px 5px rgba(0, 0, 0, .8);
+
+      .library-details {
+        width: $libraryListWidth;
+        margin-top: 0;
+        padding-top: 32px;
+
+        .library-opener {
+          opacity: 1;
+          display: block;
+        }
+      }
+    }
+
+    &.mod-focused {
+      transform: translateX(0vw);
+    }
+
+
+    .library-list {
+      width: $libraryListWidth;
+      height: 100vh;
+      margin-top: 32px;
+      overflow-y: scroll;
+
+      .library-item {
+        position: relative;
+        overflow-x: hidden;
+        padding: 10px 16.8px 13px 16.8px;
+        border-bottom: solid 1px $colorMainBorder;
+
+        &:hover {
+          background-color: $highlightColor;
+        }
+
+        .title {
+
+          @include truncate;
+          width: calc(#{$libraryListWidth} - 33.6px - 80px);
+          font-size: 21px;
+          line-height: 1;
+        }
+
+        .details {
+          margin-top: 8px;
+          color: $clr5;
+          font-size: 11px;
+
+          .detail {
+            display: inline-block;
+            border-radius: 2px;
+            padding: 2px 5px 3px 5px;
+            line-height: 1;
+            box-shadow: 0 0 0 1px $clr6;
+          }
+        }
+
+        .counter {
+          position: absolute;
+          right: 16.8px;
+          top: calc(50% - 15px);
+          width: 80px;
+          text-align: right;
+          font-size: 30px;
+          line-height: 1;
+          color: $clr7;
+        }
+
+        .progress {
+          position: absolute;
+          bottom: 0;
+          left: -3px;
+          height: 3px;
+          width: 6px;
+          background-color: $colorMainBorder;
+          transform: skewX(45deg);
+          transition: width .2s ease;
+        }
+      }
+    }
+
+    .library-details {
+      position: relative;
+      width: $libraryDetailsWidth;
+      height: 100vh;
+      margin-top: $windowControlsButtonHeight;
+      overflow-y: scroll;
+
+      .library-opener {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: $windowControlsButtonHeight;
+        box-shadow: 0 1px 0 $colorMainBorder;
+        background-color: transparent;
+        line-height: $windowControlsButtonHeight;
+        padding: 0 $padding*$multiplier;
+        color: $colorMainForeground;
+        font-size: 16px;
+        opacity: 0;
+
+        transition: all .2s ease;
+
+        &:hover {
+          color: $colorContrast;
+          background-color: $colorMainForeground;
+        }
+      }
+    }
+  }
+}

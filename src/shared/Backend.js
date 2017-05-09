@@ -10,8 +10,8 @@ class Backend {
     conn.onmessage = this._handleMessage.bind(this);
   }
 
-  _handleMessage(packet) {
-    const [eventName, payload] = arson.parse(packet);
+  _handleMessage(event) {
+    const [eventName, payload] = arson.parse(event.data);
 
     this.ee.emit(eventName, payload);
   }
@@ -20,14 +20,16 @@ class Backend {
     this.ee.on(eventName, cb);
   }
 
-  emit(eventName, payload) {
+  emit(eventName, payload = null) {
     const packet = arson.encode([eventName, payload]);
 
     conn.send(packet);
   }
 }
 
-export default new Backend();
+const inst = new Backend();
+
+export default window.wtf = inst;
 
 export const connection = new Promise((resolve, reject) => {
   conn.onopen = resolve;

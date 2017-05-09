@@ -1,6 +1,7 @@
-import { ServerContext } from '../server';
-import { Plugin } from '../PluginManager';
-import VideoInfo, { Priority } from './VideoInfo';
+import { ServerContext } from '../server'
+import { Event } from '../Events'
+import { Plugin } from '../PluginManager'
+import VideoInfo, { Priority } from './VideoInfo'
 
 export default class MediaPropsExplorer implements Plugin {
   private videoInfo: VideoInfo;
@@ -13,7 +14,7 @@ export default class MediaPropsExplorer implements Plugin {
     this.videoInfo = new VideoInfo();
 
     this.context.events.on(
-      this.context.events.core.mediaPropsRequest,
+      Event.MediaPropsRequest,
       this.onRequest.bind(this)
     );
   }
@@ -36,7 +37,7 @@ export default class MediaPropsExplorer implements Plugin {
     };
 
     this.context.events.emit(
-      this.context.events.core.mediaPropsResponse,
+      Event.MediaPropsResponse,
       response
     );
   }

@@ -1,39 +1,53 @@
-import {  EventEmitter } from 'events';
+import evts = require('events');
 
-export default class Events extends EventEmitter implements Events {
-  public core: CoreEvents = {
-    openSystemFolder: 'core:openSystemFolder',
-    folderAdded: 'core:folderAdded',
+export default class EventEmitter {
+  protected ee: any;
 
-    entryUpdate: 'core:entryUpdate',
-    entryUpdated: 'core:entryUpdated',
-    entryExplore: 'core:entryExplore',
-    entryExplored: 'core:entryExplored',
-    entryDelete: 'core:entryDelete',
-    entryDeleted: 'core:entryDeleted',
-    entryStateUpdate: 'core:entryStateUpdate',
-    entryStateUpdated: 'core:entryStateUpdated',
+  constructor() {
+    this.ee = new evts.EventEmitter();
+  }
 
-    libraryResurrected: 'core:libraryResurrected',
+  on(event: Event, cb: Function) {
+    this.ee.on(event, cb);
+  }
 
-    mediaPropsRequest: 'core:mediaPropsRequest',
-    mediaPropsResponse: 'core:mediaPropsResponse',
+  emit(event: Event, ...payload: any[]) {
+    this.ee.emit(event, ...payload);
+  }
+}
 
-    preferences: 'core:preferences',
+export enum Event {
+  OpenSystemFolder,
+  FolderAdded,
+  EntryUpdate,
+  EntryUpdated,
+  EntryExplore,
+  EntryExplored,
+  EntryDelete,
+  EntryDeleted,
+  EntryStateUpdate,
+  EntryStateUpdated,
 
-    playerSetMedia: 'core:playerSetMedia',
-    playerVolume: 'core:playerVolume',
-    playerMute: 'core:playerMute',
-    playerPlay: 'core:playerPlay',
-    playerPause: 'core:playerPause',
-    playerPrev: 'core:playerPrev',
-    playerNext: 'core:playerNext',
-    playerSeek: 'core:playerSeek',
-    playerAudioOffset: 'core:playerAudioOffset',
+  LibraryResurrected,
 
-    errors: {
-      folderNotFolder: 'core:errors:folderNotFolder',
-      folderNotExist: 'core:errors:folderNotExist',
-    }
-  };
+  MediaPropsRequest,
+  MediaPropsResponse,
+
+  LibraryRequest,
+  LibraryResponse,
+
+  Preferences,
+
+  PlayerSetMedia,
+  PlayerVolume,
+  PlayerMute,
+  PlayerPlay,
+  PlayerPause,
+  PlayerPrev,
+  PlayerNext,
+  PlayerSeek,
+  PlayerAudioOffset,
+
+  ErrorFolderNotFolder,
+  ErrorFolderNotExist
 }

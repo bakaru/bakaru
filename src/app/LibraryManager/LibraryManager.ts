@@ -1,6 +1,7 @@
-import { Plugin } from '../PluginManager';
-import { ServerContext } from "../server";
-import FS from '../lib/FS';
+import { Plugin } from '../PluginManager'
+import { ServerContext } from "../server"
+import { Event } from '../Events'
+import FS from '../lib/FS'
 
 export default class LibraryManager implements Plugin {
   protected fs: FS;
@@ -25,28 +26,46 @@ export default class LibraryManager implements Plugin {
       }
 
       this.context.events.emit(
-        this.context.events.core.libraryResurrected,
+        Event.LibraryResurrected,
         this.context.library
       );
     });
 
     this.context.events.on(
-      this.context.events.core.entryExplore,
+      Event.EntryExplore,
       this.onEntryExplore.bind(this)
     );
     this.context.events.on(
-      this.context.events.core.entryUpdate,
+      Event.EntryUpdate,
       this.onEntryUpdate.bind(this)
     );
     this.context.events.on(
-      this.context.events.core.entryStateUpdate,
+      Event.EntryStateUpdate,
       this.onEntryStateUpdate.bind(this)
     );
 
-    // FIXME: No media props explored events handlers
+    this.context.events.on(
+      Event.MediaPropsResponse,
+      this.onMediaPropsResponse.bind(this)
+    );
+  }
+
+  protected onMediaPropsResponse(response: Bakaru.MediaPropsExplorerResponse) {
+    const entry = this.context.library.get(response.entryId);
+    const episode = entry.episodes.get(response.mediaId);
+
+    entry.bitDepth = response.media.video.bitsPerPixel;
+    entry.width = response.media.video.width;
+    entry.height = response.media.video.height;
+    entry.state.mediaPropsExplored = true;
+
+    episode.media = response.media;
+
+    this.onEntryUpdate(entry);
   }
 
   protected onEntryExplore(entry: Bakaru.Entry) {
+    this.context.library.set(entry.id, entry);
     this.fs.write(entry);
     this.emitExplored(entry);
 
@@ -62,7 +81,7 @@ export default class LibraryManager implements Plugin {
         : 1; // Low priority
 
       this.context.events.emit(
-        this.context.events.core.mediaPropsRequest,
+        Event.MediaPropsRequest,
         {
           entryId: entry.id,
           mediaId: episode.id,
@@ -95,21 +114,21 @@ export default class LibraryManager implements Plugin {
 
   protected emitExplored(entry: Bakaru.Entry) {
     this.context.events.emit(
-      this.context.events.core.entryExplored,
+      Event.EntryExplored,
       entry
     );
   }
 
   protected emitUpdated(entry: Bakaru.Entry) {
     this.context.events.emit(
-      this.context.events.core.entryExplored,
+      Event.EntryUpdated,
       entry
     );
   }
 
   protected emitStateUpdated(id: string, state: Bakaru.EntryState) {
     this.context.events.emit(
-      this.context.events.core.entryExplored,
+      Event.EntryExplored,
       { id, state }
     );
   }

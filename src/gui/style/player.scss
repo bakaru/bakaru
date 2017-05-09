@@ -1,0 +1,109 @@
+@import "variables";
+
+.player {
+  @include fixedPane;
+
+  z-index: 100;
+
+  filter: grayscale(0);
+
+  &.mod-focused {
+    filter: grayscale(.5);
+  }
+
+  .player-controller {
+    @include fixedPane;
+
+    .player-controller-mpv {
+      width: 100vw;
+      height: 100vh;
+      background-color: black;
+    }
+  }
+
+  .player-controls-holder {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: $playerControlsHeight + 30px;
+
+    z-index: 102;
+
+    &:hover>div {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .player-controls {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: $playerControlsHeight;
+
+      background-color: rgba($colorMainBackground, .5);
+
+      opacity: 1;
+
+      transform: translateY(0);//translateY($playerControlsHeight);
+      transition: opacity .2s ease;
+
+      z-index: 103;
+
+      .buttons {
+        display: flex;
+        height: 100%;
+      }
+
+      button {
+        height: 100%;
+        border: none;
+        background-color: transparent;
+        padding: 5px 15px;
+
+        svg {
+          fill: $colorMainForeground;
+        }
+
+        &:hover {
+          background-color: rgba($colorContrast, .5);
+          box-shadow: 0 0 15px darken($colorContrast, 30%) inset;
+        }
+      }
+    }
+  }
+
+  .library-trigger {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 50px;
+    color: transparent;
+    background-color: transparent;
+    user-select: none;
+    cursor: default;
+
+    transition: all .2s ease;
+
+    z-index: 101;
+
+    &:hover {
+      color: #e9ecef;
+      background-color: rgba(0, 0, 0, .5);
+
+      &::after {
+        opacity: 1;
+      }
+    }
+
+    &>span {
+      transform: rotate(-90deg);
+      letter-spacing: 15px;
+    }
+  }
+}

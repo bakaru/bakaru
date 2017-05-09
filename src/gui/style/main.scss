@@ -1,20 +1,126 @@
+@import "variables";
+
 body {
-  background-color: black;
+  box-sizing: border-box;
+  user-select: none;
+  cursor: default;
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    background-color: transparent;
+  }
+  ::-webkit-scrollbar:horizontal {
+    height: 2px;
+  }
+  ::-webkit-scrollbar-track {
+    border-left: solid 1px $colorMainBorder;
+    background-color: $colorMainBackground;
+
+    &:horizontal {
+      border-left: none;
+      border-top: solid 1px $colorMainBorder;
+    }
+  }
+  ::-webkit-scrollbar-thumb {
+    width: 2px;
+    box-shadow: 1px 0 0 0 $colorMainBorder inset;
+    background-color: $colorMainBackground;
+
+    &:horizontal {
+      box-shadow: 0 1px 0 0 $colorMainBorder inset;
+    }
+  }
+  ::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+  ::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
 }
 
-.test {
-  color: red;
-}
-
-.player-controller {
+.dragger {
+  -webkit-app-region: drag;
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  left: $libraryDetailsWidth;
+  height: 50px;
 
-  .player-controller-mpv {
-    width: 100vw;
-    height: 100vh;
+  box-shadow: 0 1px transparent;
+  background-color: transparent;
+
+  &:hover>div {
+    opacity: 1;
+  }
+
+  z-index: 900;
+
+  .wrapper {
+    -webkit-app-region: no-drag;
+    position: fixed;
+    top: 0;
+    right: 0;
+    display: flex;
+    width: $windowControlsButtonWidth * 3;
+    opacity: 0;
+    transition: opacity .2s ease;
+  }
+
+  header {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: $windowControlsButtonHeight;
+    width: 150px;
+    color: $colorContrast;
+    padding-left: 5px;
+    font-size: 20px;
+    line-height: $windowControlsButtonHeight;
+    font-weight: 300;
+  }
+
+  button {
+    display: block;
+    border: none;
+    height: $windowControlsButtonHeight;
+    width: $windowControlsButtonWidth;
+    background-color: transparent;
+    color: $colorMainForeground;
+    transition: all .2s ease;
+    outline: none;
+
+    &:hover {
+      background-color: $colorMainForeground;
+      color: $colorContrast;
+    }
+  }
+
+  .icon {
+    width: 10px;
+    height: 10px;
+    fill: currentColor;
+    shape-rendering: crispEdges;
+  }
+
+  &.mod-visible {
+    left: 0;
+    height: $windowControlsButtonHeight;
+    box-shadow: 0 1px $colorMainBorder;
+    background-color: $colorMainBackground;
+
+    header {
+      display: block;
+    }
+
+    button {
+      color: $colorContrast;
+    }
+
+    .wrapper {
+      opacity: 1;
+    }
   }
 }
