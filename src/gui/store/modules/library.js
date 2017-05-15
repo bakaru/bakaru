@@ -3,7 +3,7 @@ import Event from 'shared/Event'
 
 const initialState = {
   entries: new Map(),
-  selected: null
+  selected: window.localStorage['library-selected-entry'] || null
 }
 
 const SET_LIBRARY = 'bakaru/library/setLibrary';
@@ -28,6 +28,8 @@ function doSetEntry(state, { entry }) {
 
 const SELECT = 'bakaru/library/select';
 function doSelect(state, { id }) {
+  window.localStorage['library-selected-entry'] = id;
+
   return {
     ...state,
     selected: id

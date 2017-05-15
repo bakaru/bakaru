@@ -1,4 +1,5 @@
 import Inferno from 'inferno'
+import className from 'classnames'
 
 export default function Item(props) {
   let episodesWatched = 0;
@@ -10,8 +11,16 @@ export default function Item(props) {
     }
   }
 
+  const itemClassName = className({
+    'library-item': true,
+    'mod-selected': props.selected
+  });
+
   return (
-    <div className="library-item">
+    <div
+      className={itemClassName}
+      onClick={props.select}
+    >
       <div className="title">
         {props.item.title}
       </div>

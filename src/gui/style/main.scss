@@ -14,7 +14,7 @@ body {
   }
   ::-webkit-scrollbar-track {
     border-left: solid 1px $colorMainBorder;
-    background-color: $colorMainBackground;
+    background-color: transparent;
 
     &:horizontal {
       border-left: none;
@@ -22,9 +22,7 @@ body {
     }
   }
   ::-webkit-scrollbar-thumb {
-    width: 2px;
-    box-shadow: 1px 0 0 0 $colorMainBorder inset;
-    background-color: $colorMainBackground;
+    background-color: rgba($colorMainBorder, .25);
 
     &:horizontal {
       box-shadow: 0 1px 0 0 $colorMainBorder inset;
@@ -109,7 +107,7 @@ body {
     left: 0;
     height: $windowControlsButtonHeight;
     box-shadow: 0 1px $colorMainBorder;
-    background-color: $colorMainBackground;
+    background-color: rgba($colorMainBackground, 1);
 
     header {
       display: block;

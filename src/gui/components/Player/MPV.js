@@ -64,6 +64,10 @@ export default class ReactMPV extends Component {
 
     delete props.onReady;
     delete props.onPropertyChange;
+    props.onMouseUp = e => {
+      e.stopPropagation();
+      this.props.onClickOnCanvas(e);
+    }
 
     return (
       <embed

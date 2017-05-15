@@ -1,8 +1,9 @@
-$colorContrast: hsl(345, 100%, 50%);
-$colorMainBackground: #343a40;
+$colorContrast2: hsl(345, 100%, 50%);
+$colorContrast: hsl(210, 100%, 60%);
+$colorMainBackground: rgba(#343a40, .5);
 $colorMainForeground: #e9ecef;
-$colorMainBorder: #495057;
-$highlightColor: #212529;
+$colorMainBorder: rgba($colorMainForeground, .2);
+$highlightColor: rgba(#212529, .5);
 
 $clr0: #f8f9fa;
 $clr1: #f1f3f5;
@@ -20,11 +21,13 @@ $multiplier: 1.68;
 
 $playerControlsHeight: 50px;
 
-$libraryListWidth: 40vw;
-$libraryDetailsWidth: 60vw;
+$libraryListWidth: 60vw;
+$libraryDetailsWidth: 40vw;
 
 $windowControlsButtonHeight: 32px;
 $windowControlsButtonWidth: 46px;
+
+$buttonHeight: 40px;
 
 @mixin fixedPane() {
   position: fixed;
@@ -38,4 +41,23 @@ $windowControlsButtonWidth: 46px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@mixin button() {
+  height: $buttonHeight;
+  padding: $padding $padding*$multiplier;
+  color: $colorContrast;
+  font-size: 16px;
+  letter-spacing: 1px;
+  border: solid 1px $colorContrast;
+  border-radius: 3px;
+  background-color: transparent;
+
+  transition: all .2s ease-out;
+  outline: none;
+
+  &:hover {
+    text-shadow: 0 2px 10px darken($colorContrast, 20%);
+    box-shadow: 0 2px 10px darken($colorContrast, 20%), 0 2px 10px darken($colorContrast, 20%) inset;
+  }
 }

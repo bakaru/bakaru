@@ -5,14 +5,17 @@
 
   z-index: 100;
 
-  filter: grayscale(0);
-
   &.mod-focused {
-    filter: grayscale(.5);
+    .player-controller {
+      filter: blur(0px);
+    }
   }
 
   .player-controller {
     @include fixedPane;
+
+    filter: blur(50px);
+    will-change: filter;
 
     .player-controller-mpv {
       width: 100vw;
@@ -30,24 +33,27 @@
 
     z-index: 102;
 
-    &:hover>div {
-      opacity: 1;
+    &:hover .player-controls {
+      backdrop-filter: blur(20px);
       transform: translateY(0);
+      opacity: 1;
     }
 
     .player-controls {
       position: fixed;
+      display: flex;
       bottom: 0;
       left: 0;
       right: 0;
       height: $playerControlsHeight;
 
-      background-color: rgba($colorMainBackground, .5);
+      background-color: rgba($colorMainBackground, .2);
+      backdrop-filter: blur(0);
+      transform: translateY($playerControlsHeight - 1px);
+      color: $colorMainForeground;
+      text-shadow: 0 0 5px rgba($clr9, .5);
 
-      opacity: 1;
-
-      transform: translateY(0);//translateY($playerControlsHeight);
-      transition: opacity .2s ease;
+      transition: backdrop-filter .2s ease, all .2s ease;
 
       z-index: 103;
 
@@ -61,14 +67,51 @@
         border: none;
         background-color: transparent;
         padding: 5px 15px;
+        outline: none;
 
         svg {
           fill: $colorMainForeground;
         }
 
         &:hover {
-          background-color: rgba($colorContrast, .5);
-          box-shadow: 0 0 15px darken($colorContrast, 30%) inset;
+          background-color: rgba($colorMainForeground, .2);
+        }
+      }
+
+      .trackbar {
+        flex-grow: 10;
+        position: relative;
+        height: 100%;
+
+        .progress {
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          width: 0;
+          background: linear-gradient(
+            to left,
+            rgba(darken($colorContrast, 10%), .5) 0%,
+            rgba(darken($colorContrast, 10%), .35) 10px,
+            rgba(desaturate($colorContrast, 20%), .15) 30px,
+            rgba(desaturate($colorContrast, 20%), .15) 100%
+          );
+          box-shadow: 1px 0 0 $colorContrast;
+
+          z-index: 2;
+        }
+
+        .time {
+          position: absolute;
+          right: $padding*$multiplier;
+          top: calc(50% - 7px);
+          font-size: 14px;
+          line-height: 1;
+
+          user-select: none;
+          pointer-events: none;
+
+          z-index: 1;
         }
       }
     }
@@ -83,27 +126,25 @@
     left: 0;
     bottom: 0;
     width: 50px;
-    color: transparent;
-    background-color: transparent;
+    opacity: 0;
     user-select: none;
     cursor: default;
+    text-shadow: 0 0 5px rgba($clr9, .5);
 
     transition: all .2s ease;
 
     z-index: 101;
 
     &:hover {
-      color: #e9ecef;
-      background-color: rgba(0, 0, 0, .5);
-
-      &::after {
-        opacity: 1;
-      }
+      opacity: 1;
+      color: $colorMainForeground;
+      background-color: rgba($colorMainBackground, .2);
+      backdrop-filter: blur(20px);
     }
 
     &>span {
       transform: rotate(-90deg);
-      letter-spacing: 15px;
+      letter-spacing: 10px;
     }
   }
 }

@@ -11,21 +11,25 @@ export default function List(props) {
   const items = [];
 
   for (const item of props.items.values()) {
-    console.log(item);
-
     items.push(
-      <Item key={item.id} item={item}/>
+      <Item
+        key={item.id}
+        item={item}
+        select={() => props.select(item.id)}
+        selected={props.selected === item.id}
+      />
     );
   }
 
   return (
     <div className="library-list">
       {items}
-      <button
-        onClick={openDialog}
-      >
-        Add
-      </button>
+      {/*<button*/}
+        {/*onClick={openDialog}*/}
+      {/*>*/}
+        {/*Add*/}
+      {/*</button>*/}
+      <div style={{ height: '2000px' }}></div>
     </div>
   );
 }

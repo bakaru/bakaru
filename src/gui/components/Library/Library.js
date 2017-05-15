@@ -7,6 +7,7 @@ import {
   toLibrary,
   library
 } from 'gui/store/modules/ui'
+import { select } from 'gui/store/modules/library'
 import List from './List'
 import Details from './Details'
 
@@ -25,17 +26,24 @@ function Library(props) {
     'mod-focused': isLibrary
   });
 
+  const entry = props.library.selected
+    ? props.library.entries.get(props.library.selected)
+    : null;
+
   return (
     <div className="library">
       <div
         className={playerLibraryOverlayClassName}
-        onClick={props.switchToLibrary}
+        onClick={props.switchToPlayer}
       />
       <div className={libraryContainerClassName}>
         <List
           items={props.library.entries}
+          select={props.selectEntry}
+          selected={props.library.selected}
         />
         <Details
+          entry={entry}
           isShyLibrary={isShyLibrary}
           switchToLibrary={props.switchToLibrary}
           switchToPlayer={props.switchToPlayer}
@@ -51,6 +59,7 @@ export default connect(
     library: state.library
   }),
   dispatch => ({
+    selectEntry: (id) => dispatch(select(id)),
     switchToPlayer: () => dispatch(toPlayer()),
     switchToLibrary: () => dispatch(toLibrary())
   })
