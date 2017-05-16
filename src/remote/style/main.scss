@@ -1,0 +1,47 @@
+@import "../../gui/style/variables";
+
+body {
+  box-sizing: border-box;
+  user-select: none;
+  cursor: default;
+  color: $colorMainForeground;
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    background-color: transparent;
+  }
+  ::-webkit-scrollbar:horizontal {
+    height: 2px;
+  }
+  ::-webkit-scrollbar-track {
+    border-left: solid 1px $colorMainBorder;
+    background-color: transparent;
+
+    &:horizontal {
+      border-left: none;
+      border-top: solid 1px $colorMainBorder;
+    }
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba($colorMainBorder, .25);
+
+    &:horizontal {
+      box-shadow: 0 1px 0 0 $colorMainBorder inset;
+    }
+  }
+  ::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+  ::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+}
+
+button {
+  padding: $padding $padding*$multiplier;
+  border-radius: 3px;
+  border: none;
+  background-color: rgba($colorMainForeground, .2);
+}

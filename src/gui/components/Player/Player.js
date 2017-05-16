@@ -12,64 +12,13 @@ import {
   toShyLibrary
 } from 'gui/store/modules/ui'
 
-
-const videoPath = 'D:\\anime\\Durarara!!x2 Shou [BD] [720p]\\[Winter] Durarara!!x2 Shou 02 [BDrip 1280x720 x264 Vorbis].mkv';
-const videoPath2 = 'D:\\anime\\[AniDub]_Kiznaiver_[720p]_[ADStudio]\\[AniDub]_Kiznaiver_[07]_[720p_x264_Aac]_[ADStudio].mp4';
-
-const playIcon = (
-  <svg
-    key="play"
-    width={36}
-    height={36}
-    viewBox="0 0 36 36"
-  >
-    <path d="M 12,26 16,26 16,10 12,10 z M 21,26 25,26 25,10 21,10 z"/>
-  </svg>
-);
-
-const pauseIcon = (
-  <svg
-    key="pause"
-    width={36}
-    height={36}
-    viewBox="0 0 36 36"
-  >
-    <path d="M 12,26 18.5,22 18.5,14 12,10 z M 18.5,22 25,18 25,18 18.5,14 z"/>
-  </svg>
-);
-
-const volumeOff = (
-  <svg
-    key="volume-off"
-    width={16}
-    height={16}
-    viewBox="0 0 1792 1792"
-  >
-    <path d="M1280 352v1088q0 26-19 45t-45 19-45-19l-333-333h-262q-26 0-45-19t-19-45v-384q0-26 19-45t45-19h262l333-333q19-19 45-19t45 19 19 45z"/>
-  </svg>
-);
-
-const volumeDown = (
-  <svg
-    key="volume-down"
-    width={16}
-    height={16}
-    viewBox="0 0 1792 1792"
-  >
-    <path d="M1088 352v1088q0 26-19 45t-45 19-45-19l-333-333h-262q-26 0-45-19t-19-45v-384q0-26 19-45t45-19h262l333-333q19-19 45-19t45 19 19 45zm384 544q0 76-42.5 141.5t-112.5 93.5q-10 5-25 5-26 0-45-18.5t-19-45.5q0-21 12-35.5t29-25 34-23 29-35.5 12-57-12-57-29-35.5-34-23-29-25-12-35.5q0-27 19-45.5t45-18.5q15 0 25 5 70 27 112.5 93t42.5 142z"/>
-  </svg>
-);
-
-const volumeUp = (
-  <svg
-    key="volume-up"
-    width={16}
-    height={16}
-    viewBox="0 0 1792 1792"
-  >
-    <path d="M832 352v1088q0 26-19 45t-45 19-45-19l-333-333h-262q-26 0-45-19t-19-45v-384q0-26 19-45t45-19h262l333-333q19-19 45-19t45 19 19 45zm384 544q0 76-42.5 141.5t-112.5 93.5q-10 5-25 5-26 0-45-18.5t-19-45.5q0-21 12-35.5t29-25 34-23 29-35.5 12-57-12-57-29-35.5-34-23-29-25-12-35.5q0-27 19-45.5t45-18.5q15 0 25 5 70 27 112.5 93t42.5 142zm256 0q0 153-85 282.5t-225 188.5q-13 5-25 5-27 0-46-19t-19-45q0-39 39-59 56-29 76-44 74-54 115.5-135.5t41.5-173.5-41.5-173.5-115.5-135.5q-20-15-76-44-39-20-39-59 0-26 19-45t45-19q13 0 26 5 140 59 225 188.5t85 282.5zm256 0q0 230-127 422.5t-338 283.5q-13 5-26 5-26 0-45-19t-19-45q0-36 39-59 7-4 22.5-10.5t22.5-10.5q46-25 82-51 123-91 192-227t69-289-69-289-192-227q-36-26-82-51-7-4-22.5-10.5t-22.5-10.5q-39-23-39-59 0-26 19-45t45-19q13 0 26 5 211 91 338 283.5t127 422.5z"/>
-  </svg>
-);
+import {
+  play,
+  pause,
+  volumeUp,
+  volumeOff,
+  volumeDown
+} from 'gui/components/icons'
 
 const props = {
   mute: 'mute',
@@ -92,6 +41,15 @@ class Player extends Component {
     super(props);
 
     this.state = {};
+    this.initialized = false;
+  }
+
+  componentDidUpdate() {
+    if (!this.initialized && this.props.library.loaded && this.props.entryId && this.props.episodeId) {
+      this.initialized = true;
+
+      PlayerControl.media(this.props.entryId, this.props.episodeId)
+    }
   }
 
   handleMPVReady(mpv) {
@@ -175,7 +133,7 @@ class Player extends Component {
               <button
                 onClick={::this.togglePause}
               >
-                {this.props.playing ? playIcon : pauseIcon}
+                {this.props.playing ? pause : play}
               </button>
               <button
                 onClick={::this.onMute}

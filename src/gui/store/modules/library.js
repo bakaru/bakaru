@@ -2,6 +2,7 @@ import Backend from 'shared/Backend'
 import Event from 'shared/Event'
 
 const initialState = {
+  loaded: false,
   entries: new Map(),
   selected: window.localStorage['library-selected-entry'] || null
 }
@@ -10,6 +11,7 @@ const SET_LIBRARY = 'bakaru/library/setLibrary';
 function doSetLibrary(state, { entries }) {
   return {
     ...state,
+    loaded: true,
     entries
   }
 }

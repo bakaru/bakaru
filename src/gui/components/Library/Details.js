@@ -2,8 +2,7 @@ import Inferno from 'inferno'
 import Component from 'inferno-component'
 import Player from 'gui/control/Player'
 import className from 'classnames'
-
-let loadedFor = null;
+import { play as playIcon, angleRight } from 'gui/components/icons'
 
 export default class Details extends Component {
   constructor(props) {
@@ -40,11 +39,6 @@ export default class Details extends Component {
 
     const entry = props.entry;
 
-    if (loadedFor !== entry.id) {
-      loadedFor = entry.id;
-      setMedia(entry);
-    }
-
     const audioSelectorClass = className({
       'select': true,
       'mod-open': this.state.audioSelectorOpen
@@ -57,7 +51,8 @@ export default class Details extends Component {
           onClick={props.switchToLibrary}
         >
         <span>
-          {'<<'} Back to library
+          <span style={{ transform: 'rotateY(-180deg)' }}>{angleRight}</span>
+          Back to library
         </span>
         </div>
 
@@ -70,11 +65,35 @@ export default class Details extends Component {
 
         <section className="controls">
           <div className={audioSelectorClass}>
+            <div className="angle">
+              {angleRight}
+            </div>
             <div
               className="current"
               onClick={::this.onToggleAudioSelector}
             >
-              Audio: something
+              something
+            </div>
+            <ul
+              className="list"
+              onClick={::this.onToggleAudioSelector}
+            >
+              <li>Test 1</li>
+              <li>Test 2</li>
+              <li>Test 2</li>
+              <li>Test 2</li>
+              <li>Test 2</li>
+            </ul>
+          </div>
+          <div className={audioSelectorClass}>
+            <div className="angle">
+              {angleRight}
+            </div>
+            <div
+              className="current"
+              onClick={::this.onToggleAudioSelector}
+            >
+              something
             </div>
             <ul
               className="list"
@@ -91,7 +110,7 @@ export default class Details extends Component {
           <button
             onClick={() => { play(); props.switchToPlayer() }}
           >
-            Play
+            {playIcon}
           </button>
         </section>
 

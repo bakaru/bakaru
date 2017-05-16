@@ -1,5 +1,5 @@
 import './bootstrap/lookupHostAddress'
-
+import * as fs from 'fs'
 import * as path from 'path'
 import * as debug from 'debug'
 import * as express from 'express'
@@ -31,7 +31,7 @@ export default function bootServer(port: number = 44888): void {
   // Set urls
   global.bakaru.paths['mainWindowUrl'] = `http://127.0.0.1:${port}/main`;
   global.bakaru.paths['remoteWindowUrls'] = global.bakaru.addresses.map(address => {
-    return `http://${address}:${port}/main`;
+    return `http://${address}:${port}/remote`;
   });
 
   const app = express();
@@ -42,9 +42,13 @@ export default function bootServer(port: number = 44888): void {
     events
   );
 
-  app.use(express.static(path.join(__dirname, '../gui')));
+  app.use('/gui', express.static(path.join(__dirname, '../gui')));
   app.get('/main', (req, res) => {
     res.sendFile(path.join(__dirname, '../gui/index.html'));
+  });
+  app.use('/remote', express.static(path.join(__dirname, '../remote')));
+  app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../remote/index.html'));
   });
 
   http.listen(port);
