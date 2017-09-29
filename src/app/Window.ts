@@ -12,9 +12,9 @@ export default class Window {
   protected app: Electron.App;
   protected name: string;
   protected rootDir: string;
-  protected electron: Electron.ElectronMainAndRenderer;
+  protected electron: Electron.AllElectron;
   protected mainWindowUrl: string;
-  protected mainWindowOptions: Electron.BrowserWindowOptions;
+  protected mainWindowOptions: Electron.BrowserWindowConstructorOptions;
 
   constructor() {
     this.name = 'Bakaru';

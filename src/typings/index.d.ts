@@ -5,7 +5,6 @@
 ///<reference types="rimraf"/>
 ///<reference types="express"/>
 ///<reference types="bluebird"/>
-///<reference types="electron"/>
 ///<reference path="./bakaru.d.ts"/>
 
 import './node-custom';
