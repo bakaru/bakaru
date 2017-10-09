@@ -11,6 +11,5 @@ import './node-custom';
 import './global-custom';
 import './fastpriorityqueue';
 import './arson';
-import './react-svg-morph';
 import './fast-levenshtein';
 import './javascript-natural-sort';

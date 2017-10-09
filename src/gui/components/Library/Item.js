@@ -1,4 +1,4 @@
-import Inferno from 'inferno'
+import React from 'react'
 import className from 'classnames'
 
 export default function Item(props) {

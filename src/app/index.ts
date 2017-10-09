@@ -26,8 +26,8 @@ import bootServer from './server';
 })();
 
 // Error handler
-process.on('uncaughtException', e => {
-  console.error(e);
-
-  process.exit(1);
-});
+// process.on('uncaughtException', e => {
+//   console.error(e);
+//
+//   process.exit(1);
+// });

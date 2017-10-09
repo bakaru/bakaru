@@ -1,5 +1,4 @@
-import Inferno from 'inferno'
-import Component from 'inferno-component'
+import React, { Component } from 'react'
 import Player from 'gui/control/Player'
 import className from 'classnames'
 import { play as playIcon, angleRight } from 'gui/components/icons'

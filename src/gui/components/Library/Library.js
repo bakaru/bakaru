@@ -1,5 +1,5 @@
-import Inferno from 'inferno'
-import { connect } from 'inferno-redux'
+import React from 'react'
+import { connect } from 'react-redux'
 import className from 'classnames'
 import {
   shyLibrary,

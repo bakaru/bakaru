@@ -1,10 +1,9 @@
 {
   "presets": [
-    "electron",
-    "babili"
+    "react",
+    "electron"
   ],
   "plugins": [
-    "inferno",
     "remove-comments"
   ]
 }

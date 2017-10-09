@@ -1,8 +1,8 @@
 require('./style');
 
-import Inferno from 'inferno'
-import Component from 'inferno-component'
-import { Provider } from 'inferno-redux'
+import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
 import Backend, { connection } from 'shared/Backend'
 import Event from 'shared/Event'
 import { play, pause } from 'gui/components/icons'
@@ -44,7 +44,7 @@ class Button extends Component {
 connection.then(() => {
   // const store = createStore();
 
-  Inferno.render(
+  ReactDOM.render(
     <div>
       Yay!
       <Button/>

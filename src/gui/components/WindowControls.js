@@ -1,7 +1,7 @@
-import Inferno from 'inferno'
+import React from 'react'
 import Window from 'gui/control/Window'
 import className from 'classnames'
-import { connect } from 'inferno-redux'
+import { connect } from 'react-redux'
 import { library } from 'gui/store/modules/ui'
 
 const iconMaximize = 'M0,0v10.1h10.2V0H0z M9.2,9.2H1.1V1h8.1V9.2z';
