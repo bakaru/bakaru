@@ -18,8 +18,11 @@ export default function isSeries(classifiedItems: Bakaru.ClassifiedFolderItems) 
   const distances = [];
   const pairs = [];
   const percentile = .9;
+  const lengths = [];
 
   for (let i = 0; i < videosLength; i++) {
+    lengths.push(videos[i]);
+    
     for (let j = 0; j < videosLength; j++) {
       const compositeKey = `${i}${j}`;
 
@@ -33,10 +36,11 @@ export default function isSeries(classifiedItems: Bakaru.ClassifiedFolderItems) 
     }
   }
 
-  distances.sort((a, b) => a > b ? 1 : (a < b ? -1 : 0));
+  distances.sort((a, b) => b - a);
   const index = Math.round(distances.length * percentile) + 1;
   const mean = distances.slice(0, index).reduce((acc, n) => acc + n, 0) / index;
-
-  // 90% times diff should be less than 5 symbols, that should be enough, huh?
-  return mean < 5;
+  const meanLength = lengths.reduce((acc, n) => acc + n, 0) / lengths.length;
+  
+  // 90% times diff should be less than half length of the mean files name's length
+  return mean < (meanLength / 2);
 };
