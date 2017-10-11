@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-export default class ReactMPV extends Component {
-  constructor(props) {
-    super(props);
+export default class MPV extends Component {
+  static propTypes = {
+    onReady: PropTypes.func.isRequired,
+    onClickOnCanvas: PropTypes.func.isRequired,
+    onPropertyChange: PropTypes.func.isRequired,
+  };
 
-    this._node = null;
-  }
+  _node = null;
 
   /**
    * Send a command to the player.
@@ -58,22 +61,22 @@ export default class ReactMPV extends Component {
     this._node.addEventListener("message", this._handleMessage.bind(this));
   }
 
-  render() {
-    const props = { ...this.props };
+  shouldComponentUpdate() {
+    return false;
+  }
 
-    delete props.onReady;
-    delete props.onPropertyChange;
-    props.onMouseUp = e => {
+  render() {
+    const onMouseUp = e => {
       e.stopPropagation();
       this.props.onClickOnCanvas(e);
     }
 
     return (
       <embed
-        {...props}
         ref={node => this._node = node}
         type="application/x-mpvjs"
         className="player-controller-mpv"
+        onMouseUp={onMouseUp}
       />
     );
   }

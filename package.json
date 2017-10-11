@@ -99,6 +99,7 @@
     "mkdirp": "^0.5.1",
     "mousetrap": "1.5.3",
     "mpv.js": "^0.2.2",
+    "prop-types": "^15.6.0",
     "react-svg-morph": "^0.1.10",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",

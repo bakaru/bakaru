@@ -21,8 +21,8 @@ $multiplier: 1.68;
 
 $playerControlsHeight: 50px;
 
-$libraryListWidth: 60vw;
-$libraryDetailsWidth: 40vw;
+$libraryListWidth: 45vw;
+$libraryDetailsWidth: 55vw;
 
 $windowControlsButtonHeight: 32px;
 $windowControlsButtonWidth: 46px;
@@ -47,14 +47,14 @@ $buttonHeight: 40px;
   height: $buttonHeight;
   padding: $padding $padding*$multiplier;
   color: $colorMainForeground;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 200;
   line-height: 1;
   letter-spacing: 1px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  border: solid 1px rgba($colorMainForeground, .5);
-  border-radius: 3px;
-  background-color: rgba($colorMainForeground, .1);
+  border: none;
+  border-radius: $buttonHeight/2;
+  background-color: rgba($colorMainForeground, .2);
 
   transition: all .2s ease-out;
   outline: none;

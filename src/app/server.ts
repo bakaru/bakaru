@@ -1,5 +1,4 @@
 import './bootstrap/lookupHostAddress'
-import * as fs from 'fs'
 import * as path from 'path'
 import * as debug from 'debug'
 import * as express from 'express'

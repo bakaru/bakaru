@@ -1,6 +1,7 @@
 @import "variables";
 
-$entryItemHeight: 70px;
+$entryItemHeight: 140px;
+$spaceBetweenEps: 1px;
 
 .library {
   z-index: 200;
@@ -66,51 +67,61 @@ $entryItemHeight: 70px;
       transform: translateX(0vw);
     }
 
+    .adder {
+      position: absolute;
+      bottom: $padding;
+      left: $padding;
+      z-index: 100;
+    }
 
     .library-list {
       width: $libraryListWidth;
       height: 100vh;
+      padding: $padding;
       margin-top: 32px;
       overflow-y: scroll;
-      box-shadow: -1px 0 0 $colorMainBorder inset;
+      //box-shadow: -1px 0 0 $colorMainBorder inset;
 
       .library-item {
         position: relative;
         overflow-x: hidden;
-        padding: 10px 16.8px 13px 16.8px;
-        height: $entryItemHeight;
-        border-bottom: solid 1px $colorMainBorder;
+        padding: 20px 16.8px 20px 16.8px;
+        margin-bottom: 1px;
+        background-color: rgba($highlightColor, 1);
+        display: flex;
+        align-items: center;
+
+        &:first-child {
+          border-top-left-radius: 10px;
+          border-top-right-radius: 10px;
+        }
+
+        &:last-child {
+          border-bottom-left-radius: 10px;
+          border-bottom-right-radius: 10px;
+        }
 
         &.mod-selected,
         &.mod-selected:hover {
-          background-color: rgba($highlightColor, .8);
+          background-color: rgba($highlightColor, .5);
+
+          .progress {
+            opacity: 1;
+          }
         }
 
         &:hover {
-          background-color: rgba($highlightColor, .5);
+          background-color: rgba($highlightColor, .85);
         }
 
         .title {
           @include truncate;
           width: calc(#{$libraryListWidth} - 33.6px - 80px);
-          font-size: 21px;
+          font-size: 20px;
           line-height: 28px;
-          margin-top: -6px;
           overflow: hidden;
-        }
-
-        .details {
-          margin-top: 8px;
-          color: $clr5;
-          font-size: 11px;
-
-          .detail {
-            display: inline-block;
-            border-radius: 2px;
-            padding: 2px 5px 3px 5px;
-            line-height: 1;
-            box-shadow: 0 0 0 1px $clr6;
-          }
+          z-index: 10;
+          letter-spacing: .5px;
         }
 
         .counter {
@@ -123,17 +134,18 @@ $entryItemHeight: 70px;
           line-height: 1;
           color: rgba($colorMainBorder, .5);
           text-shadow: 0 0 1px rgba($highlightColor, .8);
+          z-index: 10;
         }
 
         .progress {
           position: absolute;
+          top: 0;
           bottom: 0;
-          left: -3px;
-          height: 3px;
-          width: 6px;
-          background-color: $colorMainBorder;
-          transform: skewX(45deg);
+          left: 0;
+          min-width: 10%;
           transition: width .2s ease;
+          background-color: rgba($colorMainForeground, .2);
+          opacity: .05;
         }
       }
     }
@@ -143,8 +155,8 @@ $entryItemHeight: 70px;
       width: $libraryDetailsWidth;
       height: 100vh;
       overflow-y: scroll;
+      padding: 0 40px;
       margin-top: $windowControlsButtonHeight;
-      box-shadow: -1px 0 0 $colorMainBorder inset;
 
       .library-details-placeholder {
         width: 100%;
@@ -179,32 +191,35 @@ $entryItemHeight: 70px;
       }
 
       header {
-        padding: $padding $padding*$multiplier;
-        font-size: 24px;
+        display: flex;
+        padding: $padding;
+        font-size: 35px;
+        width: 100%;
         height: $entryItemHeight;
         line-height: 1.28;
+        text-align: center;
+        justify-content: center;
+        flex-direction: column;
       }
 
       .entry-path {
         @include truncate;
-        text-decoration: underline;
         font-size: 14px;
         color: $clr6;
       }
 
       .controls {
-        padding: $padding $padding*$multiplier;
         display: flex;
         justify-content: space-between;
 
         & > *:first-child {
-          border-top-left-radius: 2px;
-          border-bottom-left-radius: 2px;
+          border-top-left-radius: $buttonHeight/2;
+          border-bottom-left-radius: $buttonHeight/2;
         }
 
         & > *:last-child {
-          border-top-right-radius: 2px;
-          border-bottom-right-radius: 2px;
+          border-top-right-radius: $buttonHeight/2;
+          border-bottom-right-radius: $buttonHeight/2;
         }
 
         button {
@@ -242,15 +257,21 @@ $entryItemHeight: 70px;
             transform: rotateZ(-90deg);
           }
 
+          &:first-child .current {
+            border-top-left-radius: $buttonHeight/2;
+            border-bottom-left-radius: $buttonHeight/2;
+          }
+
           .current,
           .list {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            border: solid 1px rgba($colorMainForeground, .5);
             border-right: none;
             transition: opacity .2s ease-out;
+            background-color: rgba($colorMainForeground, .2);
+            margin-right: 1px;
           }
 
           .current {
@@ -266,7 +287,6 @@ $entryItemHeight: 70px;
             height: auto;
             opacity: 0;
             list-style: none;
-            backdrop-filter: blur(0px);
             background-color: rgba($colorMainForeground, .1);
 
             li {
@@ -299,8 +319,22 @@ $entryItemHeight: 70px;
         }
       }
 
-      .desc {
-        padding: $padding $padding*$multiplier;
+      .episodes {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        border-radius: 10px;
+        overflow: hidden;
+
+        div {
+          padding: $padding $padding*$multiplier;
+          background-color: rgba($highlightColor, .5);
+          line-height: 1;
+          text-align: center;
+          margin-right: $spaceBetweenEps;
+          margin-bottom: $spaceBetweenEps;
+          flex-grow: 1;
+        }
       }
     }
   }

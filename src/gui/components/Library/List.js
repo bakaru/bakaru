@@ -1,11 +1,5 @@
 import React from 'react'
-import Backend from 'shared/Backend'
-import Event from 'shared/Event'
 import Item from './Item'
-
-function openDialog() {
-  Backend.emit(Event.OpenSystemFolder);
-}
 
 export default function List(props) {
   const items = [];
@@ -24,12 +18,6 @@ export default function List(props) {
   return (
     <div className="library-list">
       {items}
-      {/*<button*/}
-        {/*onClick={openDialog}*/}
-      {/*>*/}
-        {/*Add*/}
-      {/*</button>*/}
-      <div style={{ height: '2000px' }}></div>
     </div>
   );
 }

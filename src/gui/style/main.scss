@@ -1,7 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito');
 @import "variables";
 
-body {
+* {
   box-sizing: border-box;
+  font-family: Nunito;
+}
+
+body {
   user-select: none;
   cursor: default;
 
@@ -13,16 +18,15 @@ body {
     height: 2px;
   }
   ::-webkit-scrollbar-track {
-    border-left: solid 1px $colorMainBorder;
     background-color: transparent;
 
     &:horizontal {
       border-left: none;
-      border-top: solid 1px $colorMainBorder;
     }
   }
   ::-webkit-scrollbar-thumb {
     background-color: rgba($colorMainBorder, .25);
+    border-radius: 2px;
 
     &:horizontal {
       box-shadow: 0 1px 0 0 $colorMainBorder inset;
@@ -74,7 +78,7 @@ body {
     height: $windowControlsButtonHeight;
     width: 150px;
     color: $colorContrast;
-    padding-left: 5px;
+    padding-left: 10px;
     font-size: 20px;
     line-height: $windowControlsButtonHeight;
     font-weight: 300;
@@ -89,6 +93,7 @@ body {
     color: $colorMainForeground;
     transition: all .2s ease;
     outline: none;
+    border-radius: 0;
 
     &:hover {
       background-color: $colorMainForeground;
@@ -106,7 +111,6 @@ body {
   &.mod-visible {
     left: 0;
     height: $windowControlsButtonHeight;
-    box-shadow: 0 1px $colorMainBorder;
     background-color: rgba($colorMainBackground, 1);
 
     header {

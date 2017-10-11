@@ -21,7 +21,7 @@ export default function isSeries(classifiedItems: Bakaru.ClassifiedFolderItems) 
   const lengths = [];
 
   for (let i = 0; i < videosLength; i++) {
-    lengths.push(videos[i]);
+    lengths.push(videos[i].length);
     
     for (let j = 0; j < videosLength; j++) {
       const compositeKey = `${i}${j}`;
@@ -40,7 +40,7 @@ export default function isSeries(classifiedItems: Bakaru.ClassifiedFolderItems) 
   const index = Math.round(distances.length * percentile) + 1;
   const mean = distances.slice(0, index).reduce((acc, n) => acc + n, 0) / index;
   const meanLength = lengths.reduce((acc, n) => acc + n, 0) / lengths.length;
-  
+
   // 90% times diff should be less than half length of the mean files name's length
   return mean < (meanLength / 2);
 };

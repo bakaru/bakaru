@@ -34,8 +34,6 @@ export default class FolderExplorer implements Plugin {
   async onFolderAdded(folderPath: string): Promise<void> {
     const normalizedPath = folderPath.normalize();
 
-    console.log('Folder added', folderPath);
-
     try {
       const normalizedPathStats = await stat(normalizedPath);
 

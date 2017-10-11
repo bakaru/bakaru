@@ -18,6 +18,14 @@ export default class Details extends Component {
     this.setState({ audioSelectorOpen: !this.state.audioSelectorOpen });
   }
 
+  onPlay() {
+    setMedia(this.props.entry);
+
+    Player.play();
+
+    this.props.switchToPlayer();
+  }
+
   render () {
     const props = this.props;
 
@@ -43,6 +51,16 @@ export default class Details extends Component {
       'mod-open': this.state.audioSelectorOpen
     });
 
+    const episodes = [];
+
+    for (const [id, episode] of entry.episodes) {
+      episodes.push(
+        <div key={id}>
+          {episode.title}
+        </div>
+      );
+    }
+
     return (
       <div className="library-details">
         <div
@@ -56,7 +74,9 @@ export default class Details extends Component {
         </div>
 
         <header>
-          {entry.title}
+          <div>
+            {entry.title}
+          </div>
           <div className="entry-path">
             {entry.path}
           </div>
@@ -107,14 +127,14 @@ export default class Details extends Component {
           </div>
 
           <button
-            onClick={() => { play(); props.switchToPlayer() }}
+            onClick={::this.onPlay}
           >
             {playIcon}
           </button>
         </section>
 
-        <section className="desc">
-          Yaya desc
+        <section className="episodes">
+          {episodes}
         </section>
       </div>
     );
@@ -126,9 +146,4 @@ function setMedia(entry) {
   const episodeId = [...entry.episodes.keys()][0];
 
   Player.media(entryId, episodeId);
-}
-
-function play() {
-  Player.play();
-  Player.seek(60.0);
 }

@@ -24,11 +24,6 @@ export default function Item(props) {
       <div className="title">
         {props.item.title}
       </div>
-      <div className="details">
-        <div className="detail">
-          {props.item.width}&times;{props.item.height}
-        </div>
-      </div>
       <div className="counter">
         {episodesWatched}/{props.item.episodes.size}
       </div>

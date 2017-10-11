@@ -59,7 +59,12 @@ class Player extends Component {
     PlayerControl.onPlay(() => this.mpv.property(props.pause, false));
     PlayerControl.onPause(() => this.mpv.property(props.pause, true));
     PlayerControl.onSeek(time => this.mpv.property(props.timePos, time));
-    PlayerControl.onMedia(media => this.mpv.command(commands.loadfile, this.translateMedia(media)));
+    PlayerControl.onMedia(media => {
+      const file = this.translateMedia(media);
+      console.log('wat', file, media);
+
+      this.mpv.command(commands.loadfile, file);
+    });
     PlayerControl.onVolume(volume => this.mpv.property(props.volume, volume));
     PlayerControl.onMute(mute => this.mpv.property(props.mute, mute));
   }
