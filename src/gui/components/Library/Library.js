@@ -1,8 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import className from 'classnames'
-import Backend from 'shared/Backend'
-import Event from 'shared/Event'
 import {
   shyLibrary,
   toPlayer,
@@ -12,10 +10,6 @@ import {
 import { select } from 'gui/store/modules/library'
 import List from './List'
 import Details from './Details'
-
-function openDialog() {
-  Backend.emit(Event.OpenSystemFolder);
-}
 
 function Library(props) {
   const isShyLibrary = props.ui.view === shyLibrary;
@@ -54,12 +48,6 @@ function Library(props) {
           switchToLibrary={props.switchToLibrary}
           switchToPlayer={props.switchToPlayer}
         />
-        <button
-          onClick={openDialog}
-          className="adder"
-        >
-          Add
-        </button>
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
 @import "variables";
 
+$libraryControlsHeight: 60px;
 $entryItemHeight: 140px;
 $spaceBetweenEps: 1px;
+$sidesPadding: 40px;
 
 .library {
   z-index: 200;
@@ -58,7 +60,7 @@ $spaceBetweenEps: 1px;
 
         .library-opener {
           opacity: 1;
-          display: block;
+          display: flex;
         }
       }
     }
@@ -67,20 +69,23 @@ $spaceBetweenEps: 1px;
       transform: translateX(0vw);
     }
 
-    .adder {
-      position: absolute;
-      bottom: $padding;
-      left: $padding;
-      z-index: 100;
+    .library-controls {
+      display: flex;
+      padding-bottom: 10px;
+
+      input {
+        @include input;
+        margin-right: 10px;
+        flex-grow: 1;
+      }
     }
 
     .library-list {
       width: $libraryListWidth;
-      height: 100vh;
+      height: calc(100vh - 32px);
       padding: $padding;
       margin-top: 32px;
       overflow-y: scroll;
-      //box-shadow: -1px 0 0 $colorMainBorder inset;
 
       .library-item {
         position: relative;
@@ -91,12 +96,12 @@ $spaceBetweenEps: 1px;
         display: flex;
         align-items: center;
 
-        &:first-child {
+        &:nth-child(2) {
           border-top-left-radius: 10px;
           border-top-right-radius: 10px;
         }
 
-        &:last-child {
+        &:last-of-type {
           border-bottom-left-radius: 10px;
           border-bottom-right-radius: 10px;
         }
@@ -133,7 +138,6 @@ $spaceBetweenEps: 1px;
           font-size: 30px;
           line-height: 1;
           color: rgba($colorMainBorder, .5);
-          text-shadow: 0 0 1px rgba($highlightColor, .8);
           z-index: 10;
         }
 
@@ -155,7 +159,7 @@ $spaceBetweenEps: 1px;
       width: $libraryDetailsWidth;
       height: 100vh;
       overflow-y: scroll;
-      padding: 0 40px;
+      padding: 0 $sidesPadding;
       margin-top: $windowControlsButtonHeight;
 
       .library-details-placeholder {
@@ -170,23 +174,28 @@ $spaceBetweenEps: 1px;
       .library-opener {
         display: none;
         position: absolute;
+        align-items: center;
+        justify-content: center;
         top: 0;
         left: 0;
-        right: 0;
-        height: $windowControlsButtonHeight;
-        box-shadow: 0 1px 0 $colorMainBorder;
+        bottom: 0;
+        width: $windowControlsButtonHeight;
         background-color: transparent;
-        line-height: $windowControlsButtonHeight;
-        padding: 0 $padding*$multiplier;
-        color: $colorMainForeground;
-        font-size: 16px;
+        color: rgba($colorMainForeground, .5);
         opacity: 0;
+
+        span {
+          transform: rotate(-90deg);
+          white-space: nowrap;
+          line-height: $windowControlsButtonHeight;
+          font-size: 16px;
+        }
 
         transition: all .2s ease;
 
         &:hover {
-          color: $colorContrast;
-          background-color: $colorMainForeground;
+          color: $colorMainForeground;
+          background-color: rgba($colorMainForeground, .2);
         }
       }
 
@@ -319,12 +328,17 @@ $spaceBetweenEps: 1px;
         }
       }
 
-      .episodes {
+      .episodes-wrapper {
         margin-top: 20px;
-        display: flex;
-        flex-wrap: wrap;
         border-radius: 10px;
         overflow: hidden;
+        width: calc(100% - 1px);
+      }
+
+      .episodes {
+        display: flex;
+        flex-wrap: wrap;
+        width: calc(#{$libraryDetailsWidth} - #{$sidesPadding*2});
 
         div {
           padding: $padding $padding*$multiplier;

@@ -67,10 +67,7 @@ export default class Details extends Component {
           className={openerClassName}
           onClick={props.switchToLibrary}
         >
-        <span>
-          <span style={{ transform: 'rotateY(-180deg)' }}>{angleRight}</span>
-          Back to library
-        </span>
+          <span>Back to library</span>
         </div>
 
         <header>
@@ -133,9 +130,11 @@ export default class Details extends Component {
           </button>
         </section>
 
-        <section className="episodes">
-          {episodes}
-        </section>
+        <div className="episodes-wrapper">
+          <section className="episodes">
+            {episodes}
+          </section>
+        </div>
       </div>
     );
   }

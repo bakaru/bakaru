@@ -63,6 +63,7 @@
       }
 
       button {
+        position: relative;
         height: 100%;
         border: none;
         background-color: transparent;
@@ -70,11 +71,34 @@
         outline: none;
 
         svg {
+          width: 18px;
+          height: 18px;
           fill: $colorMainForeground;
+          stroke: $colorMainForeground;
         }
 
         &:hover {
           background-color: rgba($colorMainForeground, .2);
+        }
+
+        &.play-pause {
+          padding-left: 25px;
+          padding-right: 25px;
+        }
+
+        &.volume {
+          .amount {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba($colorMainForeground, .2);
+            opacity: 0;
+          }
+
+          &:hover .amount {
+            opacity: 1;
+          }
         }
       }
 

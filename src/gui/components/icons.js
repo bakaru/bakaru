@@ -15,9 +15,15 @@ export const pause = (
     key="play"
     width={36}
     height={36}
-    viewBox="0 0 36 36"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
   >
-    <path d="M 12,26 16,26 16,10 12,10 z M 21,26 25,26 25,10 21,10 z"/>
+    <rect x="6" y="4" width="4" height="16"/>
+    <rect x="14" y="4" width="4" height="16"/>
   </svg>
 );
 
@@ -26,9 +32,14 @@ export const play = (
     key="pause"
     width={36}
     height={36}
-    viewBox="0 0 36 36"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
   >
-    <path d="M 12,26 18.5,22 18.5,14 12,10 z M 18.5,22 25,18 25,18 18.5,14 z"/>
+    <polygon points="5 3 19 12 5 21 5 3"/>
   </svg>
 );
 

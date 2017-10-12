@@ -136,13 +136,16 @@ class Player extends Component {
             <div className="buttons">
               <button
                 onClick={::this.togglePause}
+                className="play-pause"
               >
                 {this.props.playing ? pause : play}
               </button>
               <button
                 onClick={::this.onMute}
                 onWheel={::this.onVolume}
+                className="volume"
               >
+                <div className="amount" style={{ height: this.props.volume + '%' }}/>
                 {volumeIcon}
               </button>
             </div>
