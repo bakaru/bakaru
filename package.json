@@ -1,6 +1,6 @@
 {
   "name": "Bakaru",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Bakaru, an anime player",
   "homepage": "https://github.com/bakaru/bakaru",
   "main": "./dist/app/index.js",
