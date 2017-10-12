@@ -49,5 +49,13 @@ export enum Event {
   PlayerAudioOffset,
 
   ErrorFolderNotFolder,
-  ErrorFolderNotExist
+  ErrorFolderNotExist,
+
+  UpdateCheck,
+  UpdateCheckPending,
+  UpdateAvailable,
+  UpdateNotAvailable,
+  UpdateDownloading,
+  UpdateDownloaded,
+  UpdatePerform
 }

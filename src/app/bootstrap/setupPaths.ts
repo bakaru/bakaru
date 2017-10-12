@@ -1,16 +1,20 @@
-import { app } from 'electron';
-import { join } from 'path';
-import { promisify } from 'bluebird';
-import * as mkdirp from 'mkdirp';
+import { app } from 'electron'
+import { join } from 'path'
+import { promisify } from 'bluebird'
+import * as mkdirp from 'mkdirp'
+
 const makeDir = promisify(mkdirp);
 
-const vendors = global.bakaru.debug
-  ? join(__dirname, '..', '..', '..', 'vendor')
-  : join(app.getAppPath(), '..', '..', '..', 'vendor');
+const prodPath = join(app.getAppPath(), '../app.asar.unpacked/vendor');
+const devPath = join(__dirname, '..', '..', '..', 'vendor');
 
-global.bakaru.paths.mpv = join(vendors, 'mpv');
+const vendors = global.bakaru.debug
+  ? devPath
+  : prodPath;
+
+global.bakaru.paths.mpv = vendors;
 process.env.path = `${global.bakaru.paths.mpv};${process.env.path}`;
-global.bakaru.paths.ffmpeg = join(vendors, 'ffmpeg');
+global.bakaru.paths.ffmpeg = vendors;
 
 const data = global.bakaru.paths.data = join(app.getPath('userData'));
 

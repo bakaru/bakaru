@@ -1,7 +1,6 @@
 import * as debug from 'debug'
 import * as electron from 'electron'
 import icon from './icon'
-import mpv = require('mpv.js')
 
 const log = debug('bakaru:window');
 

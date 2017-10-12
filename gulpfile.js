@@ -2,11 +2,13 @@ const gulp = require('gulp');
 const unzip = require('gulp-unzip');
 const download = require('gulp-download');
 
-const vendorsLink = 'https://github.com/bakaru/bakaru-thirdparty/releases/download/reference/win.zip';
+const libmpvLink = 'https://github.com/bakaru/bakaru-thirdparty/releases/download/reference/vendor.zip';
+
+const dest = gulp.dest('./vendor/');
 
 gulp.task(
-  'init-vendors',
-  () => download(vendorsLink).pipe(unzip()).pipe(gulp.dest('./vendor/'))
+  'vendor-win',
+  () => download(libmpvLink).pipe(unzip()).pipe(dest)
 );
 
-gulp.task('default', ['init-vendors']);
+gulp.task('default', ['vendor-win']);

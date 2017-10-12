@@ -10,6 +10,7 @@ import SockRelay from './SockRelay'
 import Window from './Window'
 
 // Core modules
+import Updater from './Updater'
 import FolderExplorer from './FolderExplorer'
 import LibraryManager from './LibraryManager'
 import SystemFolderOpener from './SystemFolderOpener'
@@ -62,6 +63,7 @@ export default function bootServer(port: number = 44888): void {
   };
 
   global.bakaru.pm = new PluginManager(serverContext, [
+    Updater,
     FolderExplorer,
     LibraryManager,
     SystemFolderOpener,
