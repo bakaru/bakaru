@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Bakaru, an anime player",
   "homepage": "https://github.com/bakaru/bakaru",
-  "main": "app/main.js",
+  "main": "./dist/app/index.js",
   "scripts": {
     "start": "electron dist/app debug",
     "watch:main": "tsc -p src/app -w",
@@ -17,7 +17,9 @@
     "test-win:app": "mocha --compilers ts:ts-node/register -p src/app/tsconfig.json src/app/**/*.test.ts",
     "test:gui": "mocha src/gui/**/*.test.js",
     "test": "npm run test:app && npm run test:gui",
-    "electron-rebuild": "electron-rebuild -w uws"
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": {
     "type": "git",
@@ -30,6 +32,21 @@
   ],
   "author": "Alexander Kukhta <me@thers.io>",
   "license": "CC0-4.0",
+  "build": {
+    "appId": "org.bakaru.tsukihi",
+    "npmRebuild": false,
+    "directories": {
+      "output": "artifacts"
+    },
+    "asarUnpack": [
+      "node_modules/mpv.js/**"
+    ],
+    "snap": {
+      "stagePackages": [
+        "libmpv1"
+      ]
+    }
+  },
   "devDependencies": {
     "@types/bluebird": "^3.5.12",
     "@types/chai": "^3.5.2",
@@ -56,10 +73,11 @@
     "css-loader": "^0.26.4",
     "decompress": "^4.2.0",
     "electron": "^1.7.8",
+    "electron-builder": "^19.36.0",
     "electron-mocha": "^3.5.0",
     "electron-packager": "^8.7.2",
-    "electron-rebuild": "^1.5.7",
     "elegant-spinner": "^1.0.1",
+    "extract-text-webpack-plugin": "^3.0.1",
     "file-loader": "^0.9.0",
     "got": "6.2.0",
     "gulp": "^3.9.1",
@@ -75,9 +93,13 @@
     "node-cp": "^0.1.1",
     "node-sass": "^4.5.2",
     "progress": "1.1.8",
+    "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
+    "react-svg-morph": "^0.1.10",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
     "rimraf": "^2.6.2",
     "sass-loader": "^6.0.3",
     "style-loader": "^0.13.2",
@@ -94,7 +116,6 @@
     "debug": "^2.6.9",
     "double-ended-queue": "2.1.0-0",
     "express": "^4.16.0",
-    "extract-text-webpack-plugin": "^3.0.1",
     "fast-levenshtein": "1.1.0",
     "fastpriorityqueue": "^0.1.0",
     "fs-extra": "^1.0.0",
@@ -103,10 +124,6 @@
     "mkdirp": "^0.5.1",
     "mousetrap": "1.5.3",
     "mpv.js": "^0.2.2",
-    "prop-types": "^15.6.0",
-    "react-svg-morph": "^0.1.10",
-    "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0",
     "uws": "^0.14.5",
     "ws": "^2.3.1"
   }

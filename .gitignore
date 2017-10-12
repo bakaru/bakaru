@@ -3,7 +3,7 @@ node_modules
 bower_components
 npm-debug.log
 bakaru.log
-build
+artifacts
 /vendor
 /test.js
 gui_old
