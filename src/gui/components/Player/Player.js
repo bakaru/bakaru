@@ -54,6 +54,8 @@ class Player extends Component {
   handleMPVReady(mpv) {
     this.mpv = mpv;
 
+    console.log('Le me ready');
+
     Object.values(props).forEach(this.mpv.observe.bind(mpv));
 
     PlayerControl.onPlay(() => this.mpv.property(props.pause, false));

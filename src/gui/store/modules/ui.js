@@ -5,7 +5,7 @@ export const shyLibrary = 'shyLibrary';
 export const player ='player';
 
 const initialState = {
-  view: shyLibrary,
+  view: library,
   maximized: Window.isMaximized()
 };
 
