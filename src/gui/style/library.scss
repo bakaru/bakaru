@@ -348,6 +348,11 @@ $sidesPadding: 40px;
           margin-right: $spaceBetweenEps;
           margin-bottom: $spaceBetweenEps;
           flex-grow: 1;
+          transition: all .2s ease;
+
+          &:hover {
+            background-color: rgba($colorMainForeground, .25);
+          }
         }
       }
     }
