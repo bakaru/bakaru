@@ -8,8 +8,16 @@ import {
   library
 } from 'gui/store/modules/ui'
 import { select } from 'gui/store/modules/library'
+import { check, perform } from 'gui/store/modules/update'
 import List from './List'
 import Details from './Details'
+import Backend from 'shared/Backend'
+import Event from 'shared/Event'
+import * as icons from 'gui/components/icons'
+
+function openDialog() {
+  Backend.emit(Event.OpenSystemFolder);
+}
 
 function Library(props) {
   const isShyLibrary = props.ui.view === shyLibrary;
@@ -37,6 +45,34 @@ function Library(props) {
         onClick={props.switchToPlayer}
       />
       <div className={libraryContainerClassName}>
+        <div className="library-controls">
+          <input
+            type="search"
+            placeholder="Filter"
+          />
+
+          <div className="button-group">
+            <button
+              onClick={check}
+              className="iconed"
+            >
+              {icons.refreshCw}
+            </button>
+
+            <button
+              className="iconed"
+            >
+              {icons.settings}
+            </button>
+
+            <button
+              onClick={openDialog}
+              className="iconed adder"
+            >
+              {icons.plusCircle}
+            </button>
+          </div>
+        </div>
         <List
           items={props.library.entries}
           select={props.selectEntry}
@@ -56,6 +92,7 @@ function Library(props) {
 export default connect(
   state => ({
     ui: state.ui,
+    update: state.update,
     library: state.library
   }),
   dispatch => ({

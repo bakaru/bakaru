@@ -1,11 +1,5 @@
 import React from 'react'
 import Item from './Item'
-import Backend from 'shared/Backend'
-import Event from 'shared/Event'
-
-function openDialog() {
-  Backend.emit(Event.OpenSystemFolder);
-}
 
 export default function List(props) {
   const items = [];
@@ -23,19 +17,6 @@ export default function List(props) {
 
   return (
     <div className="library-list">
-      <div className="library-controls">
-        <input
-          type="search"
-          placeholder="Boku no Pico"
-        />
-
-        <button
-          onClick={openDialog}
-          className="adder"
-        >
-          Add
-        </button>
-      </div>
 
       {items}
     </div>

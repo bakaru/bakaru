@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Player from 'gui/control/Player'
 import className from 'classnames'
-import { play as playIcon, angleRight } from 'gui/components/icons'
+import * as icons from 'gui/components/icons'
 
 export default class Details extends Component {
   constructor(props) {
@@ -82,7 +82,7 @@ export default class Details extends Component {
         <section className="controls">
           <div className={audioSelectorClass}>
             <div className="angle">
-              {angleRight}
+              {icons.angleRight}
             </div>
             <div
               className="current"
@@ -103,7 +103,7 @@ export default class Details extends Component {
           </div>
           <div className={audioSelectorClass}>
             <div className="angle">
-              {angleRight}
+              {icons.angleRight}
             </div>
             <div
               className="current"
@@ -126,7 +126,7 @@ export default class Details extends Component {
           <button
             onClick={::this.onPlay}
           >
-            {playIcon}
+            {icons.play}
           </button>
         </section>
 

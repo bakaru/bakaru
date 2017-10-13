@@ -11,7 +11,8 @@ body {
   cursor: default;
 
   ::-webkit-scrollbar {
-    width: 4px;
+    //width: 4px;
+    width: 0px;
     background-color: transparent;
   }
   ::-webkit-scrollbar:horizontal {
@@ -25,7 +26,8 @@ body {
     }
   }
   ::-webkit-scrollbar-thumb {
-    background-color: rgba($colorMainBorder, .25);
+    background-color: transparent;
+    //background-color: rgba($colorMainBorder, .25);
     border-radius: 2px;
 
     &:horizontal {
@@ -124,5 +126,54 @@ body {
     .wrapper {
       opacity: 1;
     }
+  }
+}
+
+.spinner {
+  @keyframes spun {
+    0% {
+      left: 0;
+      width: 5px;
+    }
+
+    25% {
+      width: 50%;
+    }
+
+    50% {
+      left: calc(100% - 5px);
+      width: 5px;
+    }
+
+    75% {
+      width: 50%;
+    }
+
+    100% {
+      left: 0;
+      width: 5px;
+    }
+  }
+
+  position: relative;
+  display: block;
+  width: 30px;
+  height: 5px;
+  border-radius: 2.5px;
+  background-color: rgba($clr0, .25);
+
+  &::before {
+    display: block;
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 2.5px;
+    background-color: lighten($colorContrast, 20%);
+
+    animation-name: spun;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
   }
 }

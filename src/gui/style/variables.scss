@@ -28,6 +28,7 @@ $windowControlsButtonHeight: 32px;
 $windowControlsButtonWidth: 46px;
 
 $buttonHeight: 40px;
+$buttonRadius: 20px;
 
 @mixin fixedPane() {
   position: fixed;
@@ -53,7 +54,7 @@ $buttonHeight: 40px;
   letter-spacing: 1px;
   font-family: Nunito;
   border: none;
-  border-radius: $buttonHeight/2;
+  border-radius: $buttonRadius;
   background-color: rgba($colorMainForeground, .2);
 
   transition: all .2s ease-out;
@@ -68,6 +69,13 @@ $buttonHeight: 40px;
     height: 18px;
     fill: currentColor;
     stroke: currentColor;
+  }
+
+  &.iconed {
+
+    svg {
+      fill: none;
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
-const fs = require('fs');
 
+const WebpackNotifierPlugin = require('webpack-notifier');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -51,6 +51,7 @@ module.exports = [
       // noParse: /ws/
     },
     plugins: [
+      new WebpackNotifierPlugin(),
       new HtmlWebpackPlugin({
         inject: true,
         chunks: [ 'gui' ],
