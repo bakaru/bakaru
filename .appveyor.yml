@@ -4,6 +4,8 @@ image: Visual Studio 2017
 install:
   - ps: Install-Product node 8
   - npm install
+  - npm run vendor
+  - npm run compile
   - npm run release
 
 build: off
