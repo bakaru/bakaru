@@ -122,6 +122,9 @@
           );
           box-shadow: 1px 0 0 $colorContrast;
 
+          user-select: none;
+          pointer-events: none;
+
           z-index: 2;
         }
 

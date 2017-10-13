@@ -71,9 +71,9 @@ export default class Details extends Component {
         </div>
 
         <header>
-          <div>
+          <h3>
             {entry.title}
-          </div>
+          </h3>
           <div className="entry-path">
             {entry.path}
           </div>

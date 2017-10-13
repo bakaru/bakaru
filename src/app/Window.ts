@@ -29,7 +29,7 @@ export default class Window {
     this.mainWindow = null;
     this.mainWindowOptions = {
       width: 1000,
-      height: 720,
+      height: 563,
       title: this.name,
       frame: false,
       icon: this.electron.nativeImage.createFromDataURL(icon),

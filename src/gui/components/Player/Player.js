@@ -54,8 +54,6 @@ class Player extends Component {
   handleMPVReady(mpv) {
     this.mpv = mpv;
 
-    console.log('Le me ready');
-
     Object.values(props).forEach(this.mpv.observe.bind(mpv));
 
     PlayerControl.onPlay(() => this.mpv.property(props.pause, false));
@@ -101,6 +99,14 @@ class Player extends Component {
     e.stopPropagation();
 
     PlayerControl.mute(!this.props.muted);
+  }
+
+  onSeek(e) {
+    const x = e.clientX;
+    const rect = e.target.getBoundingClientRect();
+    const tx = (x - rect.left) / rect.width;
+
+    PlayerControl.seek(tx * this.state[props.duration]);
   }
 
   render() {
@@ -152,8 +158,8 @@ class Player extends Component {
               </button>
             </div>
 
-            <div className="trackbar">
-              <div className="progress" style={{ width: `${this.state['percent-pos']*2}%` }}/>
+            <div className="trackbar" onMouseDown={::this.onSeek}>
+              <div className="progress" style={{ width: `${this.state['percent-pos']}%` }}/>
               <div className="time">
                 {time}
               </div>
