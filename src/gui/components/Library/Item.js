@@ -1,5 +1,23 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import className from 'classnames'
+import Player from 'gui/control/Player'
+import { remove } from 'gui/store/modules/library'
+import * as icons from 'gui/components/icons'
+
+function onPlay(switchToPlayer) {
+  setMedia(this.props.entry);
+
+  Player.play();
+
+  switchToPlayer();
+}
+
+function onDelete(e, id) {
+  e.stopPropagation();
+
+  remove(id);
+}
 
 export default function Item(props) {
   let episodesWatched = 0;
@@ -27,13 +45,31 @@ export default function Item(props) {
       <div className="counter">
         {episodesWatched}/{props.item.episodes.size}
       </div>
+      <div className="button-group actions">
+        <button
+          className="iconed"
+          onClick={e => onDelete(e, props.item.id)}
+        >
+          {icons.minusCircle}
+        </button>
+        <button
+          className="iconed"
+        >
+          {icons.play}
+        </button>
+      </div>
       <Progress width={100 * (episodesWatched / episodesTotal)}/>
     </div>
   );
 }
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  select: PropTypes.func.isRequired,
+  selected: PropTypes.bool.isRequired,
+};
 
 function Progress({ width }) {
   return (
-    <div className="progress" style={{ width: `calc(${width}% + 6px)` }}/>
+    <div className="progress" style={{ width: `${width}%` }}/>
   );
 }

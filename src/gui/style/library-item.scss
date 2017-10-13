@@ -1,0 +1,87 @@
+@import "variables";
+
+.library-item {
+  position: relative;
+  overflow-x: hidden;
+  padding: 20px 16.8px 20px 16.8px;
+  margin-bottom: 1px;
+  background-color: rgba($highlightColor, 1);
+  display: flex;
+  align-items: center;
+
+  &:nth-child(1) {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  &:last-of-type {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+
+  &.mod-selected,
+  &.mod-selected:hover {
+    background-color: rgba($highlightColor, .5);
+
+    .progress {
+      opacity: 1;
+    }
+  }
+
+  &:hover {
+    background-color: rgba($highlightColor, .85);
+
+    .counter {
+      opacity: 0;
+    }
+
+    .actions {
+      opacity: 1;
+    }
+  }
+
+  .title {
+    @include truncate;
+    width: calc(#{$libraryListWidth} - 150px);
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 28px;
+    overflow: hidden;
+    z-index: 10;
+    letter-spacing: .5px;
+  }
+
+  .counter {
+    position: absolute;
+    right: 16.8px;
+    top: calc(50% - 15px);
+    width: 80px;
+    text-align: right;
+    font-size: 30px;
+    font-weight: 200;
+    line-height: 1;
+    color: rgba($colorMainBorder, .5);
+    opacity: 1;
+    transition: all .2s ease;
+
+    z-index: 10;
+  }
+
+  .actions {
+    position: absolute;
+    right: 16.8px;
+    opacity: 0;
+    transition: all .2s ease;
+    z-index: 20;
+  }
+
+  .progress {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    transition: width .2s ease;
+    background-color: rgba($colorMainForeground, .2);
+    opacity: .05;
+  }
+}

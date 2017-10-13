@@ -19,13 +19,11 @@ export default class Details extends Component {
   }
 
   onPlay() {
-    //setMedia(this.props.entry);
+    setMedia(this.props.entry);
 
-    //Player.play();
+    Player.play();
 
-    //this.props.switchToPlayer();
-
-    console.log(this.props.entry);
+    this.props.switchToPlayer();
   }
 
   render () {

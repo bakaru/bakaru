@@ -108,19 +108,24 @@ body {
     height: 10px;
     fill: currentColor;
     shape-rendering: crispEdges;
+    stroke-width: 0;
   }
 
   &.mod-visible {
     left: 0;
     height: $windowControlsButtonHeight;
-    //background-color: rgba($colorMainBackground, .5);
 
     header {
       display: block;
+      font-weight: 600;
     }
 
     button {
       color: $colorContrast;
+
+      svg {
+        stroke-width: 0;
+      }
     }
 
     .wrapper {
@@ -175,5 +180,29 @@ body {
     animation-duration: 1s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
+  }
+}
+
+button {
+  @include button;
+}
+
+.button-group {
+  display: flex;
+
+  button {
+    margin-right: 1px;
+    border-radius: 0;
+  }
+
+  button:first-child {
+    border-top-left-radius: $buttonRadius;
+    border-bottom-left-radius: $buttonRadius;
+  }
+
+  button:last-child {
+    margin-right: 0;
+    border-top-right-radius: $buttonRadius;
+    border-bottom-right-radius: $buttonRadius;
   }
 }
