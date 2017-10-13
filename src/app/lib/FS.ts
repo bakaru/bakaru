@@ -1,6 +1,6 @@
-import * as arson from 'arson';
-import * as path from 'path';
-import * as fs from 'fs';
+import * as arson from 'arson'
+import * as path from 'path'
+import * as fs from 'fs'
 
 function read<T>(filename: string): Promise<T> {
   return new Promise<T>((resolve, reject) => {
@@ -23,6 +23,18 @@ function write(filename: string, content: any): Promise<void> {
 
       return resolve();
     });
+  });
+}
+
+function unlink(filename: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    fs.unlink(filename, error => {
+      if (error) {
+        return reject(error);
+      }
+
+      return resolve();
+    })
   });
 }
 
@@ -91,6 +103,20 @@ export default class FileSystem {
     }
 
     this.debounce(entry.id, () => write(path.join(this.rootPath, `${entry.id}.arson`), entry));
+  }
+
+  /**
+   * Deletes entry
+   *
+   * @param {string} id
+   */
+  delete(id: string): void {
+    if (this.lib.has(id)) {
+      this.lib.delete(id);
+      this.writeLib();
+    }
+
+    this.debounce(`delete:${id}`, () => unlink(path.join(this.rootPath, `${id}.arson`)))
   }
 
   /**

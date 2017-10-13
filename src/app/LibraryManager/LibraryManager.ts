@@ -43,6 +43,10 @@ export default class LibraryManager implements Plugin {
       Event.EntryStateUpdate,
       this.onEntryStateUpdate.bind(this)
     );
+    this.context.events.on(
+      Event.EntryDelete,
+      this.onEntryDelete.bind(this)
+    );
 
     this.context.events.on(
       Event.MediaPropsResponse,
@@ -97,6 +101,17 @@ export default class LibraryManager implements Plugin {
       this.context.library.set(entry.id, entry);
       this.fs.write(entry);
       this.emitUpdated(entry);
+    }
+  }
+
+  protected onEntryDelete(entryId: string) {
+    if (this.context.library.has(entryId)) {
+      this.context.library.delete(entryId);
+      this.fs.delete(entryId);
+      this.context.events.emit(
+        Event.EntryDeleted,
+        entryId
+      );
     }
   }
 

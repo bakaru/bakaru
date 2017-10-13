@@ -17,7 +17,6 @@ export default function List(props) {
 
   return (
     <div className="library-list">
-
       {items}
     </div>
   );

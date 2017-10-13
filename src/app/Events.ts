@@ -27,6 +27,8 @@ export enum Event {
   EntryDeleted,
   EntryStateUpdate,
   EntryStateUpdated,
+  EntryEpisodeWatched,
+  EntryEpisodeStoppedAt,
 
   LibraryResurrected,
 

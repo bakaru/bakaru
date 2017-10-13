@@ -18,7 +18,17 @@ export default class Updater implements Plugin {
 
     autoUpdater.checkForUpdatesAndNotify();
 
-    context.events.on(Event.UpdateCheck, () => autoUpdater.checkForUpdates());
+    context.events.on(Event.UpdateCheck, () => {
+      if (global.bakaru.debug) {
+        console.log('Kek update');
+
+        context.events.emit(Event.UpdateCheckPending);
+
+        setTimeout(() => context.events.emit(Event.UpdateAvailable), 1000);
+      } else {
+        autoUpdater.checkForUpdates();
+      }
+    });
     context.events.on(Event.UpdatePerform, () => autoUpdater.quitAndInstall());
   }
 }

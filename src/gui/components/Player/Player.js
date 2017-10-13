@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { join } from 'path'
 import { connect } from 'react-redux'
 import className from 'classnames'
@@ -10,6 +11,10 @@ import {
   shyLibrary,
   toShyLibrary
 } from 'gui/store/modules/ui'
+import {
+  setWatched,
+  setStoppedAt
+} from 'gui/store/modules/library'
 
 import {
   play,
@@ -36,12 +41,14 @@ const commands = {
 };
 
 class Player extends Component {
-  constructor(props) {
-    super(props);
+  static propTypes = {
+    watched: PropTypes.func.isRequired,
+    stopped: PropTypes.func.isRequired,
+    switchToShyLibrary: PropTypes.func.isRequired,
+  };
 
-    this.state = {};
-    this.initialized = false;
-  }
+  state = {};
+  initialized = false;
 
   componentDidUpdate() {
     if (!this.initialized && this.props.library.loaded && this.props.entryId && this.props.episodeId) {
@@ -51,7 +58,7 @@ class Player extends Component {
     }
   }
 
-  handleMPVReady(mpv) {
+  mountMPV(mpv) {
     this.mpv = mpv;
 
     Object.values(props).forEach(this.mpv.observe.bind(mpv));
@@ -59,18 +66,21 @@ class Player extends Component {
     PlayerControl.onPlay(() => this.mpv.property(props.pause, false));
     PlayerControl.onPause(() => this.mpv.property(props.pause, true));
     PlayerControl.onSeek(time => this.mpv.property(props.timePos, time));
-    PlayerControl.onMedia(media => {
-      const file = this.translateMedia(media);
-      console.log('wat', file, media);
-
-      this.mpv.command(commands.loadfile, file);
-    });
+    PlayerControl.onMedia(media => this.mpv.command(commands.loadfile, this.translateMedia(media)));
     PlayerControl.onVolume(volume => this.mpv.property(props.volume, volume));
     PlayerControl.onMute(mute => this.mpv.property(props.mute, mute));
   }
 
   handlePropertyChange(name, value) {
     this.setState({[name]: value});
+
+    if (name === props.timePos) {
+      this.handleTimeAdvance(value);
+    }
+  }
+
+  handleTimeAdvance(time) {
+
   }
 
   togglePause(e) {
@@ -128,7 +138,7 @@ class Player extends Component {
     return (
       <div className={playerClassName}>
         <PlayerController
-          onReady={::this.handleMPVReady}
+          onReady={::this.mountMPV}
           onPropertyChange={::this.handlePropertyChange}
           onClickOnCanvas={::this.togglePause}
         />
@@ -178,7 +188,9 @@ export default connect(
     ...state.player
   }),
   dispatch => ({
-    switchToShyLibrary: () => dispatch(toShyLibrary())
+    switchToShyLibrary: () => dispatch(toShyLibrary()),
+    watched: (ent, ep) => dispatch(setWatched(ent, ep)),
+    stopped: (ent, ep, time) => dispatch(setStoppedAt(ent, ep, time)),
   })
 )(Player);
 
