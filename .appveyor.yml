@@ -9,3 +9,7 @@ install:
   - npm run release
 
 build: off
+
+artifacts:
+  - path: artifacts/Bakaru-Setup.exe
+    name: Bakaru-Setup-win32-x64.exe
