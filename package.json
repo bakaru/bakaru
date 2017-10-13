@@ -35,12 +35,11 @@
       "output": "artifacts"
     },
     "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": "x64"
-        }
-      ]
+      "target": [{
+        "target": "nsis",
+        "arch": "x64"
+      }],
+      "artifactName": "Bakaru-Setup.exe"
     },
     "publish": {
       "provider": "github"
