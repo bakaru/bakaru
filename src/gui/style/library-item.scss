@@ -21,7 +21,7 @@
 
   &.mod-selected,
   &.mod-selected:hover {
-    background-color: rgba($highlightColor, .5);
+    background-color: rgba($colorMainForeground, .1);
 
     .progress {
       opacity: 1;
@@ -81,7 +81,7 @@
     bottom: 0;
     left: 0;
     transition: width .2s ease;
-    background-color: rgba($colorMainForeground, .2);
-    opacity: .05;
+    background-color: rgba($colorContrast, .75);
+    opacity: .15;
   }
 }

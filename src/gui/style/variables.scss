@@ -30,6 +30,11 @@ $windowControlsButtonWidth: 46px;
 $buttonHeight: 40px;
 $buttonRadius: 20px;
 
+$libraryControlsHeight: 60px;
+$entryItemHeight: 140px;
+$spaceBetweenEps: 1px;
+$sidesPadding: 40px;
+
 @mixin fixedPane() {
   position: fixed;
   left: 0;

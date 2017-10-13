@@ -80,6 +80,8 @@ function Library(props) {
         />
         <Details
           entry={entry}
+          currentEntryId={props.player.entryId}
+          currentEpisodeId={props.player.episodeId}
           isShyLibrary={isShyLibrary}
           switchToLibrary={props.switchToLibrary}
           switchToPlayer={props.switchToPlayer}
@@ -92,6 +94,7 @@ function Library(props) {
 export default connect(
   state => ({
     ui: state.ui,
+    player: state.player,
     update: state.update,
     library: state.library
   }),

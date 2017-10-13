@@ -11,8 +11,7 @@ body {
   cursor: default;
 
   ::-webkit-scrollbar {
-    //width: 4px;
-    width: 0px;
+    width: 0;
     background-color: transparent;
   }
   ::-webkit-scrollbar:horizontal {
@@ -27,7 +26,6 @@ body {
   }
   ::-webkit-scrollbar-thumb {
     background-color: transparent;
-    //background-color: rgba($colorMainBorder, .25);
     border-radius: 2px;
 
     &:horizontal {

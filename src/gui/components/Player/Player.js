@@ -45,10 +45,21 @@ class Player extends Component {
     watched: PropTypes.func.isRequired,
     stopped: PropTypes.func.isRequired,
     switchToShyLibrary: PropTypes.func.isRequired,
+
+    ui: PropTypes.object.isRequired,
+    library: PropTypes.object.isRequired,
   };
 
   state = {};
   initialized = false;
+
+  componentDidMount() {
+    setInterval(() => {
+      if (!this.state[props.pause]) {
+        this.advanceTime();
+      }
+    }, 1000);
+  }
 
   componentDidUpdate() {
     if (!this.initialized && this.props.library.loaded && this.props.entryId && this.props.episodeId) {
@@ -63,8 +74,8 @@ class Player extends Component {
 
     Object.values(props).forEach(this.mpv.observe.bind(mpv));
 
-    PlayerControl.onPlay(() => this.mpv.property(props.pause, false));
-    PlayerControl.onPause(() => this.mpv.property(props.pause, true));
+    PlayerControl.onPlay(() => this.mpv.property(props.pause, false) && this.advanceTime());
+    PlayerControl.onPause(() => this.mpv.property(props.pause, true) && this.advanceTime());
     PlayerControl.onSeek(time => this.mpv.property(props.timePos, time));
     PlayerControl.onMedia(media => this.mpv.command(commands.loadfile, this.translateMedia(media)));
     PlayerControl.onVolume(volume => this.mpv.property(props.volume, volume));
@@ -73,14 +84,26 @@ class Player extends Component {
 
   handlePropertyChange(name, value) {
     this.setState({[name]: value});
-
-    if (name === props.timePos) {
-      this.handleTimeAdvance(value);
-    }
   }
 
-  handleTimeAdvance(time) {
+  advanceTime() {
+    const entryId = this.props.entryId;
+    const episodeId = this.props.episodeId;
 
+    if (!entryId || !episodeId) {
+      return;
+    }
+
+    const episode = this.props.library.entries.get(entryId).episodes.get(episodeId);
+
+    const time = this.state[props.timePos];
+    const duration = this.state[props.duration];
+
+    this.props.stopped(entryId, episodeId, time);
+
+    if (!episode.watched && time / duration > .8) {
+      this.props.watched(entryId, episodeId);
+    }
   }
 
   togglePause(e) {

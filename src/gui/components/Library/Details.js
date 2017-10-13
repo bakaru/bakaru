@@ -1,16 +1,29 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Player from 'gui/control/Player'
 import className from 'classnames'
 import * as icons from 'gui/components/icons'
 
 export default class Details extends Component {
-  constructor(props) {
-    super(props);
+  static propTypes = {
+    entry: PropTypes.object,
+    isShyLibrary: PropTypes.bool.isRequired,
+    switchToLibrary: PropTypes.func.isRequired,
+    switchToPlayer: PropTypes.func.isRequired,
 
-    this.state = {
-      audioSelectorOpen: false
-    };
-  }
+    currentEntryId: PropTypes.string,
+    currentEpisodeId: PropTypes.string,
+  };
+
+  static defaultProps = {
+    entry: null,
+    currentEntryId: null,
+    currentEpisodeId: null,
+  };
+
+  state = {
+    audioSelectorOpen: false
+  };
 
   onToggleAudioSelector(e) {
     e.stopPropagation();
@@ -18,8 +31,15 @@ export default class Details extends Component {
     this.setState({ audioSelectorOpen: !this.state.audioSelectorOpen });
   }
 
-  onPlay() {
-    setMedia(this.props.entry);
+  onPlay(episodeId = null) {
+    const entry = this.props.entry;
+
+    const entryId = entry.id;
+
+    Player.media(
+      entryId,
+      episodeId || [...entry.episodes.keys()][0]
+    );
 
     Player.play();
 
@@ -54,8 +74,17 @@ export default class Details extends Component {
     const episodes = [];
 
     for (const [id, episode] of entry.episodes) {
+      const entryClassName = className({
+        watched: episode.watched,
+        current: entry.id === props.currentEntryId && id === props.currentEpisodeId
+      })
+
       episodes.push(
-        <div key={id}>
+        <div
+          key={id}
+          className={entryClassName}
+          onClick={() => this.onPlay(id)}
+        >
           {episode.title}
         </div>
       );
@@ -124,7 +153,7 @@ export default class Details extends Component {
           </div>
 
           <button
-            onClick={::this.onPlay}
+            onClick={() => this.onPlay()}
           >
             {icons.play}
           </button>
@@ -138,11 +167,4 @@ export default class Details extends Component {
       </div>
     );
   }
-}
-
-function setMedia(entry) {
-  const entryId = entry.id;
-  const episodeId = [...entry.episodes.keys()][0];
-
-  Player.media(entryId, episodeId);
 }
