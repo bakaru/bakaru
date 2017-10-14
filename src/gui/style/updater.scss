@@ -1,0 +1,37 @@
+@import "variables";
+
+.updater-button {
+  position: relative;
+
+  &::after {
+    display: block;
+    position: absolute;
+    top: calc(50% - 8px);
+    right: calc(-200px - #{$padding*$multiplier});
+    width: 200px;
+    content: 'Check for update';
+    text-align: left;
+    font-weight: 500;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &.idle:hover::after {
+    content: 'Check for update';
+    opacity: 1;
+  }
+
+  &.available {
+    color: $clrSuccess;
+
+    &::after {
+      content: 'Update available';
+      opacity: 1;
+    }
+
+    &:hover::after {
+      content: 'Install update';
+      opacity: 1;
+    }
+  }
+}

@@ -16,9 +16,16 @@ export default class CommonGUIRelay implements Plugin {
     })
 
     this.route(Event.LibraryResurrected);
+
     this.route(Event.EntryExplored);
     this.route(Event.EntryUpdated);
     this.route(Event.EntryDeleted);
+
+    this.route(Event.UpdateCheckPending);
+    this.route(Event.UpdateAvailable);
+    this.route(Event.UpdateDownloading);
+    this.route(Event.UpdateDownloaded);
+    this.route(Event.UpdateNotAvailable);
   }
 
   protected route(event: Event) {

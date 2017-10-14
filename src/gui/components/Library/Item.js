@@ -47,14 +47,12 @@ export default function Item(props) {
       </div>
       <div className="button-group actions">
         <button
-          className="iconed"
+          className="negative"
           onClick={e => onDelete(e, props.item.id)}
         >
           {icons.minusCircle}
         </button>
-        <button
-          className="iconed"
-        >
+        <button>
           {icons.play}
         </button>
       </div>

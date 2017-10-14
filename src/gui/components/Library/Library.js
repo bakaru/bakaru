@@ -8,9 +8,9 @@ import {
   library
 } from 'gui/store/modules/ui'
 import { select } from 'gui/store/modules/library'
-import { check, perform } from 'gui/store/modules/update'
 import List from './List'
 import Details from './Details'
+import UpdaterButton from './UpdaterButton'
 import Backend from 'shared/Backend'
 import Event from 'shared/Event'
 import * as icons from 'gui/components/icons'
@@ -53,10 +53,10 @@ function Library(props) {
 
           <div className="button-group">
             <button
-              onClick={check}
-              className="iconed"
+              onClick={openDialog}
+              className="iconed adder"
             >
-              {icons.refreshCw}
+              {icons.plusCircle}
             </button>
 
             <button
@@ -65,12 +65,7 @@ function Library(props) {
               {icons.settings}
             </button>
 
-            <button
-              onClick={openDialog}
-              className="iconed adder"
-            >
-              {icons.plusCircle}
-            </button>
+            <UpdaterButton/>
           </div>
         </div>
         <List

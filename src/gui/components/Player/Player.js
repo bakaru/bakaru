@@ -173,7 +173,6 @@ class Player extends Component {
         </div>
         <div className="player-controls-holder">
           <div className="player-controls">
-
             <div className="buttons">
               <button
                 onClick={::this.togglePause}
