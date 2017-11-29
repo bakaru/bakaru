@@ -35,10 +35,12 @@
       "output": "artifacts"
     },
     "win": {
-      "target": [{
-        "target": "nsis",
-        "arch": "x64"
-      }],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": "x64"
+        }
+      ],
       "artifactName": "Bakaru-Setup.exe"
     },
     "publish": {
@@ -98,8 +100,8 @@
     "node-sass": "^4.5.3",
     "progress": "1.1.8",
     "prop-types": "^15.6.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "react-svg-morph": "^0.1.10",
     "redux": "^3.7.2",

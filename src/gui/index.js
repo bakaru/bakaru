@@ -1,9 +1,9 @@
 require('./style');
 
-import React from 'react'
+import React, { Fragment } from 'react'
 import ReactDOM from 'react-dom'
 import WindowControls from './components/WindowControls'
-import Player from './components/Player'
+import Player from './components/Player/Player'
 import Library from './components/Library'
 import { Provider } from 'react-redux'
 import { connection } from 'shared/Backend'
@@ -15,11 +15,11 @@ connection.then(() => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <div>
+      <Fragment>
         <WindowControls/>
         <Library/>
         <Player/>
-      </div>
+      </Fragment>
     </Provider>,
     document.getElementById('gui-mount')
   );
