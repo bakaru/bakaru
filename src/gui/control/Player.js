@@ -14,34 +14,33 @@ class Player {
     Backend.on(Event.PlayerSeek, time => this.ee.emit(Event.PlayerSeek, time));
   }
 
+  emitBoth(event, payload) {
+    this.ee.emit(event, payload);
+    Backend.emit(event, payload);
+  }
+
   play() {
-    this.ee.emit(Event.PlayerPlay);
-    Backend.emit(Event.PlayerPlay);
+    this.emitBoth(Event.PlayerPlay);
   }
 
   pause() {
-    this.ee.emit(Event.PlayerPause);
-    Backend.emit(Event.PlayerPause);
+    this.emitBoth(Event.PlayerPause);
   }
 
   media(entryId, episodeId) {
-    this.ee.emit(Event.PlayerSetMedia, { entryId, episodeId });
-    Backend.emit(Event.PlayerSetMedia, { entryId, episodeId });
+    this.emitBoth(Event.PlayerSetMedia, { entryId, episodeId });
   }
 
   volume(volume) {
-    this.ee.emit(Event.PlayerVolume, volume);
-    Backend.emit(Event.PlayerVolume, volume);
+    this.emitBoth(Event.PlayerVolume, volume);
   }
 
   mute(mute) {
-    this.ee.emit(Event.PlayerMute, mute);
-    Backend.emit(Event.PlayerMute, mute);
+    this.emitBoth(Event.PlayerMute, mute);
   }
 
   seek(time) {
-    this.ee.emit(Event.PlayerSeek, time);
-    Backend.emit(Event.PlayerSeek, time);
+    this.emitBoth(Event.PlayerSeek, time);
   }
 
   onPlay(cb) {

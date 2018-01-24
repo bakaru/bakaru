@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { check, perform } from 'gui/store/modules/update'
+import { check, perform } from 'shared/store/modules/update'
 import * as icons from 'gui/components/icons'
 import className from 'classnames'
 

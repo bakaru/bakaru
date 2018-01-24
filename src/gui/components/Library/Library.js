@@ -6,8 +6,8 @@ import {
   toPlayer,
   toLibrary,
   library
-} from 'gui/store/modules/ui'
-import { select } from 'gui/store/modules/library'
+} from 'shared/store/modules/ui'
+import { select } from 'shared/store/modules/library'
 import List from './List'
 import Details from './Details'
 import UpdaterButton from './UpdaterButton'

@@ -16,6 +16,7 @@ import LibraryManager from './LibraryManager'
 import SystemFolderOpener from './SystemFolderOpener'
 import MediaPropsExplorer from './MediaPropsExplorer'
 import CommonGUIRelay from './CommonGUIRelay'
+import { PlaybackChan } from './PlaybackChan/PlaybackChan'
 
 const log = debug('bakaru:server');
 
@@ -68,6 +69,7 @@ export default function bootServer(port: number = 44888): void {
     LibraryManager,
     SystemFolderOpener,
     MediaPropsExplorer,
-    CommonGUIRelay
+    CommonGUIRelay,
+    PlaybackChan
   ]);
 }

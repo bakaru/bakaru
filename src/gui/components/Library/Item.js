@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import className from 'classnames'
 import Player from 'gui/control/Player'
-import { remove } from 'gui/store/modules/library'
+import { remove } from 'shared/store/modules/library'
 import * as icons from 'gui/components/icons'
 
 function onPlay(switchToPlayer) {

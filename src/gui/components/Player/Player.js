@@ -7,11 +7,11 @@ import PlayerController from './MPV/PlayerController'
 import {
   player,
   toShyLibrary
-} from 'gui/store/modules/ui'
+} from 'shared/store/modules/ui'
 import {
   setWatched,
   setStoppedAt
-} from 'gui/store/modules/library'
+} from 'shared/store/modules/library'
 import { PlayPause } from 'gui/components/Player/controls/PlayPause'
 import { Volume } from 'gui/components/Player/controls/Volume'
 import { TrackBar } from 'gui/components/Player/controls/TrackBar'

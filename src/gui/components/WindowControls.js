@@ -2,7 +2,7 @@ import React from 'react'
 import Window from 'gui/control/Window'
 import className from 'classnames'
 import { connect } from 'react-redux'
-import { library } from 'gui/store/modules/ui'
+import { library } from 'shared/store/modules/ui'
 
 const iconMaximize = 'M0,0v10.1h10.2V0H0z M9.2,9.2H1.1V1h8.1V9.2z';
 const iconRestore = 'M2.1,0v2H0v8.1h8.2v-2h2V0H2.1z M7.2,9.2H1.1V3h6.1V9.2z M9.2,7.1h-1V2H3.1V1h6.1V7.1z';

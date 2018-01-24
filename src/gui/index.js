@@ -8,7 +8,7 @@ import Library from './components/Library'
 import { Provider } from 'react-redux'
 import { connection } from 'shared/Backend'
 
-import createStore from './store';
+import createStore from 'shared/store';
 
 connection.then(() => {
   const store = createStore();
